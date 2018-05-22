@@ -19,6 +19,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'eve_auth',
     'eve_esi',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -88,6 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'eve_auth.EveUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
