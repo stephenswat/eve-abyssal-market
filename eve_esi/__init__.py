@@ -13,7 +13,8 @@ ESI_SECURITY = esipy.EsiSecurity(
     redirect_uri=settings.ESI_CALLBACK,
     client_id=settings.ESI_CLIENT_ID,
     secret_key=settings.ESI_SECRET_KEY,
-    esi_datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility')
+    esi_datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility'),
+    headers={'User-Agent': settings.ESI_USER_AGENT}
 )
 
 
