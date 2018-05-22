@@ -19,6 +19,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'eve_esi',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -106,3 +107,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+ESI_SWAGGER_JSON = "https://esi.tech.ccp.is/latest/swagger.json?datasource=tranquility"
+ESI_CALLBACK = ""
+ESI_CLIENT_ID = ""
+ESI_SECRET_KEY = ""
+ESI_USER_AGENT = ""
