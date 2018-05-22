@@ -47,6 +47,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'abyssal_market.wsgi.application'
 
+AUTHENTICATION_BACKENDS = [
+    'eve_auth.backend.EveAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 AUTH_USER_MODEL = 'eve_auth.EveUser'
 
