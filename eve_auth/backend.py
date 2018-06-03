@@ -2,11 +2,21 @@ from eve_auth.models import EveUser
 
 
 class EveAuthBackend:
-    def authenticate(self, request, character_id, name):
-        user, _ = EveUser.objects.get_or_create(
-            character_id=character_id,
-            defaults={'name': name}
-        )
+    def authenticate(self, request, info=None, tokens=None):
+        scopes = info['Scopes'].split(' ')
+
+        try:
+            user = EveUser.objects.get(character_id=info['CharacterID'])
+        except EveUser.DoesNotExist:
+            user = EveUser(character_id=info['CharacterID'])
+
+        user.name = info['CharacterName']
+        user.scope_read_contracts = 'esi-contracts.read_character_contracts.v1' in scopes
+        user.scope_open_window = 'esi-ui.open_window.v1' in scopes
+
+        user.tokens = tokens
+
+        user.save()
 
         return user
 

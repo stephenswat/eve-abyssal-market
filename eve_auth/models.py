@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
@@ -34,6 +36,10 @@ class EveUser(AbstractBaseUser):
     scope_read_contracts = models.BooleanField()
     scope_open_window = models.BooleanField()
 
+    access_token = models.CharField(max_length=128)
+    refresh_token = models.CharField(max_length=128)
+    token_expiry = models.DateTimeField()
+
     USERNAME_FIELD = 'character_id'
     REQUIRED_FIELDS = ['name']
 
@@ -45,6 +51,27 @@ class EveUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+
+    @property
+    def tokens(self):
+        return {
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token,
+            'expires_in': (
+                self.token_expiry -
+                datetime.datetime.now(datetime.timezone.utc)
+            ).total_seconds(),
+            'token_type': 'Bearer',
+        }
+
+    @tokens.setter
+    def tokens(self, token):
+        self.access_token = token['access_token']
+        self.refresh_token = token['refresh_token']
+        self.token_expiry = (
+            datetime.datetime.now(datetime.timezone.utc) +
+            datetime.timedelta(seconds=token['expires_in'])
+        )
 
     @property
     def is_staff(self):

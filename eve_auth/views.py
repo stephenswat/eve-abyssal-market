@@ -19,22 +19,9 @@ class CallbackView(View):
     def get(self, request, *args, **kwargs):
         security = get_esi_security()
 
-        security.auth(request.GET['code'])
+        tokens = security.auth(request.GET['code'])
         data = security.verify()
 
-        user = authenticate(
-            request,
-            character_id=data['CharacterID'],
-            name=data['CharacterName']
-        )
-
-        scopes = data['Scopes'].split(' ')
-
-        user.scope_read_contracts = 'esi-contracts.read_character_contracts.v1' in scopes
-        user.scope_open_window = 'esi-ui.open_window.v1' in scopes
-
-        user.save()
-
-        login(request, user)
+        login(request, authenticate(request, info=data, tokens=tokens))
 
         return redirect('/')
