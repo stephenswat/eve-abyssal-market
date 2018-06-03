@@ -54,6 +54,10 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = 'eve_auth.EveUser'
 
+LOGIN_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
