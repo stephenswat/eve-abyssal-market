@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from eve_auth.models import EveUser
+
+
+admin.site.register(EveUser)
