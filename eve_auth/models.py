@@ -79,7 +79,7 @@ class EveUser(AbstractBaseUser):
         res = get_esi_security()
         res.update_token(self.tokens)
 
-        if res.is_token_expired():
+        if res.is_token_expired(offset=60):
             self.tokens = res.refresh()
 
         return res
