@@ -8,7 +8,10 @@ from eve_esi import get_esi_security
 class LoginView(View):
     def get(self, *args, **kwargs):
         return redirect(get_esi_security().get_auth_uri(
-            scopes=['esi-contracts.read_character_contracts.v1', 'esi-assets.read_assets.v1']
+            scopes=[
+                'esi-contracts.read_character_contracts.v1',
+                'esi-ui.open_window.v1'
+            ]
         ))
 
 
