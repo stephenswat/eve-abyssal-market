@@ -5,12 +5,12 @@ from django.conf import settings
 
 ESI_APP = esipy.EsiApp(
     datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility')
-)
+).get_latest_swagger
 
 
 def get_esi_security():
     return esipy.EsiSecurity(
-        app=ESI_APP.get_latest_swagger,
+        app=ESI_APP,
         redirect_uri=settings.ESI_CALLBACK,
         client_id=settings.ESI_CLIENT_ID,
         secret_key=settings.ESI_SECRET_KEY,
