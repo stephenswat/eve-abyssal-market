@@ -28,6 +28,13 @@ class CallbackView(View):
             name=data['CharacterName']
         )
 
+        scopes = data['Scopes'].split(' ')
+
+        user.scope_read_contracts = 'esi-contracts.read_character_contracts.v1' in scopes
+        user.scope_open_window = 'esi-ui.open_window.v1' in scopes
+
+        user.save()
+
         login(request, user)
 
         return redirect('/')

@@ -31,6 +31,9 @@ class EveUser(AbstractBaseUser):
 
     objects = MyUserManager()
 
+    scope_read_contracts = models.BooleanField()
+    scope_open_window = models.BooleanField()
+
     USERNAME_FIELD = 'character_id'
     REQUIRED_FIELDS = ['name']
 
