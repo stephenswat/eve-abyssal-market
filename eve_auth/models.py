@@ -3,7 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-from eve_esi import get_esi_security, get_esi_client
+from eve_esi import get_esi_security, get_esi_client, ESI_APP
 
 
 class MyUserManager(BaseUserManager):
@@ -86,6 +86,13 @@ class EveUser(AbstractBaseUser):
 
     def get_client(self):
         return get_esi_client(self.get_security())
+
+    def get_contracts(self):
+        op = ESI_APP.op['get_characters_character_id_contracts'](
+            character_id=self.character_id
+        )
+
+        return self.get_client().request(op).data
 
     @property
     def is_staff(self):

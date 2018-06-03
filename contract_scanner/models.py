@@ -9,6 +9,10 @@ class Contract(models.Model):
         (1, 'Expired'),
         (2, 'Sold'),
         (3, 'Disappeared'),
+        (4, 'Canceled'),
+        (5, 'Rejected'),
+        (6, 'Deleted'),
+        (9, 'Unknown'),
     )
 
     id = models.IntegerField(primary_key=True)
@@ -25,3 +29,5 @@ class Contract(models.Model):
 
     seen_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    known = models.BooleanField(default=False)

@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     'eve_esi',
     'abyssal_modules',
     'contract_scanner',
+    'huey.contrib.djhuey',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
