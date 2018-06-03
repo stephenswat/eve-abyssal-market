@@ -3,6 +3,8 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+from eve_esi import get_esi_security, get_esi_client
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, character_id, name):
@@ -72,6 +74,14 @@ class EveUser(AbstractBaseUser):
             datetime.datetime.now(datetime.timezone.utc) +
             datetime.timedelta(seconds=token['expires_in'])
         )
+
+    def get_security(self):
+        res = get_esi_security()
+        res.update_token(self.tokens)
+        return res
+
+    def get_client(self):
+        return get_esi_client(self.get_security())
 
     @property
     def is_staff(self):
