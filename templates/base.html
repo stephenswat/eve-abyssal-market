@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Abyssal Market</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://bootswatch.com/4/superhero/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <style>
+      html {
+        overflow-y:scroll;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+      <div class="container">
+        <span class="navbar-brand" href="#">Abyssal Market</span>
+        <ul class="navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+            <li class="nav-item my-auto">
+              <span class="nav-link p-0">
+                <img src="https://image.eveonline.com/Character/{{ user.character_id}}_32.jpg" />
+                <span class="py-auto">{{ user.name }}</span>
+              </span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'eve_auth:logout' %}">
+                Log out
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'eve_auth:login' %}">Log in</a>
+            </li>
+          {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+
+    <main role="main" class="container">
+      {% block content %} {% endblock %}
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  </body>
+</html>

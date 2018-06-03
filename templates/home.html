@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <img style="max-width: 100%" src="https://discordapp.com/assets/1c8a54f25d101bdc607cec7228247a9a.svg">
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <h1>Discord</h1>
+            <p class="lead">
+                Below is your Discord authentication token. Enter the command into the lobby channel and you should receive the correct roles.
+            </p>
+            <br />
+            <br />
+            <p>
+                Please be aware that this token will be invalidated when you refresh this page. This will not remove your existing roles.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
