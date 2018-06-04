@@ -12,6 +12,7 @@ INSTALLED_APPS = [
     'abyssal_modules',
     'contract_scanner',
     'huey.contrib.djhuey',
+    'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

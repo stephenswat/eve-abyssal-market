@@ -12,6 +12,7 @@ class EveAuthBackend:
 
         user.name = info['CharacterName']
         user.scope_read_contracts = 'esi-contracts.read_character_contracts.v1' in scopes
+        user.scope_read_assets = 'esi-assets.read_assets.v1' in scopes
         user.scope_open_window = 'esi-ui.open_window.v1' in scopes
 
         user.tokens = tokens

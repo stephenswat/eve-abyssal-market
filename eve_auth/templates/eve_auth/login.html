@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1>Login</h1>
+    <p class="lead">
+        Please select the scopes (permissions) you would like to give the application.
+    </p>
+
+    <p>
+        Be aware that if you log in with a set of permissions, logging in again later
+        with fewer permissions does not necessarily revoke the permissions you granted
+        earlier. Revoke permissions via the <a
+        href="https://community.eveonline.com/support/third-party-applications/">official
+        interface</a>.
+    </p>
+
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">Log in</button>
+        {% endbuttons %}
+    </form>
+</div>
+{% endblock %}

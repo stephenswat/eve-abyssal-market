@@ -36,6 +36,7 @@ class EveUser(AbstractBaseUser):
     objects = MyUserManager()
 
     scope_read_contracts = models.BooleanField()
+    scope_read_assets = models.BooleanField()
     scope_open_window = models.BooleanField()
 
     access_token = models.CharField(max_length=128)
