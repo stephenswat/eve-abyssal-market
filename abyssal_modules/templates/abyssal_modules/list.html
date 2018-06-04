@@ -4,7 +4,7 @@
 <div class="jumbotron">
     <h1>Abyssal Modules</h1>
 
-    <table class="table">
+    <table class="table module-table">
         <thead>
             <tr>
                 <th>Icon</th>
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {% for m in modules %}
-            <tr>
+            <tr class="item">
                 <td><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></td>
                 <td>{{ m.id}}</td>
                 <td>{{ m.type.name }}</td>

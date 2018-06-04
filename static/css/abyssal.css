@@ -1,0 +1,7 @@
+.module-table td {
+    vertical-align: middle
+}
+
+.module-table tr.item {
+    height: 88px;
+}
