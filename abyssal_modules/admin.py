@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from abyssal_modules.models import ModuleType, ModuleDogmaAttribute
+
+
+admin.site.register(ModuleType)
+admin.site.register(ModuleDogmaAttribute)
