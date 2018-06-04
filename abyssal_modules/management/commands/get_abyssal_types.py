@@ -2,7 +2,7 @@ from tqdm import tqdm
 
 from django.core.management.base import BaseCommand
 
-from ._abyssal_primitive import ITEMS
+from ._abyssal_primitive import ITEMS, UNIT_STR
 from eve_esi import ESI
 from abyssal_modules.models import ModuleType, ModuleDogmaAttribute
 
@@ -39,7 +39,7 @@ class Command(BaseCommand):
                         'name': attr_data['display_name'],
                         'high_is_good': attr_data.get('high_is_good', None),
                         'icon_id': attr_data.get('icon_id', 0),
-                        'unit_str': '',
+                        'unit_str': UNIT_STR.get(attr_data.get('unit_id', -1), ''),
                         'interesting': attr_data['attribute_id'] in INTERESTING
                     }
                 )
