@@ -1,4 +1,5 @@
 import datetime
+import itertools
 
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
@@ -94,6 +95,23 @@ class EveUser(AbstractBaseUser):
         )
 
         return self.get_client().request(op).data
+
+    def get_assets(self):
+        results = []
+
+        for page in itertools.count(start=1):
+            op = ESI['get_characters_character_id_assets'](
+                character_id=self.character_id,
+                page=page
+            )
+
+            req = self.get_client().request(op)
+            results += req.data
+
+            if page >= req.header['X-Pages'][0]:
+                break
+
+        return results
 
     @property
     def is_staff(self):
