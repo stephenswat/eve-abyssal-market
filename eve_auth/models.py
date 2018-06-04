@@ -3,7 +3,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-from eve_esi import get_esi_security, get_esi_client, ESI_APP
+from eve_esi import ESI
 
 
 class MyUserManager(BaseUserManager):
@@ -76,7 +76,7 @@ class EveUser(AbstractBaseUser):
         )
 
     def get_security(self):
-        res = get_esi_security()
+        res = ESI.get_security()
         res.update_token(self.tokens)
 
         if res.is_token_expired(offset=60):
@@ -85,10 +85,10 @@ class EveUser(AbstractBaseUser):
         return res
 
     def get_client(self):
-        return get_esi_client(self.get_security())
+        return ESI.get_client(self.get_security())
 
     def get_contracts(self):
-        op = ESI_APP.op['get_characters_character_id_contracts'](
+        op = ESI['get_characters_character_id_contracts'](
             character_id=self.character_id
         )
 
