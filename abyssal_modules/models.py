@@ -13,6 +13,10 @@ class ModuleDogmaAttribute(models.Model):
 
     interesting = models.BooleanField()
 
+    @property
+    def icon_path(self):
+        return "/img/attributes/%d.png" % self.id
+
     def __str__(self):
         return self.name
 
@@ -47,6 +51,10 @@ class Module(models.Model):
         through='ModuleAttribute',
         related_name='+'
     )
+
+    @property
+    def attribute_list(self):
+        return self.moduleattribute_set.filter(attribute__interesting=True)
 
     @classmethod
     def get_or_create_from_type_item_id(cls, type_id, item_id):
@@ -89,3 +97,10 @@ class ModuleAttribute(models.Model):
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
 
     value = models.FloatField()
+
+    @property
+    def real_value(self):
+        if self.attribute.id == 73:
+            return self.value / 1000
+
+        return self.value

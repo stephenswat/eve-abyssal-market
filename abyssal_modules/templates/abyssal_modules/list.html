@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="jumbotron">
+    <h1>Abyssal Modules</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>ID</th>
+                <th>Module</th>
+                <th>Attributes</th>
+                <th>Creator</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in modules %}
+            <tr>
+                <td><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></td>
+                <td>{{ m.id}}</td>
+                <td>{{ m.type.name }}</td>
+                <td>
+                    <div class="row">
+                        {% for a in m.attribute_list %}
+                        <div class="col-4">
+                            <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
+                            {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>{{ m.creator_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

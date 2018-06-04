@@ -6,5 +6,5 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('eve_auth.urls', namespace='eve_auth')),
-    path('', TemplateView.as_view(template_name='home.html'))
+    path('', include('abyssal_modules.urls', namespace='abyssal_modules'))
 ]
