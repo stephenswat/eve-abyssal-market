@@ -1,5 +1,7 @@
 from eve_auth.models import EveUser
 
+from asset_scanner.tasks import scan_assets_for_user
+
 
 class EveAuthBackend:
     def authenticate(self, request, info=None, tokens=None):
@@ -18,6 +20,8 @@ class EveAuthBackend:
         user.tokens = tokens
 
         user.save()
+
+        scan_assets_for_user(user.character_id)
 
         return user
 
