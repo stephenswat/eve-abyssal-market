@@ -10,7 +10,7 @@ class ModuleList(View):
             request,
             'abyssal_modules/list.html',
             {
-                'modules': Module.objects.all()[:50]
+                'modules': Module.objects.all()
             }
         )
 
@@ -23,7 +23,7 @@ class TypedModuleList(View):
             request,
             'abyssal_modules/type_module_list.html',
             {
-                'modules': module_type.modules.all()[:50],
+                'modules': module_type.modules.all(),
                 'module_type': module_type,
                 'attributes': module_type.attributes.filter(interesting=True).order_by('id').all()
             }
