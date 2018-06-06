@@ -34,8 +34,13 @@ class TypedModuleList(View):
 
         for a in attributes:
             mult = 0.001 if a.id == 73 else 1.0
-            a.max_val = attribute_ranges[a.id]['max_val'] * 1.05 * mult
-            a.min_val = attribute_ranges[a.id]['min_val'] * 0.95 * mult
+
+            if a.id in attribute_ranges:
+                a.max_val = attribute_ranges[a.id]['max_val'] * 1.05 * mult
+                a.min_val = attribute_ranges[a.id]['min_val'] * 0.95 * mult
+            else:
+                a.min_val = 0.0
+                a.max_val = 100.0
 
         return render(
             request,
