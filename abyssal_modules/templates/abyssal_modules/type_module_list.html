@@ -13,6 +13,23 @@
 <div class="jumbotron">
     <h1>{{ module_type.name }}</h1>
 
+    <form>
+        <div class="row">
+        {% for at in attributes %}
+            <div class="form-group col-6">
+                <div class="row">
+                    <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
+                    <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-min"></span>
+                    <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-max"></span>
+                </div>
+                <div id="attr-{{ at.id }}-range"></div>
+            </div>
+        {% endfor %}
+        </div>
+    </form>
+</div>
+
+<div class="jumbotron">
     <table class="table module-table" id="module-table">
         <thead>
             <tr>
@@ -44,13 +61,61 @@
 
 {% block trailing_js %}
 <script>
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            {% for at in attributes %}
+            var value = data[2 + {{ forloop.counter0 }}];
+
+            if (value <= attr_val[{{ at.id }}][0] || value >= attr_val[{{ at.id }}][1]) {
+                return false;
+            }
+            {% endfor %}
+
+            return true;
+        }
+    );
+
+    var attr_val = {
+        {% for at in attributes %}
+        {{ at.id }}: [{{ at.min_val }}, {{ at.max_val }}],
+        {% endfor %}
+    }
+
+    var table;
+
     $(document).ready(function () {
-        $('#module-table').DataTable({
+        table = $('#module-table').DataTable({
             "columnDefs": [
                 { "orderable": false, "targets": 0 }
             ],
             "order": [[1, "asc"]]
         });
+
+        update_labels();
     });
+
+    function update_labels() {
+        {% for at in attributes %}
+        $("#attr-{{ at.id }}-min").text(attr_val[{{ at.id }}][0].toFixed(1));
+        $("#attr-{{ at.id }}-max").text(attr_val[{{ at.id }}][1].toFixed(1));
+        {% endfor %}
+    }
+
+    {% for at in attributes %}
+        $(function () {
+            $("#attr-{{ at.id }}-range").slider({
+                range: true,
+                min: attr_val[{{ at.id }}][0],
+                max: attr_val[{{ at.id }}][1],
+                step: 0.01,
+                values: attr_val[{{ at.id }}],
+                slide: function (event, ui) {
+                    attr_val[{{ at.id }}] = ui.values;
+                    table.draw();
+                    update_labels();
+                }
+            });
+        });
+    {% endfor %}
 </script>
 {% endblock %}

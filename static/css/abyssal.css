@@ -13,3 +13,29 @@
 .navbar-fill {
     flex-grow: 1.0;
 }
+
+.ui-slider {
+    height: 4px !important;
+    border: 0px !important;
+    background-color: #222f39 !important;
+}
+
+.ui-slider-range {
+    /* background-color: transparent; */
+    background-image: url("/static/img/abyss_slider.png") !important;
+    background-position: right !important;
+}
+
+.ui-slider-handle {
+    height: 14px !important;
+    border: none !important;
+    border-radius: 2px !important;
+}
+
+.range-min {
+    color: #cc292f;
+}
+
+.range-max {
+    color: #41cc53;
+}
