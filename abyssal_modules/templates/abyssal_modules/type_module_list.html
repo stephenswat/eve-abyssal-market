@@ -44,8 +44,13 @@
 
 {% block trailing_js %}
 <script>
-$(document).ready(function() { 
-    $('#module-table').DataTable(); 
-});
+    $(document).ready(function () {
+        $('#module-table').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            "order": [[1, "asc"]]
+        });
+    });
 </script>
 {% endblock %}

@@ -4,7 +4,7 @@
 <div class="jumbotron">
     <h1>Abyssal Modules</h1>
 
-    <table class="table module-table">
+    <table class="table module-table" id="module-table">
         <thead>
             <tr>
                 <th>Icon</th>
@@ -19,7 +19,7 @@
             <tr class="item">
                 <td><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></td>
                 <td>{{ m.id}}</td>
-                <td>{{ m.type.name }}</td>
+                <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
                 <td>
                     <div class="row">
                         {% for a in m.attribute_list %}
@@ -36,4 +36,18 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+
+{% block trailing_js %}
+<script>
+    $(document).ready(function () {
+        $('#module-table').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 },
+                { "orderable": false, "targets": 3 },
+            ],
+            "order": [[1, "asc"]]
+        });
+    });
+</script>
 {% endblock %}
