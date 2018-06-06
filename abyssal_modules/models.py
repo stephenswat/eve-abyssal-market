@@ -54,7 +54,7 @@ class Module(models.Model):
 
     @property
     def attribute_list(self):
-        return self.moduleattribute_set.filter(attribute__interesting=True)
+        return self.moduleattribute_set.filter(attribute__interesting=True).order_by('attribute_id')
 
     @classmethod
     def get_or_create_from_type_item_id(cls, type_id, item_id):
