@@ -56,42 +56,6 @@ class Module(models.Model):
     def attribute_list(self):
         return self.moduleattribute_set.filter(attribute__interesting=True).order_by('attribute_id')
 
-    @classmethod
-    def get_or_create_from_type_item_id(cls, type_id, item_id):
-        try:
-            return cls.objects.get(id=item_id)
-        except cls.DoesNotExist:
-            pass
-
-        client = ESI.get_client()
-
-        module_data = client.request(
-            ESI['get_dogma_dynamic_items_type_id_item_id'](
-                type_id=type_id,
-                item_id=item_id
-            )
-        ).data
-
-        res = cls(
-            id=item_id,
-            type_id=type_id,
-            mutator_type_id=module_data['mutator_type_id'],
-            source_type_id=module_data['source_type_id'],
-            creator_id=module_data['created_by']
-        )
-
-        res.save()
-
-        for a in module_data['dogma_attributes']:
-            try:
-                ModuleAttribute(
-                    module=res,
-                    attribute=ModuleDogmaAttribute.objects.get(id=a['attribute_id']),
-                    value=a['value']
-                ).save()
-            except ModuleDogmaAttribute.DoesNotExist:
-                pass
-
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)

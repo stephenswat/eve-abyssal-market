@@ -3,6 +3,7 @@ from huey.contrib.djhuey import db_periodic_task, db_task
 
 from eve_auth.models import EveUser
 from abyssal_modules.models import ModuleType, Module
+from abyssal_modules.tasks import create_module
 
 
 @db_task(retries=1000, retry_delay=60)
@@ -14,7 +15,8 @@ def scan_assets_for_user(character_id):
     abyssal_modules = [x for x in assets if x['type_id'] in abyssal_types]
 
     for x in abyssal_modules:
-        Module.get_or_create_from_type_item_id(x['type_id'], x['item_id'])
+        if not Module.objects.filter(id=x['item_id']).exists():
+            create_module(x['type_id'], x['item_id'])
 
 
 @db_periodic_task(crontab(minute='*'))
