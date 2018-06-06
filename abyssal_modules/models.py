@@ -3,6 +3,13 @@ from django.db import models
 from eve_esi import ESI
 
 
+class Creator(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
+
 class ModuleDogmaAttribute(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
@@ -44,13 +51,24 @@ class Module(models.Model):
     mutator_type_id = models.IntegerField()
     source_type_id = models.IntegerField()
 
-    creator_id = models.BigIntegerField()
+    creator = models.ForeignKey(
+        Creator,
+        models.DO_NOTHING,
+        related_name='creations',
+        db_constraint=False
+    )
 
     attributes = models.ManyToManyField(
         ModuleDogmaAttribute,
         through='ModuleAttribute',
         related_name='+'
     )
+
+    def get_creator(self):
+        try:
+            return self.creator
+        except Creator.DoesNotExist:
+            return None
 
     @property
     def attribute_list(self):

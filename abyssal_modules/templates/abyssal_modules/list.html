@@ -30,7 +30,7 @@
                         {% endfor %}
                     </div>
                 </td>
-                <td>{{ m.creator_id }}</td>
+                <td>{{ m.get_creator|default_if_none:"Unknown" }}</td>
             </tr>
             {% endfor %}
         </tbody>
