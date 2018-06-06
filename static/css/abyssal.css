@@ -5,3 +5,11 @@
 .module-table tr.item {
     height: 88px;
 }
+
+.module-dropdown {
+    width: 550px;
+}
+
+.navbar-fill {
+    flex-grow: 1.0;
+}
