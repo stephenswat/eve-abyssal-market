@@ -5,7 +5,7 @@ from eve_auth.models import EveUser
 from abyssal_modules.models import ModuleType, Module
 
 
-@db_task()
+@db_task(retries=1000, retry_delay=60)
 def scan_assets_for_user(character_id):
     user = EveUser.objects.get(character_id=character_id)
     assets = user.get_assets()

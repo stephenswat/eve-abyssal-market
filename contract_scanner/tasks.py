@@ -21,13 +21,13 @@ CONTRACT_STATUS = {
 }
 
 
-@db_task()
+@db_task(retries=1000, retry_delay=60)
 def scan_contract(character_id, contract_id):
     user = EveUser.objects.get(character_id=character_id)
     print("Placeholder")
 
 
-@db_task()
+@db_task(retries=1000, retry_delay=60)
 def scan_contracts_for_user(character_id):
     user = EveUser.objects.get(character_id=character_id)
 
