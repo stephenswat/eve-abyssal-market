@@ -39,7 +39,18 @@ class ModuleType(models.Model):
     def __str__(self):
         return self.name
 
+class ModuleManager(models.Manager):
+    def get_queryset(self):
+        return super(ModuleManager, self).get_queryset().prefetch_related(
+            'moduleattribute_set__attribute',
+            'type',
+            'creator'
+        )
+
+
 class Module(models.Model):
+    objects = ModuleManager()
+
     id = models.BigIntegerField(primary_key=True)
     type = models.ForeignKey(
         ModuleType,
@@ -72,7 +83,11 @@ class Module(models.Model):
 
     @property
     def attribute_list(self):
-        return self.moduleattribute_set.filter(attribute__interesting=True).order_by('attribute_id')
+        return sorted(
+            [x for x in self.moduleattribute_set.all() if x.attribute.interesting],
+            key=lambda x: x.attribute_id
+        )
+        # return self.moduleattribute_set.filter(attribute__interesting=True).order_by('attribute_id')
 
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
