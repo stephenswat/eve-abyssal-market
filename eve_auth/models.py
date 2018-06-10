@@ -1,5 +1,6 @@
 import datetime
 import itertools
+from esipy.exceptions import APIException
 
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
@@ -82,7 +83,14 @@ class EveUser(AbstractBaseUser):
         res.update_token(self.tokens)
 
         if res.is_token_expired(offset=60):
-            self.tokens = res.refresh()
+            try:
+                self.tokens = res.refresh()
+            except APIException as e:
+                if e.status_code == 400:
+                    raise EveUser.KeyDeletedException(
+                        "ESI refused to refresh our tokens."
+                    )
+                raise
 
         return res
 
@@ -116,3 +124,7 @@ class EveUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+    class KeyDeletedException(Exception):
+        def __init__(self, message):
+            super().__init__(message)

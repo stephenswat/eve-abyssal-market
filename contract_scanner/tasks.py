@@ -31,7 +31,11 @@ def scan_contract(character_id, contract_id):
 def scan_contracts_for_user(character_id):
     user = EveUser.objects.get(character_id=character_id)
 
-    contracts = user.get_contracts()
+    try:
+        contracts = user.get_contracts()
+    except EveUser.KeyDeletedException:
+        return
+
     all_ids = set()
 
     for x in contracts:

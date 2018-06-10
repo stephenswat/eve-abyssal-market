@@ -9,7 +9,11 @@ from abyssal_modules.tasks import create_module
 @db_task(retries=1000, retry_delay=60)
 def scan_assets_for_user(character_id):
     user = EveUser.objects.get(character_id=character_id)
-    assets = user.get_assets()
+
+    try:
+        assets = user.get_assets()
+    except EveUser.KeyDeletedException:
+        return
 
     abyssal_types = ModuleType.objects.values_list('id', flat=True)
     abyssal_modules = [x for x in assets if x['type_id'] in abyssal_types]
