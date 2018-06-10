@@ -1,9 +1,13 @@
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
+import logging
 
 from eve_auth.models import EveUser
 from abyssal_modules.models import ModuleType, Module
 from abyssal_modules.tasks import create_module
+
+
+logger = logging.getLogger(__name__)
 
 
 @db_task(retries=1000, retry_delay=60)
@@ -13,6 +17,7 @@ def scan_assets_for_user(character_id):
     try:
         assets = user.get_assets()
     except EveUser.KeyDeletedException:
+        logger.info("Key refresh error for user %d", character_id)
         return
 
     abyssal_types = ModuleType.objects.values_list('id', flat=True)

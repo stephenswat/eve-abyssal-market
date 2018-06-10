@@ -1,10 +1,14 @@
 import pprint
+import logging
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
+
+
+logger = logging.getLogger(__name__)
 
 
 CONTRACT_STATUS = {
@@ -24,7 +28,7 @@ CONTRACT_STATUS = {
 @db_task(retries=1000, retry_delay=60)
 def scan_contract(character_id, contract_id):
     user = EveUser.objects.get(character_id=character_id)
-    print("Placeholder")
+    logger.info("Not scanning contract %d for user %d (not implemented)", contract_id, character_id)
 
 
 @db_task(retries=1000, retry_delay=60)
@@ -34,6 +38,7 @@ def scan_contracts_for_user(character_id):
     try:
         contracts = user.get_contracts()
     except EveUser.KeyDeletedException:
+        logger.info("Key refresh error for user %d", character_id)
         return
 
     all_ids = set()
