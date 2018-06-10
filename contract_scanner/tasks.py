@@ -71,7 +71,7 @@ def scan_contracts_for_user(character_id):
             scan_contract(character_id, obj.id)
 
 
-@db_periodic_task(crontab(hour='*/2'))
+@db_periodic_task(crontab(minute='0', hour='*/2'))
 def scan_contracts_for_all_users():
     for u in EveUser.objects.filter(scope_read_contracts=True):
         scan_contracts_for_user(u.character_id)

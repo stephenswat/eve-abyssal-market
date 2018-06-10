@@ -28,7 +28,7 @@ def scan_assets_for_user(character_id):
             create_module(x['type_id'], x['item_id'])
 
 
-@db_periodic_task(crontab(hour='*/2'))
+@db_periodic_task(crontab(minute='0', hour='*/2'))
 def scan_assets_for_all_users():
     for u in EveUser.objects.filter(scope_read_assets=True):
         scan_assets_for_user(u.character_id)
