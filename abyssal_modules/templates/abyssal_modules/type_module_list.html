@@ -51,7 +51,7 @@
                     {{ a.real_value|floatformat }}
                 </td>
                 {% endfor %}
-                <td>{{ m.get_creator|default_if_none:"Unknown" }}</td>
+                <td>{{ m.creator.name }}</td>
             </tr>
             {% endfor %}
         </tbody>

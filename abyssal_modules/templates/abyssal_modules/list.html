@@ -66,7 +66,7 @@ purpose of holding your abyssal mods. Of course, this is only feasible for real
                         {% endfor %}
                     </div>
                 </td>
-                <td>{{ m.get_creator|default_if_none:"Unknown" }}</td>
+                <td>{{ m.creator.name }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -3,7 +3,24 @@ from django.db import models
 from eve_esi import ESI
 
 
-class Creator(models.Model):
+class EveCharacterManager(models.Manager):
+    def upsert_by_id(self, character_id):
+        client = ESI.get_client()
+
+        character_data = client.request(
+            ESI['get_characters_character_id'](character_id=character_id)
+        ).data
+
+        character, _ = EveCharacter.objects.update_or_create(
+            id=character_id,
+            defaults={'name': character_data['name']}
+        )
+
+        return character
+
+class EveCharacter(models.Model):
+    objects = EveCharacterManager()
+
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=64)
 
@@ -63,10 +80,9 @@ class Module(models.Model):
     source_type_id = models.IntegerField()
 
     creator = models.ForeignKey(
-        Creator,
-        models.DO_NOTHING,
-        related_name='creations',
-        db_constraint=False
+        EveCharacter,
+        models.CASCADE,
+        related_name='creations'
     )
 
     attributes = models.ManyToManyField(
@@ -75,19 +91,12 @@ class Module(models.Model):
         related_name='+'
     )
 
-    def get_creator(self):
-        try:
-            return self.creator
-        except Creator.DoesNotExist:
-            return None
-
     @property
     def attribute_list(self):
         return sorted(
             [x for x in self.moduleattribute_set.all() if x.attribute.interesting],
             key=lambda x: x.attribute_id
         )
-        # return self.moduleattribute_set.filter(attribute__interesting=True).order_by('attribute_id')
 
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
