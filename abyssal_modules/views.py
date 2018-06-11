@@ -11,7 +11,7 @@ class ModuleList(View):
             request,
             'abyssal_modules/list.html',
             {
-                'modules': Module.objects.all()
+                'modules': Module.objects.order_by('-first_seen')[:100]
             }
         )
 

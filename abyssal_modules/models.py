@@ -91,6 +91,8 @@ class Module(models.Model):
         related_name='+'
     )
 
+    first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
+
     @property
     def attribute_list(self):
         return sorted(
