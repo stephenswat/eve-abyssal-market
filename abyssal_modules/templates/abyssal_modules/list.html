@@ -48,6 +48,7 @@ purpose of holding your abyssal mods. Of course, this is only feasible for real
                 <th>Module</th>
                 <th>Attributes</th>
                 <th>Creator</th>
+                <th>Owner</th>
             </tr>
         </thead>
         <tbody>
@@ -67,6 +68,13 @@ purpose of holding your abyssal mods. Of course, this is only feasible for real
                     </div>
                 </td>
                 <td>{{ m.creator.name }}</td>
+                <td>
+                    {% if m.current_ownership is None %}
+                    Unknown
+                    {% elif m.current_ownership.asset_owner is not None %}
+                    {{ m.current_ownership.asset_owner.name }}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -39,6 +39,7 @@
                 <th width="80px"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
                 <th>Creator</th>
+                <th>Owner</th>
             </tr>
         </thead>
         <tbody>
@@ -52,6 +53,13 @@
                 </td>
                 {% endfor %}
                 <td>{{ m.creator.name }}</td>
+                <td>
+                    {% if m.current_ownership is None %}
+                    Unknown
+                    {% elif m.current_ownership.asset_owner is not None %}
+                    {{ m.current_ownership.asset_owner.name }}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

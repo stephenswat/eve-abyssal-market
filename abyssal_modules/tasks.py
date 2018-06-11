@@ -9,8 +9,10 @@ from eve_esi import ESI
 
 @db_task(retries=1000, retry_delay=60)
 def create_module(type_id, item_id):
-    if Module.objects.filter(id=item_id).exists():
-        return
+    try:
+        return Module.objects.get(id=item_id)
+    except Module.DoesNotExist:
+        pass
 
     client = ESI.get_client()
 
@@ -22,7 +24,7 @@ def create_module(type_id, item_id):
     ).data
 
     with transaction.atomic():
-        character = EveCharacter.objects.upsert_by_id(module_data['created_by'])
+        character = EveCharacter.objects.get_or_create_by_id(module_data['created_by'])
 
         res = Module(
             id=item_id,
@@ -43,3 +45,5 @@ def create_module(type_id, item_id):
                 ).save()
             except ModuleDogmaAttribute.DoesNotExist:
                 pass
+
+    return res
