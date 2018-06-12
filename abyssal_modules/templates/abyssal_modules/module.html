@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="jumbotron">
+    <h1>{{ object.creator.name }}'s Modified {{ object.type.name }}</h1>
+
+
+    <div class="row">
+        <div class="col-6">
+            <dl>
+                <dt>Creator</dt>
+                <dd>{{ object.creator.name }}</dd>
+                <dt>Owner</dt>
+                <dd>
+                    {% if object.current_ownership is None %}
+                    Unknown
+                    {% elif object.current_ownership.asset_owner is not None %}
+                    {{ object.current_ownership.asset_owner.name }}
+                    {% endif %}
+                </dd>
+                <dt>Original Module</dt>
+                <dd>{{ object.source_type_id }}</dd>
+                <dt>Mutaplasmid</dt>
+                <dd>{{ object.mutator_type_id }}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                {% for a in object.attribute_list %}
+                <dt>
+                    <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}"> {{ a.attribute.name }}</dt>
+                <dd>{{ a.real_value|floatformat }} {{ a.attribute.unit_str }}</dd>
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+
+
+    <h2>Ownership History</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Owner</th>
+                <th>Type</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in owners.all %}
+            <tr>
+                <td>
+                    {% if o.asset_owner is not None %}
+                    {{ o.asset_owner.name }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if o.asset_owner is not None %}
+                    Asset
+                    {% endif %}
+                </td>
+                <td>{{ o.start }}</td>
+                <td>{{ o.end }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+1

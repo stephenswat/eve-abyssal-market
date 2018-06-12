@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import DetailView
 from django.db.models import Min, Max
 
 from abyssal_modules.models import Module, ModuleType, ModuleAttribute
@@ -51,3 +52,13 @@ class TypedModuleList(View):
                 'attributes': attributes
             }
         )
+
+class ModuleView(DetailView):
+    model = Module
+    template_name = 'abyssal_modules/module.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.object.ownershiprecord_set.count())
+        context['owners'] = self.object.ownershiprecord_set.order_by('-start')
+        return context

@@ -55,7 +55,7 @@ purpose of holding your abyssal mods. Of course, this is only feasible for real
             {% for m in modules %}
             <tr class="item">
                 <td><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></td>
-                <td>{{ m.id}}</td>
+                <td><a href="{% url 'abyssal_modules:module_view' m.id %}">{{ m.id}}</a></td>
                 <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
                 <td>
                     <div class="row">

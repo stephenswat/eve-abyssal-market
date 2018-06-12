@@ -129,13 +129,17 @@ class Module(models.Model):
             existing = OwnershipRecord.uncompleted.get(module=self)
 
             if character is not None and existing.asset_owner == character:
+                print("1")
                 return
             elif contract is not None and existing.contract_contract == contract:
+                print("2")
                 return
             else:
+                print("3")
                 existing.complete()
                 OwnershipRecord(module=self, **params).save()
         except OwnershipRecord.DoesNotExist:
+            print("4")
             OwnershipRecord(module=self, **params).save()
 
 
