@@ -66,13 +66,13 @@ LOGOUT_REDIRECT_URL = '/'
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = False
 
 USE_TZ = True
+
+DATETIME_FORMAT = 'F j, Y, H:i'
 
 
 # Static files (CSS, JavaScript, Images)

@@ -162,6 +162,7 @@ class UncompetedOwnershipRecordManager(models.Manager):
         return super().get_queryset().filter(end=None)
 
 class OwnershipRecord(models.Model):
+    objects = models.Manager()
     uncompleted = UncompetedOwnershipRecordManager()
 
     module = models.ForeignKey(
