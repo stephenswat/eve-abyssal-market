@@ -20,10 +20,16 @@
     background-color: #222f39 !important;
 }
 
-.ui-slider-range {
+.slider-positive>.ui-slider-range {
     /* background-color: transparent; */
     background-image: url("/static/img/abyss_slider.png") !important;
     background-position: right !important;
+}
+
+.slider-negative>.ui-slider-range {
+    /* background-color: transparent; */
+    background-image: url("/static/img/abyss_slider.png") !important;
+    background-position: left !important;
 }
 
 .ui-slider-handle {

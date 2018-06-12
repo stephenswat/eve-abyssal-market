@@ -19,10 +19,15 @@
             <div class="form-group col-6">
                 <div class="row">
                     <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
+                    {% if at.high_is_good %}
                     <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-min"></span>
                     <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-max"></span>
+                    {% else %}
+                    <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-min"></span>
+                    <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-max"></span>
+                    {% endif %}
                 </div>
-                <div id="attr-{{ at.id }}-range"></div>
+                <div id="attr-{{ at.id }}-range" class="slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
             </div>
         {% endfor %}
         </div>
