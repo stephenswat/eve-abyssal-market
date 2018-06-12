@@ -116,7 +116,7 @@ class Module(models.Model):
         return None
 
     @transaction.atomic
-    def set_ownership(self, character=None, contract=None):
+    def set_ownership(self, character=None, contract=None, date=None):
         if sum(x is not None for x in [character, contract]) != 1:
             raise ValueError("Must pass either a character or a contract")
 
@@ -128,18 +128,17 @@ class Module(models.Model):
         try:
             existing = OwnershipRecord.uncompleted.get(module=self)
 
+            if existing.start > date:
+                return
+
             if character is not None and existing.asset_owner == character:
-                print("1")
                 return
             elif contract is not None and existing.contract_contract == contract:
-                print("2")
                 return
             else:
-                print("3")
                 existing.complete()
                 OwnershipRecord(module=self, **params).save()
         except OwnershipRecord.DoesNotExist:
-            print("4")
             OwnershipRecord(module=self, **params).save()
 
 

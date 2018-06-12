@@ -19,7 +19,7 @@ def scan_assets_for_user(character_id):
     character = EveCharacter.objects.get_or_create_by_id(character_id)
 
     try:
-        assets = user.get_assets()
+        assets, last_modified = user.get_assets()
     except EveUser.KeyDeletedException:
         logger.info("Key refresh error for user %d", character_id)
         return
@@ -39,7 +39,7 @@ def scan_assets_for_user(character_id):
 
     with transaction.atomic():
         for m in found:
-            m.set_ownership(character=character)
+            m.set_ownership(character=character, date=last_modified)
 
         for lost in (
             OwnershipRecord.uncompleted

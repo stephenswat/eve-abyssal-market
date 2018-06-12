@@ -1,4 +1,5 @@
 import datetime
+import pytz
 import itertools
 from esipy.exceptions import APIException
 
@@ -114,12 +115,19 @@ class EveUser(AbstractBaseUser):
             )
 
             req = self.get_client().request(op)
+
+            print(req.header)
+
+            date = datetime.datetime.strptime(
+                req.header['Last-Modified'][0],
+                "%a, %d %b %Y %H:%M:%S GMT"
+            ).replace(tzinfo=pytz.UTC)
             results += req.data
 
             if page >= req.header['X-Pages'][0]:
                 break
 
-        return results
+        return results, date
 
     @property
     def is_staff(self):
