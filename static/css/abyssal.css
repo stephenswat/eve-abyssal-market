@@ -22,14 +22,14 @@
 
 .slider-positive>.ui-slider-range {
     /* background-color: transparent; */
-    background-image: url("/static/img/abyss_slider.png") !important;
-    background-position: right !important;
+    background-image: url("/static/img/abyss_slider_positive_right.png") !important;
+    background-position: 50% !important;
 }
 
 .slider-negative>.ui-slider-range {
     /* background-color: transparent; */
-    background-image: url("/static/img/abyss_slider.png") !important;
-    background-position: left !important;
+    background-image: url("/static/img/abyss_slider_negative_right.png") !important;
+    background-position: 50% !important;
 }
 
 .ui-slider-handle {
