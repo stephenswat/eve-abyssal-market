@@ -59,6 +59,5 @@ class ModuleView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.object.ownershiprecord_set.count())
         context['owners'] = self.object.ownershiprecord_set.order_by('-start')
         return context

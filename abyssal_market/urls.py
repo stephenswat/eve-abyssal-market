@@ -16,5 +16,3 @@ urlpatterns = [
 #     urlpatterns = [
 #         path('__debug__/', include(debug_toolbar.urls)),
 #     ] + urlpatterns
-
-print(__name__)

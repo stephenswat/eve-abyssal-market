@@ -1,4 +1,3 @@
-import pprint
 import logging
 
 from huey import crontab

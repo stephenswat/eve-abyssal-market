@@ -116,8 +116,6 @@ class EveUser(AbstractBaseUser):
 
             req = self.get_client().request(op)
 
-            print(req.header)
-
             date = datetime.datetime.strptime(
                 req.header['Last-Modified'][0],
                 "%a, %d %b %Y %H:%M:%S GMT"
