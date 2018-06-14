@@ -28,14 +28,16 @@ def scan_assets_for_user(character_id):
     abyssal_modules = [x for x in assets if x['type_id'] in abyssal_types]
 
     found = []
+    queue = []
 
     for x in abyssal_modules:
         try:
-            module = Module.objects.get(id=x['item_id'])
+            found.append(Module.objects.get(id=x['item_id']))
         except Module.DoesNotExist:
-            module = create_module(x['type_id'], x['item_id'])(blocking=True)
+            queue.append(create_module(x['type_id'], x['item_id']))
 
-        found.append(module)
+    found += [x.get(blocking=True) for x in queue]
+
 
     with transaction.atomic():
         for m in found:
