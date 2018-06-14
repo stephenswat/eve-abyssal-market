@@ -8,4 +8,3 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         scan_assets_for_all_users()
-

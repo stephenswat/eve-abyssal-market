@@ -1,8 +1,6 @@
 from django.conf import settings
-
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 
 urlpatterns = [
@@ -11,8 +9,9 @@ urlpatterns = [
     path('', include('abyssal_modules.urls', namespace='abyssal_modules'))
 ]
 
-# if settings.DEBUG:
-#     import debug_toolbar
-#     urlpatterns = [
-#         path('__debug__/', include(debug_toolbar.urls)),
-#     ] + urlpatterns
+if settings.DEBUG:
+    pass
+    # import debug_toolbar
+    # urlpatterns = [
+    #     path('__debug__/', include(debug_toolbar.urls)),
+    # ] + urlpatterns

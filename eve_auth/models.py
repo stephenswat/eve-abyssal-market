@@ -1,6 +1,6 @@
 import datetime
-import pytz
 import itertools
+import pytz
 from esipy.exceptions import APIException
 
 from django.db import models
@@ -52,10 +52,10 @@ class EveUser(AbstractBaseUser):
     def __str__(self):
         return self.name
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self, *_, **__):
         return self.is_admin
 
-    def has_module_perms(self, app_label):
+    def has_module_perms(self, _):
         return self.is_admin
 
     @property
@@ -132,5 +132,4 @@ class EveUser(AbstractBaseUser):
         return self.is_admin
 
     class KeyDeletedException(Exception):
-        def __init__(self, message):
-            super().__init__(message)
+        pass

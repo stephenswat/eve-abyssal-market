@@ -20,9 +20,18 @@ class Contract(models.Model):
     status = models.SmallIntegerField(db_index=True, choices=STATUS_CHOICES)
 
     issuer_id = models.BigIntegerField(db_index=True)
-    owner = models.ForeignKey(EveUser, models.SET_NULL, db_index=True, null=True)
+    owner = models.ForeignKey(
+        EveUser,
+        models.SET_NULL,
+        db_index=True,
+        null=True
+    )
 
-    price = models.DecimalField(max_digits=32, decimal_places=2, db_index=True)
+    price = models.DecimalField(
+        max_digits=32,
+        decimal_places=2,
+        db_index=True
+    )
 
     issued_at = models.DateTimeField()
     expires_at = models.DateTimeField()

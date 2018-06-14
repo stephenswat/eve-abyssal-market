@@ -24,6 +24,7 @@ class EveCharacterManager(models.Manager):
 
             return character
 
+
 class EveCharacter(models.Model):
     objects = EveCharacterManager()
 
@@ -32,6 +33,7 @@ class EveCharacter(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ModuleDogmaAttribute(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -50,6 +52,7 @@ class ModuleDogmaAttribute(models.Model):
     def __str__(self):
         return self.name
 
+
 class ModuleType(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128)
@@ -61,6 +64,7 @@ class ModuleType(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ModuleManager(models.Manager):
     def get_queryset(self):
@@ -104,14 +108,17 @@ class Module(models.Model):
     @property
     def attribute_list(self):
         return sorted(
-            [x for x in self.moduleattribute_set.all() if x.attribute.interesting],
+            [
+                x for x in self.moduleattribute_set.all()
+                if x.attribute.interesting
+            ],
             key=lambda x: x.attribute_id
         )
 
     @property
     def current_ownership(self):
         for ownership in self.ownershiprecord_set.all():
-            if ownership.end == None:
+            if ownership.end is None:
                 return ownership
         return None
 
@@ -126,17 +133,17 @@ class Module(models.Model):
             params = {'contract_contract': contract}
 
         try:
-            existing = OwnershipRecord.uncompleted.get(module=self)
+            ext = OwnershipRecord.uncompleted.get(module=self)
 
-            if existing.start > date:
+            if ext.start > date:
                 return
 
-            if character is not None and existing.asset_owner == character:
+            if character is not None and ext.asset_owner == character:
                 return
-            elif contract is not None and existing.contract_contract == contract:
+            elif contract is not None and ext.contract_contract == contract:
                 return
             else:
-                existing.complete()
+                ext.complete()
                 OwnershipRecord(module=self, **params).save()
         except OwnershipRecord.DoesNotExist:
             OwnershipRecord(module=self, **params).save()
@@ -159,6 +166,7 @@ class ModuleAttribute(models.Model):
 class UncompetedOwnershipRecordManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(end=None)
+
 
 class OwnershipRecord(models.Model):
     objects = models.Manager()

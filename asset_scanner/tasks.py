@@ -1,12 +1,14 @@
+import logging
+
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
-
-import logging
 
 from django.db import transaction
 
 from eve_auth.models import EveUser
-from abyssal_modules.models import ModuleType, Module, EveCharacter, OwnershipRecord
+from abyssal_modules.models import (
+    ModuleType, Module, EveCharacter, OwnershipRecord
+)
 from abyssal_modules.tasks import create_module
 
 
@@ -38,18 +40,18 @@ def scan_assets_for_user(character_id):
 
     found += [x.get(blocking=True) for x in queue]
 
-
     with transaction.atomic():
         for m in found:
             m.set_ownership(character=character, date=last_modified)
 
-        for lost in (
+        lost = (
             OwnershipRecord.uncompleted
             .filter(asset_owner=character_id)
             .exclude(module__id__in=[x.id for x in found])
-        ):
-            lost.complete()
+        )
 
+        for l in lost:
+            l.complete()
 
 
 @db_periodic_task(crontab(minute='0', hour='*/2'))

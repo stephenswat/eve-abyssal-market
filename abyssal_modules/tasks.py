@@ -1,9 +1,10 @@
 from django.db import transaction
 
-from huey import crontab
-from huey.contrib.djhuey import db_periodic_task, db_task
+from huey.contrib.djhuey import db_task
 
-from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
+from abyssal_modules.models import (
+    Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
+)
 from eve_esi import ESI
 
 
@@ -24,7 +25,9 @@ def create_module(type_id, item_id):
     ).data
 
     with transaction.atomic():
-        character = EveCharacter.objects.get_or_create_by_id(module_data['created_by'])
+        character = EveCharacter.objects.get_or_create_by_id(
+            module_data['created_by']
+        )
 
         res = Module(
             id=item_id,
@@ -40,7 +43,9 @@ def create_module(type_id, item_id):
             try:
                 ModuleAttribute(
                     module=res,
-                    attribute=ModuleDogmaAttribute.objects.get(id=a['attribute_id']),
+                    attribute=ModuleDogmaAttribute.objects.get(
+                        id=a['attribute_id']
+                    ),
                     value=a['value']
                 ).save()
             except ModuleDogmaAttribute.DoesNotExist:

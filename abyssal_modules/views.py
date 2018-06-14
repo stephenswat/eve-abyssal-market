@@ -21,8 +21,9 @@ class TypedModuleList(View):
     def get(self, request, type_id):
         module_type = ModuleType.objects.get(id=type_id)
 
-        attribute_ranges = {x['attribute__id']: x for x in ModuleAttribute
-            .objects
+        attribute_ranges = {
+            x['attribute__id']: x
+            for x in ModuleAttribute.objects
             .filter(
                 module__type__id=type_id,
                 attribute__interesting=True
@@ -31,7 +32,12 @@ class TypedModuleList(View):
             .annotate(min_val=Min('value'), max_val=Max('value'))
         }
 
-        attributes = module_type.attributes.filter(interesting=True).order_by('id').all()
+        attributes = (
+            module_type.attributes
+            .filter(interesting=True)
+            .order_by('id')
+            .all()
+        )
 
         for a in attributes:
             mult = 0.001 if a.id == 73 else 1.0
@@ -52,6 +58,7 @@ class TypedModuleList(View):
                 'attributes': attributes
             }
         )
+
 
 class ModuleView(DetailView):
     model = Module
