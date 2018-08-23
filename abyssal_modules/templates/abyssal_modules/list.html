@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <div class="jumbotron">
 <h1>What the hell is this?</h1>
@@ -24,8 +25,8 @@ efficiently search for the abyssal modules you want. </p>
                 <th>ID</th>
                 <th>Module</th>
                 <th>Attributes</th>
-                <th>Creator</th>
-                <th>Owner</th>
+                <th>Price</th>
+                <th>Open</th>
             </tr>
         </thead>
         <tbody>
@@ -44,14 +45,8 @@ efficiently search for the abyssal modules you want. </p>
                         {% endfor %}
                     </div>
                 </td>
-                <td><a href="{% url 'abyssal_modules:creator_view' m.creator.id %}">{{ m.creator.name }}</a></td>
-                <td>
-                    {% if m.current_ownership is None %}
-                    Unknown
-                    {% elif m.current_ownership.asset_owner is not None %}
-                    {{ m.current_ownership.asset_owner.name }}
-                    {% endif %}
-                </td>
+                <td>{{ m.contract_price|intword }} ISK</td>
+                <td>{{ m.contract_id }}</td>
             </tr>
             {% endfor %}
         </tbody>

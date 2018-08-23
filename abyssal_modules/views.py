@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Count, F
 
 from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
@@ -10,11 +10,22 @@ from abyssal_modules.models import (
 
 class ModuleList(View):
     def get(self, request):
+        modules = (
+            Module
+            .objects
+            .filter(contracts__status=0)
+            .annotate(
+                contract_price=F('contracts__price'),
+                contract_id=F('contracts__id')
+            )
+            .order_by('-first_seen')[:100]
+        )
+
         return render(
             request,
             'abyssal_modules/list.html',
             {
-                'modules': Module.objects.order_by('-first_seen')[:100]
+                'modules': modules
             }
         )
 

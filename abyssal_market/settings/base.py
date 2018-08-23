@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'contract_scanner',
     'huey.contrib.djhuey',
     'bootstrap4',
+    'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
