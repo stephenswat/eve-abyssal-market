@@ -1,10 +1,16 @@
 import logging
+import pprint
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
+from django.db import transaction
+
+from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
+from eve_esi import ESI
+from abyssal_modules.tasks import create_module
 
 
 logger = logging.getLogger(__name__)
@@ -25,55 +31,74 @@ CONTRACT_STATUS = {
 
 
 @db_task(retries=1000, retry_delay=60)
-def scan_contract(character_id, contract_id):
-    # user = EveUser.objects.get(character_id=character_id)
-    logger.info(
-        "Not scanning contract %d for user %d (not implemented)",
-        contract_id, character_id
-    )
+def scan_contract(contract_dict):
+    abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
 
+    client = ESI.get_client()
 
-@db_task(retries=1000, retry_delay=60)
-def scan_contracts_for_user(character_id):
-    user = EveUser.objects.get(character_id=character_id)
-
-    try:
-        contracts = user.get_contracts()
-    except EveUser.KeyDeletedException:
-        logger.info("Key refresh error for user %d", character_id)
-        return
-
-    all_ids = set()
-
-    for x in contracts:
-        if x['type'] != 'item_exchange':
-            continue
-
-        if x['issuer_id'] != character_id:
-            continue
-
-        if x['availability'] != 'public':
-            continue
-
-        all_ids.add(x['contract_id'])
-
-        obj, _ = Contract.objects.update_or_create(
-            id=x['contract_id'],
+    with transaction.atomic():
+        contract, _ = Contract.objects.get_or_create(
+            id=contract_dict['contract_id'],
             defaults={
-                'owner': user,
-                'issuer_id': x['issuer_id'],
-                'price': x['price'],
-                'issued_at': x['date_issued'].v,
-                'expires_at': x['date_expired'].v,
-                'status': CONTRACT_STATUS[x['status']]
+                'status': 0,
+                'issuer_id': contract_dict['issuer_id'],
+                'price': contract_dict['price'],
+                'issued_at': contract_dict['date_issued'].v,
+                'expires_at': contract_dict['date_expired'].v,
+                'single_item': False
             }
         )
+        contract.scanned = True
+        contract.status = 0
 
-        if not obj.known:
-            scan_contract(character_id, obj.id)
+        data = client.request(
+            ESI['get_contracts_public_items_contract_id'](contract_id=contract.id)
+        ).data
+
+        contract.single_item = (len(data) == 1)
+
+        for item in data:
+            if item['type_id'] in abyssal_ids:
+                print("Abyssal!")
+                module = create_module(
+                    type_id=item['type_id'],
+                    item_id=item['item_id']
+                )(blocking=True)
+
+                contract.modules.add(module)
+
+        contract.save()
 
 
-@db_periodic_task(crontab(minute='0', hour='*/2'))
-def scan_contracts_for_all_users():
-    for u in EveUser.objects.filter(scope_read_contracts=True):
-        scan_contracts_for_user(u.character_id)
+@db_periodic_task(crontab(minute='0', hour='*/1'))
+def scan_public_contracts():
+    client = ESI.get_client()
+
+    head = client.head(
+        ESI['get_contracts_public_region_id'](region_id=10000002)
+    )
+
+    all_contracts = []
+
+    if head.status == 200:
+        number_of_page = head.header['X-Pages'][0]
+
+        for page in range(1, number_of_page + 1):
+            data = client.request(
+                ESI['get_contracts_public_region_id'](region_id=10000002, page=page)
+            )
+
+            all_contracts += list(data.data)
+
+    for contract_dict in all_contracts:
+        if contract_dict['type'] != 'item_exchange':
+            continue
+
+        try:
+            contract = Contract.objects.get(id=contract_dict['contract_id'])
+
+            if not contract.scanned:
+                raise ValueError("Contract is not yet scanned")
+        except (Contract.DoesNotExist, ValueError) as e:
+            scan_contract(dict(contract_dict))
+

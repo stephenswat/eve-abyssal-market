@@ -20,12 +20,6 @@ class Contract(models.Model):
     status = models.SmallIntegerField(db_index=True, choices=STATUS_CHOICES)
 
     issuer_id = models.BigIntegerField(db_index=True)
-    owner = models.ForeignKey(
-        EveUser,
-        models.SET_NULL,
-        db_index=True,
-        null=True
-    )
 
     price = models.DecimalField(
         max_digits=32,
@@ -39,4 +33,8 @@ class Contract(models.Model):
     seen_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    known = models.BooleanField(default=False)
+    scanned = models.BooleanField(default=False)
+
+    single_item = models.BooleanField()
+
+    modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')
