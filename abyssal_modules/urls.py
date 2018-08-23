@@ -17,6 +17,11 @@ urlpatterns = [
         name='module_view'
     ),
     path(
+        'creator/<int:pk>',
+        abyssal_modules.views.CreatorView.as_view(),
+        name='creator_view'
+    ),
+    path(
         '',
         abyssal_modules.views.ModuleList.as_view()
     ),

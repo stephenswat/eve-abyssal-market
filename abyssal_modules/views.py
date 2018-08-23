@@ -3,7 +3,9 @@ from django.views import View
 from django.views.generic import DetailView
 from django.db.models import Min, Max
 
-from abyssal_modules.models import Module, ModuleType, ModuleAttribute
+from abyssal_modules.models import (
+    Module, ModuleType, ModuleAttribute, EveCharacter
+)
 
 
 class ModuleList(View):
@@ -68,3 +70,8 @@ class ModuleView(DetailView):
         context = super().get_context_data(**kwargs)
         context['owners'] = self.object.ownershiprecord_set.order_by('-start')
         return context
+
+
+class CreatorView(DetailView):
+    model = EveCharacter
+    template_name = 'abyssal_modules/creator.html'

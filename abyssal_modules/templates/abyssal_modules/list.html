@@ -67,7 +67,7 @@ purpose of holding your abyssal mods. Of course, this is only feasible for real
                         {% endfor %}
                     </div>
                 </td>
-                <td>{{ m.creator.name }}</td>
+                <td><a href="{% url 'abyssal_modules:creator_view' m.creator.id %}">{{ m.creator.name }}</a></td>
                 <td>
                     {% if m.current_ownership is None %}
                     Unknown
