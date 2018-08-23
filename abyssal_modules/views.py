@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
@@ -15,7 +17,10 @@ class ModuleList(View):
         modules = (
             Module
             .objects
-            .filter(contracts__status=0)
+            .filter(
+                contracts__status=0,
+                contracts__expires_at__gte=datetime.datetime.now()
+            )
             .annotate(
                 contract_price=F('contracts__price'),
                 contract_id=F('contracts__id')
