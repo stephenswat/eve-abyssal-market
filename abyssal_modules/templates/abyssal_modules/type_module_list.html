@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% load static %}
 {% block content %}
 
@@ -43,8 +44,8 @@
                 {% for at in attributes %}
                 <th width="80px"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
-                <th>Creator</th>
-                <th>Owner</th>
+                <th>Price</th>
+                <th>Open</th>
             </tr>
         </thead>
         <tbody>
@@ -57,14 +58,13 @@
                     {{ a.real_value|floatformat }}
                 </td>
                 {% endfor %}
-                <td>{{ m.creator.name }}</td>
+                <td>{{ m.contract_price|intword }} ISK</td>
                 <td>
-                    {% if m.current_ownership is None %}
-                    Unknown
-                    {% elif m.current_ownership.asset_owner is not None %}
-                    {{ m.current_ownership.asset_owner.name }}
-                    {% endif %}
-                </td>
+                    <a
+                        class="btn btn-primary {% if not request.user.is_authenticated %}disabled{% endif %}"
+                        href="javascript:open_contract({{ m.contract_id }}, '{{ csrf_token }}')"
+                        role="button"
+                    >In-game</a></td>
             </tr>
             {% endfor %}
         </tbody>

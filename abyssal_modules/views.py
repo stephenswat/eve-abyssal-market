@@ -73,7 +73,13 @@ class TypedModuleList(View):
             request,
             'abyssal_modules/type_module_list.html',
             {
-                'modules': module_type.modules.all(),
+                'modules': module_type.modules.filter(
+                    contracts__status=0,
+                    contracts__expires_at__gte=datetime.datetime.now()
+                ).annotate(
+                    contract_price=F('contracts__price'),
+                    contract_id=F('contracts__id')
+                ),
                 'module_type': module_type,
                 'attributes': attributes
             }
