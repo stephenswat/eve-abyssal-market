@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
+from django.http import HttpResponse
 from django.db.models import Min, Max, Count, F
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
 )
-
+from eve_esi import ESI
 
 class ModuleList(View):
     def get(self, request):
@@ -86,3 +88,12 @@ class ModuleView(DetailView):
 class CreatorView(DetailView):
     model = EveCharacter
     template_name = 'abyssal_modules/creator.html'
+
+
+class OpenContractView(LoginRequiredMixin, View):
+    def post(self, request):
+        client = request.user.get_client().request(
+            ESI['post_ui_openwindow_contract'](contract_id=int(request.POST['contract_id']))
+        )
+
+        return HttpResponse(status=204)

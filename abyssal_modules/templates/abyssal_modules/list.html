@@ -46,7 +46,12 @@ efficiently search for the abyssal modules you want. </p>
                     </div>
                 </td>
                 <td>{{ m.contract_price|intword }} ISK</td>
-                <td>{{ m.contract_id }}</td>
+                <td>
+                    <a
+                        class="btn btn-primary {% if not request.user.is_authenticated %}disabled{% endif %}"
+                        href="javascript:open_contract({{ m.contract_id }}, '{{ csrf_token }}')"
+                        role="button"
+                    >In-game</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -56,14 +61,14 @@ efficiently search for the abyssal modules you want. </p>
 
 {% block trailing_js %}
 <script>
-    $(document).ready(function () {
-        $('#module-table').DataTable({
-            "columnDefs": [
-                { "orderable": false, "targets": 0 },
-                { "orderable": false, "targets": 3 },
-            ],
-            "order": []
-        });
+$(document).ready(function () {
+    $('#module-table').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": 0 },
+            { "orderable": false, "targets": 3 },
+        ],
+        "order": []
     });
+});
 </script>
 {% endblock %}

@@ -22,6 +22,11 @@ urlpatterns = [
         name='creator_view'
     ),
     path(
+        'view_contract',
+        abyssal_modules.views.OpenContractView.as_view(),
+        name='open_contract'
+    ),
+    path(
         '',
         abyssal_modules.views.ModuleList.as_view()
     ),
