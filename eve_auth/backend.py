@@ -1,7 +1,5 @@
 from eve_auth.models import EveUser
 
-from asset_scanner.tasks import scan_assets_for_user
-
 
 SCOPE_NAMES = {
     'read_contracts': 'esi-contracts.read_character_contracts.v1',
@@ -27,8 +25,6 @@ class EveAuthBackend:
         user.tokens = tokens
 
         user.save()
-
-        scan_assets_for_user(user.character_id)
 
         return user
 

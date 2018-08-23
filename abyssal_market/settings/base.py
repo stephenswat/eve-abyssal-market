@@ -13,7 +13,6 @@ INSTALLED_APPS = [
     'eve_esi',
     'abyssal_modules',
     'contract_scanner',
-    'asset_scanner',
     'huey.contrib.djhuey',
     'bootstrap4',
     'django.contrib.admin',
