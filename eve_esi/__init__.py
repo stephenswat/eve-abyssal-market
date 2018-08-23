@@ -17,7 +17,7 @@ class EsiManager:
 
     def get_security(self):
         return esipy.EsiSecurity(
-            app=self.app,
+            # app=self.app,
             redirect_uri=settings.ESI_CALLBACK,
             client_id=settings.ESI_CLIENT_ID,
             secret_key=settings.ESI_SECRET_KEY,
