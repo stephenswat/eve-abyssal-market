@@ -46,7 +46,7 @@ ITEMS = [
     },
     {
         "abyssal_id": 47804,
-        "normal_id": 10836,
+        "normal_id": 3829,
         "name": "Medium Abyssal Shield Extender"
     },
     {
