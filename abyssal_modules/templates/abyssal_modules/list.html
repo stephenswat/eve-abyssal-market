@@ -21,24 +21,22 @@ efficiently search for the abyssal modules you want. </p>
     <table class="table module-table" id="module-table">
         <thead>
             <tr>
-                <th>Icon</th>
-                <th>ID</th>
+                <th width="1px">Icon</th>
                 <th>Module</th>
                 <th>Attributes</th>
-                <th>Price</th>
-                <th>Open</th>
+                <th width="100px">Price</th>
+                <th width="1px">Open</th>
             </tr>
         </thead>
         <tbody>
             {% for m in modules %}
             <tr class="item">
-                <td><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></td>
-                <td><a href="{% url 'abyssal_modules:module_view' m.id %}">{{ m.id}}</a></td>
+                <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
                 <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
                 <td>
                     <div class="row">
                         {% for a in m.attribute_list %}
-                        <div class="col-4">
+                        <div class="col-3">
                             <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
                             {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
                         </div>
@@ -65,7 +63,8 @@ $(document).ready(function () {
     $('#module-table').DataTable({
         "columnDefs": [
             { "orderable": false, "targets": 0 },
-            { "orderable": false, "targets": 3 },
+            { "orderable": false, "targets": 2 },
+            { "orderable": false, "targets": 4 },
         ],
         "order": []
     });
