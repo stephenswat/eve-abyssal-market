@@ -70,7 +70,7 @@ def scan_contract(contract_dict):
         contract.save()
 
 
-@db_periodic_task(crontab(minute='0', hour='*/1'))
+@db_periodic_task(crontab(minute='0,30'))
 def scan_public_contracts():
     client = ESI.get_client()
 
