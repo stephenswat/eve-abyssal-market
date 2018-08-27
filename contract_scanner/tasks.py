@@ -16,20 +16,6 @@ from abyssal_modules.tasks import create_module_helper
 logger = logging.getLogger(__name__)
 
 
-CONTRACT_STATUS = {
-    'outstanding': 0,
-    'in_progress': 0,
-    'finished_issuer': 2,
-    'finished_contractor': 2,
-    'finished': 2,
-    'cancelled': 4,
-    'rejected': 5,
-    'failed': 9,
-    'deleted': 6,
-    'reversed': 9
-}
-
-
 @db_task(retries=1000, retry_delay=60)
 def scan_contract(contract_dict):
     abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
@@ -40,7 +26,6 @@ def scan_contract(contract_dict):
         contract, _ = Contract.objects.get_or_create(
             id=contract_dict['contract_id'],
             defaults={
-                'status': 0,
                 'issuer_id': contract_dict['issuer_id'],
                 'price': contract_dict['price'],
                 'issued_at': contract_dict['date_issued'].v,
@@ -49,7 +34,7 @@ def scan_contract(contract_dict):
             }
         )
 
-        contract.status = 0
+        contract.available = True
 
         data = client.request(
             ESI['get_contracts_public_items_contract_id'](contract_id=contract.id)

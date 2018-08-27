@@ -18,7 +18,7 @@ class ModuleList(View):
             Module
             .objects
             .filter(
-                contracts__status=0,
+                contracts__available=True,
                 contracts__expires_at__gte=datetime.datetime.now()
             )
             .annotate(
@@ -74,7 +74,7 @@ class TypedModuleList(View):
             'abyssal_modules/type_module_list.html',
             {
                 'modules': module_type.modules.filter(
-                    contracts__status=0,
+                    contracts__available=True,
                     contracts__expires_at__gte=datetime.datetime.now()
                 ).annotate(
                     contract_price=F('contracts__price'),

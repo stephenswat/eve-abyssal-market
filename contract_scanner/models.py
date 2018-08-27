@@ -4,20 +4,9 @@ from eve_auth.models import EveUser
 
 
 class Contract(models.Model):
-    STATUS_CHOICES = (
-        (0, 'Available'),
-        (1, 'Expired'),
-        (2, 'Sold'),
-        (3, 'Disappeared'),
-        (4, 'Canceled'),
-        (5, 'Rejected'),
-        (6, 'Deleted'),
-        (9, 'Unknown'),
-    )
-
     id = models.IntegerField(primary_key=True)
 
-    status = models.SmallIntegerField(db_index=True, choices=STATUS_CHOICES)
+    available = models.BooleanField(db_index=True, default=True)
 
     issuer_id = models.BigIntegerField(db_index=True)
 
