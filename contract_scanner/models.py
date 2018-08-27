@@ -33,8 +33,6 @@ class Contract(models.Model):
     seen_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    scanned = models.BooleanField(default=False)
-
     single_item = models.BooleanField()
 
     modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')

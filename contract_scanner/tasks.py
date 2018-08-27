@@ -48,7 +48,7 @@ def scan_contract(contract_dict):
                 'single_item': False
             }
         )
-        contract.scanned = True
+
         contract.status = 0
 
         data = client.request(
@@ -96,9 +96,6 @@ def scan_public_contracts():
 
         try:
             contract = Contract.objects.get(id=contract_dict['contract_id'])
-
-            if not contract.scanned:
-                raise ValueError("Contract is not yet scanned")
-        except (Contract.DoesNotExist, ValueError) as e:
+        except Contract.DoesNotExist as e:
             scan_contract(dict(contract_dict))
 
