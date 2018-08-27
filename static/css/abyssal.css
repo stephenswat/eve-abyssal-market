@@ -45,3 +45,11 @@
 .range-max {
     color: #41cc53;
 }
+
+.contract-button-container {
+    white-space: nowrap;
+}
+
+.btn-open-contract {
+    width: 60px;
+}
