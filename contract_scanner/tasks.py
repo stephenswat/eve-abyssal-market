@@ -79,8 +79,6 @@ def scan_public_contracts():
         if contract_dict['type'] != 'item_exchange':
             continue
 
-        try:
-            contract = Contract.objects.get(id=contract_dict['contract_id'])
-        except Contract.DoesNotExist as e:
+        if not Contract.objects.filter(id=contract_dict['contract_id']).exists():
             scan_contract(dict(contract_dict))
 
