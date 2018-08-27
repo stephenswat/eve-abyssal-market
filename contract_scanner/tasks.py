@@ -10,7 +10,7 @@ from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
 from eve_esi import ESI
-from abyssal_modules.tasks import create_module
+from abyssal_modules.tasks import create_module_helper
 
 
 logger = logging.getLogger(__name__)
@@ -60,10 +60,10 @@ def scan_contract(contract_dict):
         for item in data:
             if item['type_id'] in abyssal_ids:
                 print("Abyssal!")
-                module = create_module(
+                module = create_module_helper(
                     type_id=item['type_id'],
                     item_id=item['item_id']
-                )(blocking=True)
+                )
 
                 contract.modules.add(module)
 
