@@ -8,14 +8,17 @@ $.ajaxSetup({
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
         }
-    }
+    },
 });
 
-function open_contract(cid) {
+function open_contract(e) {
     $.ajax({
         type: "POST",
         url: "/view_contract",
-        data: { contract_id: cid }
+        data: { contract_id: e.data('contract-id') },
+        success: function () {
+            setTooltip(e, 'Opened!');
+        }
     });
 }
 
@@ -31,9 +34,6 @@ function setTooltip(btn, message) {
     $(btn).tooltip('hide')
         .attr('data-original-title', message)
         .tooltip('show');
-}
-
-function hideTooltip(btn) {
     setTimeout(function () {
         $(btn).tooltip('hide');
     }, 1000);
@@ -41,5 +41,8 @@ function hideTooltip(btn) {
 
 clipboard.on('success', function (e) {
     setTooltip(e.trigger, 'Copied!');
-    hideTooltip(e.trigger);
+});
+
+$(".btn-open-contract-esi").click(function() {
+    open_contract($(this));
 });
