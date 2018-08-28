@@ -6,6 +6,7 @@ from django.views.generic import DetailView
 from django.http import HttpResponse
 from django.db.models import Min, Max, Count, F
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 
 from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
@@ -19,7 +20,7 @@ class ModuleList(View):
             .objects
             .filter(
                 contracts__available=True,
-                contracts__expires_at__gte=datetime.datetime.now()
+                contracts__expires_at__gte=timezone.now()
             )
             .annotate(
                 contract_price=F('contracts__price'),
@@ -75,7 +76,7 @@ class TypedModuleList(View):
             {
                 'modules': module_type.modules.filter(
                     contracts__available=True,
-                    contracts__expires_at__gte=datetime.datetime.now()
+                    contracts__expires_at__gte=timezone.now()
                 ).annotate(
                     contract_price=F('contracts__price'),
                     contract_id=F('contracts__id')
