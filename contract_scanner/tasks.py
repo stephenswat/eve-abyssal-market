@@ -5,6 +5,7 @@ from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
 from django.db import transaction
+from django.db.models import Q
 
 from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
@@ -81,4 +82,10 @@ def scan_public_contracts():
 
         if not Contract.objects.filter(id=contract_dict['contract_id']).exists():
             scan_contract(dict(contract_dict))
+
+    Contract.objects.filter(
+        Q(available=True) & ~Q(id__in={x['contract_id'] for x in all_contracts})
+    ).update(
+        available=False
+    )
 
