@@ -10,14 +10,6 @@
             <dl>
                 <dt>Creator</dt>
                 <dd>{{ object.creator.name }}</dd>
-                <dt>Owner</dt>
-                <dd>
-                    {% if object.current_ownership is None %}
-                    Unknown
-                    {% elif object.current_ownership.asset_owner is not None %}
-                    {{ object.current_ownership.asset_owner.name }}
-                    {% endif %}
-                </dd>
                 <dt>Original Module</dt>
                 <dd>{{ object.source_type_id }}</dd>
                 <dt>Mutaplasmid</dt>
