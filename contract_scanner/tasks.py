@@ -17,7 +17,7 @@ from abyssal_modules.tasks import create_module_helper
 logger = logging.getLogger(__name__)
 
 
-@db_task(retries=1000, retry_delay=60)
+@db_task(retries=10, retry_delay=60)
 def scan_contract(contract_dict):
     abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
 
