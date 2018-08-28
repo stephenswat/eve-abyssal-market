@@ -62,18 +62,18 @@ def scan_contract(contract_dict):
 def scan_public_contracts():
     client = ESI.get_client()
 
-    head = client.head(
-        ESI['get_contracts_public_region_id'](region_id=10000002)
-    )
-
     all_contracts = []
 
-    if head.status == 200:
+    for region in [10000002, 10000043]:
+        head = client.head(
+            ESI['get_contracts_public_region_id'](region_id=region)
+        )
+
         number_of_page = head.header['X-Pages'][0]
 
         for page in range(1, number_of_page + 1):
             data = client.request(
-                ESI['get_contracts_public_region_id'](region_id=10000002, page=page)
+                ESI['get_contracts_public_region_id'](region_id=region, page=page)
             )
 
             all_contracts += list(data.data)
