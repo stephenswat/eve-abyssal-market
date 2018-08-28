@@ -31,7 +31,8 @@ def scan_contract(contract_dict):
                 'price': contract_dict['price'],
                 'issued_at': contract_dict['date_issued'].v,
                 'expires_at': contract_dict['date_expired'].v,
-                'single_item': False
+                'single_item': False,
+                'location_id': contract_dict['start_location_id']
             }
         )
 

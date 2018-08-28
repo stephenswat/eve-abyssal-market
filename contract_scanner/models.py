@@ -25,3 +25,5 @@ class Contract(models.Model):
     single_item = models.BooleanField()
 
     modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')
+
+    location_id = models.BigIntegerField(db_index=True)
