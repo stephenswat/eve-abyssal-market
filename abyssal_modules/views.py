@@ -24,7 +24,8 @@ class ModuleList(View):
             )
             .annotate(
                 contract_price=F('contracts__price'),
-                contract_id=F('contracts__id')
+                contract_id=F('contracts__id'),
+                contract_single=F('contracts__single_item')
             )
             .order_by('-first_seen')[:100]
         )
