@@ -57,12 +57,21 @@
                 </td>
                 {% endfor %}
                 <td>{{ m.contract_price|intword }} ISK</td>
-                <td>
+                <td class="contract-button-container">
                     <a
-                        class="btn btn-primary {% if not request.user.is_authenticated %}disabled{% endif %}"
+                        class="btn btn-primary btn-open-contract {% if not request.user.is_authenticated %}disabled{% endif %}"
                         href="javascript:open_contract({{ m.contract_id }}, '{{ csrf_token }}')"
                         role="button"
-                    >In-game</a></td>
+                    >
+                        API
+                    </a>&nbsp;
+                    <button
+                        class="btn btn-primary btn-copy-contract-link btn-open-contract"
+                        data-clipboard-text="<url=contract:30000142//{{ m.contract_id }}>Contract {{ m.contract_id }}</url>"
+                    >
+                        Link
+                    </button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
