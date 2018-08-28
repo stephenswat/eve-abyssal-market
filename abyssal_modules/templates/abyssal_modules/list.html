@@ -51,7 +51,7 @@ contract.</p>
                         {% endfor %}
                     </div>
                 </td>
-                <td>{{ m.contract_price|intword }} ISK</td>
+                <td data-sort="{{ m.contract_price }}">{{ m.contract_price|intword }} ISK</td>
                 <td class="contract-button-container">
                     <button
                         class="btn btn-primary btn-open-contract-esi btn-open-contract"
