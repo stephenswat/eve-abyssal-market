@@ -162,7 +162,6 @@
               <a class="nav-link" href="{% url 'eve_auth:login' %}">Log in</a>
             </li>
           {% endif %}
-          </li>
         </ul>
       </div>
     </nav>
@@ -173,7 +172,7 @@
       {% endfor %}
     </div>
 
-    <main role="main" class="container">
+    <main class="container">
       {% block content %} {% endblock %}
     </main>
 
