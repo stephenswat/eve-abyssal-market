@@ -47,7 +47,7 @@ efficiently search for the abyssal modules you want. </p>
                 <td class="contract-button-container">
                     <a
                         class="btn btn-primary btn-open-contract {% if not request.user.is_authenticated %}disabled{% endif %}"
-                        href="javascript:open_contract({{ m.contract_id }}, '{{ csrf_token }}')"
+                        href="javascript:open_contract({{ m.contract_id }})"
                         role="button"
                     >
                         API

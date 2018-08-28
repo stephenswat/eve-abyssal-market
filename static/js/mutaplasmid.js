@@ -1,14 +1,27 @@
-function open_contract(cid, csrf) {
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+        }
+    }
+});
+
+function open_contract(cid) {
     $.ajax({
         type: "POST",
         url: "/view_contract",
-        data: { contract_id: cid, csrfmiddlewaretoken: csrf }
+        data: { contract_id: cid }
     });
 }
 
 clipboard = new ClipboardJS('.btn-copy-contract-link');
 
-$('button').tooltip({
+$('.btn-open-contract').tooltip({
     trigger: 'click',
     placement: 'top'
 });
