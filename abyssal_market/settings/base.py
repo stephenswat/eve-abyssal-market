@@ -72,7 +72,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = False
 
-USE_TZ = False
+USE_TZ = True
 
 DATETIME_FORMAT = 'F j, Y, H:i'
 
