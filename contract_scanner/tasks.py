@@ -32,7 +32,8 @@ def scan_contract(contract_dict):
                 'issued_at': contract_dict['date_issued'].v,
                 'expires_at': contract_dict['date_expired'].v,
                 'single_item': False,
-                'location_id': contract_dict['start_location_id']
+                'location_id': contract_dict['start_location_id'],
+                'auction': (contract_dict['type'] == 'auction')
             }
         )
 
@@ -78,7 +79,7 @@ def scan_public_contracts():
             all_contracts += list(data.data)
 
     for contract_dict in all_contracts:
-        if contract_dict['type'] != 'item_exchange':
+        if contract_dict['type'] not in ['item_exchange', 'auction']:
             continue
 
         if not Contract.objects.filter(id=contract_dict['contract_id']).exists():

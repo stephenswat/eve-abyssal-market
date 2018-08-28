@@ -43,7 +43,7 @@
                 {% for at in attributes %}
                 <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
-                <th width="100px">Price</th>
+                <th width="120px">Price</th>
                 <th width="1px">Open</th>
             </tr>
         </thead>
@@ -56,7 +56,11 @@
                     {{ a.real_value|floatformat }}
                 </td>
                 {% endfor %}
-                <td data-sort="{{ m.contract_price }}">{{ m.contract_price|intword }} ISK</td>
+                <td data-sort="{{ m.contract_price }}">
+                    {{ m.contract_price|intword }} ISK
+                    {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items">M</span>{% endif %}
+                    {% if m.contract_auction %}<span class="text-muted" title="This is an auction. Price may be delayed by up to 30 minutes.">A</span>{% endif %}
+                </td>
                 <td class="contract-button-container">
                     <button
                         class="btn btn-primary btn-open-contract-esi btn-open-contract"

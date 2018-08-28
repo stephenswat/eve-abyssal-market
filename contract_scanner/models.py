@@ -23,6 +23,7 @@ class Contract(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     single_item = models.BooleanField()
+    auction = models.BooleanField()
 
     modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')
 

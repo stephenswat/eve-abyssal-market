@@ -32,7 +32,7 @@ contract.</p>
                 <th width="1px">Icon</th>
                 <th>Module</th>
                 <th>Attributes</th>
-                <th width="100px">Price</th>
+                <th width="120px">Price</th>
                 <th width="1px">Open</th>
             </tr>
         </thead>
@@ -54,6 +54,7 @@ contract.</p>
                 <td data-sort="{{ m.contract_price }}">
                     {{ m.contract_price|intword }} ISK
                     {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items">M</span>{% endif %}
+                    {% if m.contract_auction %}<span class="text-muted" title="This is an auction. Price may be delayed by up to 30 minutes.">A</span>{% endif %}
                 </td>
                 <td class="contract-button-container">
                     <button

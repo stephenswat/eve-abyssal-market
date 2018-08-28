@@ -25,7 +25,8 @@ class ModuleList(View):
             .annotate(
                 contract_price=F('contracts__price'),
                 contract_id=F('contracts__id'),
-                contract_single=F('contracts__single_item')
+                contract_single=F('contracts__single_item'),
+                contract_auction=F('contracts__auction')
             )
             .order_by('-first_seen')[:100]
         )
@@ -83,7 +84,9 @@ class TypedModuleList(View):
                     contracts__expires_at__gte=timezone.now()
                 ).annotate(
                     contract_price=F('contracts__price'),
-                    contract_id=F('contracts__id')
+                    contract_id=F('contracts__id'),
+                    contract_single=F('contracts__single_item'),
+                    contract_auction=F('contracts__auction')
                 ),
                 'module_type': module_type,
                 'attributes': attributes
