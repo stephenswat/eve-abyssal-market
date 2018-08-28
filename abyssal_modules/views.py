@@ -42,23 +42,26 @@ class TypedModuleList(View):
     def get(self, request, type_id):
         module_type = ModuleType.objects.get(id=type_id)
 
-        attribute_ranges = {
-            x['attribute__id']: x
-            for x in ModuleAttribute.objects
-            .filter(
-                module__type__id=type_id,
-                attribute__interesting=True
-            )
-            .values('attribute__id')
-            .annotate(min_val=Min('value'), max_val=Max('value'))
-        }
-
-        attributes = (
+        attributes = list(
             module_type.attributes
             .filter(interesting=True)
             .order_by('id')
             .all()
         )
+
+        if (type_id == 47702):
+            attributes.remove(module_type.attributes.get(id=2044))
+
+        attribute_ranges = {
+            x['attribute__id']: x
+            for x in ModuleAttribute.objects
+            .filter(
+                module__type__id=type_id,
+                attribute__in=attributes
+            )
+            .values('attribute__id')
+            .annotate(min_val=Min('value'), max_val=Max('value'))
+        }
 
         for a in attributes:
             mult = 0.001 if a.id == 73 else 1.0

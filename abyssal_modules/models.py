@@ -111,6 +111,7 @@ class Module(models.Model):
             [
                 x for x in self.moduleattribute_set.all()
                 if x.attribute.interesting
+                and not (self.type.id == 47702 and x.attribute.id == 2044)
             ],
             key=lambda x: x.attribute_id
         )
