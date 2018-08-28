@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load abyssal_types %}
 {% load humanize %}
 {% block content %}
 <div class="jumbotron">
@@ -19,6 +20,27 @@ If you don't want to sign in via EVE SSO you can click the "Link" button which
 will copy some data to your clipboard. You can paste this data into your
 in-game notepad and then click the newly created link to view the
 contract.</p>
+
+</div>
+
+<div class="jumbotron">
+<h1>Module Types</h1>
+
+<div class="container">
+    {% get_abyssal_type_list as type_list %}
+    {% for r, l in type_list %}
+    <div class="row">
+        <div class="col-3 align-middle">
+            <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
+        </div>
+        <div class="col-9 row">
+            {% for n, i in l %}
+            <div class="col-{{ l|column_width }} p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 </div>
 
