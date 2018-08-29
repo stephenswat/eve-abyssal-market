@@ -26,40 +26,6 @@
             </dl>
         </div>
     </div>
-
-
-    {% comment %}
-    <h2>Ownership History</h2>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Owner</th>
-                <th>Type</th>
-                <th>Start</th>
-                <th>End</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for o in owners.all %}
-            <tr>
-                <td>
-                    {% if o.asset_owner is not None %}
-                    {{ o.asset_owner.name }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if o.asset_owner is not None %}
-                    Asset
-                    {% endif %}
-                </td>
-                <td>{{ o.start }}</td>
-                <td>{{ o.end }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endcomment %}
 </div>
 
 {% endblock %}

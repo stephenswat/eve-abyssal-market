@@ -98,11 +98,6 @@ class ModuleView(DetailView):
     model = Module
     template_name = 'abyssal_modules/module.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['owners'] = self.object.ownershiprecord_set.order_by('-start')
-        return context
-
 
 class CreatorView(DetailView):
     model = EveCharacter
