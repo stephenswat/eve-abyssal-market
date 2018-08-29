@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="{% static 'css/abyssal.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href=" https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <style>
       html {
@@ -43,10 +44,10 @@
               {% for r, l in type_list %}
               <div class="dropdown-item">
                 <div class="row">
-                  <div class="col-4 align-middle">
+                  <div class="col-12 col-md-4 align-middle">
                     <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
                   </div>
-                  <div class="col-8 row">
+                  <div class="col-12 col-md-8 row">
                     {% for n, i in l %}
                     <a class="col-{{ l|column_width }}" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a>
                     {% endfor %}
@@ -96,6 +97,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="{% static 'js/mutaplasmid.js' %}"></script>
 

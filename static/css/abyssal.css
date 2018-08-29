@@ -6,10 +6,6 @@
     height: 88px;
 }
 
-.module-dropdown {
-    width: 550px;
-}
-
 .navbar-fill {
     flex-grow: 1.0;
 }
@@ -52,4 +48,10 @@
 
 .btn-open-contract {
     width: 60px;
+}
+
+@media screen and (min-device-width: 640px) {
+    .module-dropdown {
+        width: 550px;
+    }
 }

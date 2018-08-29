@@ -30,10 +30,10 @@ contract.</p>
     {% get_abyssal_type_list as type_list %}
     {% for r, l in type_list %}
     <div class="row">
-        <div class="col-3 align-middle">
+        <div class="col-md-3 col-12 align-middle">
             <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
         </div>
-        <div class="col-9 row">
+        <div class="col-md-9 col-12 row mx-0 p-1">
             {% for n, i in l %}
             <div class="col-{{ l|column_width }} p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
             {% endfor %}
@@ -48,14 +48,14 @@ contract.</p>
 <div class="jumbotron">
     <h1>Latest Abyssal Modules</h1>
 
-    <table class="table module-table" id="module-table">
+    <table class="table module-table dt-responsive" id="module-table" width="100%">
         <thead>
             <tr>
-                <th width="1px">Icon</th>
-                <th>Module</th>
-                <th>Attributes</th>
-                <th width="120px">Price</th>
-                <th width="1px">Open</th>
+                <th data-priority="1" width="1px">Icon</th>
+                <th data-priority="11000">Module</th>
+                <th data-priority="2">Attributes</th>
+                <th data-priority="10500" width="120px">Price</th>
+                <th data-priority="9500" width="1px">Open</th>
             </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@ contract.</p>
                 <td>
                     <div class="row">
                         {% for a in m.attribute_list %}
-                        <div class="col-4">
+                        <div class="col-12 col-md-4">
                             <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
                             {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
                         </div>

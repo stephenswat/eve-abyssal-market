@@ -17,7 +17,7 @@
     <form>
         <div class="row">
         {% for at in attributes %}
-            <div class="form-group col-6">
+            <div class="form-group col-12 col-md-6">
                 <div class="row">
                     <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
                     {% if at.high_is_good %}
@@ -36,15 +36,15 @@
 </div>
 
 <div class="jumbotron">
-    <table class="table module-table" id="module-table">
+    <table class="table module-table dt-responsive" id="module-table">
         <thead>
             <tr>
                 <th width="1px">Icon</th>
                 {% for at in attributes %}
-                <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                <th data-priority="10500"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
                 <th width="120px">Price</th>
-                <th width="1px">Open</th>
+                <th data-priority="9500" width="1px">Open</th>
             </tr>
         </thead>
         <tbody>
