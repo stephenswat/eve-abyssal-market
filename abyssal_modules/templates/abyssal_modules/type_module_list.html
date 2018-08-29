@@ -90,7 +90,7 @@
             {% for at in attributes %}
             var value = data[1 + {{ forloop.counter0 }}];
 
-            if (value <= attr_val[{{ at.id }}][0] || value >= attr_val[{{ at.id }}][1]) {
+            if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
                 return false;
             }
             {% endfor %}
