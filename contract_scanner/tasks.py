@@ -59,7 +59,7 @@ def scan_contract(contract_dict):
 
 
 @db_periodic_task(crontab(minute='0,30'))
-def scan_public_contracts():
+def scan_public_contracts(scan_all=False):
     client = ESI.get_client()
 
     all_contracts = []
@@ -82,7 +82,7 @@ def scan_public_contracts():
         if contract_dict['type'] not in ['item_exchange', 'auction']:
             continue
 
-        if not Contract.objects.filter(id=contract_dict['contract_id']).exists():
+        if scan_all or not Contract.objects.filter(id=contract_dict['contract_id']).exists():
             scan_contract(dict(contract_dict))
 
     Contract.objects.filter(
