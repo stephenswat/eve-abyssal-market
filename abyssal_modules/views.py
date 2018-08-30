@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.db.models import Min, Max, Count, F
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
@@ -42,7 +42,10 @@ class ModuleList(View):
 
 class TypedModuleList(View):
     def get(self, request, type_id):
-        module_type = ModuleType.objects.get(id=type_id)
+        try:
+            module_type = ModuleType.objects.get(id=type_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Module type does not exist.")
 
         attributes = list(
             module_type.attributes
