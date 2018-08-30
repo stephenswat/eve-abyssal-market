@@ -47,7 +47,11 @@ def scan_contract(contract_dict):
 
         for item in data:
             if item['type_id'] in abyssal_ids:
-                print("Abyssal!")
+                logger.info(
+                    "Found abyssal module %d in contract %d.",
+                    item['item_id'], contract_dict['contract_id']
+                )
+
                 module = create_module_helper(
                     type_id=item['type_id'],
                     item_id=item['item_id']
