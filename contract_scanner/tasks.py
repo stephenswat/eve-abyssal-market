@@ -76,20 +76,20 @@ def scan_public_contracts(scan_all=False):
         number_of_page = head.header['X-Pages'][0]
 
         for page in range(1, number_of_page + 1):
-            data = client.request(
+            contracts = list(client.request(
                 ESI['get_contracts_public_region_id'](region_id=region, page=page)
-            )
+            ).data)
 
-            for contract_dict in list(data.data):
+            for contract_dict in contracts:
                 if contract_dict['type'] not in ['item_exchange', 'auction']:
                     continue
 
                 if scan_all or not Contract.objects.filter(id=contract_dict['contract_id']).exists():
                     scan_contract(dict(contract_dict))
 
-    Contract.objects.filter(
-        Q(available=True) & ~Q(id__in={x['contract_id'] for x in all_contracts})
-    ).update(
-        available=False
-    )
+            Contract.objects.filter(
+                Q(available=True) & ~Q(id__in={x['contract_id'] for x in contracts})
+            ).update(
+                available=False
+            )
 
