@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Imports abyssal types and attributes'
 
     INTERESTING = [
-        6, 20, 30, 50, 54, 68, 72, 73, 84, 97, 105, 554, 983, 1159, 2044
+        6, 20, 30, 50, 54, 67, 68, 72, 73, 84, 97, 105, 554, 983, 1159, 2044, 2267
     ]
 
     def __init__(self, *args, **kwargs):

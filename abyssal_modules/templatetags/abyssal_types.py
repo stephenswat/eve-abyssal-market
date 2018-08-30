@@ -16,6 +16,8 @@ def get_abyssal_type_list():
         ("Ancil. Shield Boosters", [("Medium", 47836), ("Large", 47838), ("X-Large", 47840)]),
         ("Ancil. Armor Repairers", [("Small", 47842), ("Medium", 47844), ("Large", 47846)]),
         ("Energy Neutralizers", [("Small", 47824), ("Medium", 47828), ("Heavy", 47832)]),
+        ("Energy Nosferatus", [("Small", 48419), ("Medium", 48423), ("Heavy", 48427)]),
+        ("Cap Batteries", [("Small", 48431), ("Medium", 48435), ("Large", 48439)]),
         ("Tackle Modules", [("Stasis Webifiers", 47702), ("Warp Scramblers", 47732), ("Warp Disruptors", 47736)]),
     ]
 

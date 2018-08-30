@@ -153,7 +153,37 @@ ITEMS = [
         "abyssal_id": 47793,
         "normal_id": 10840,
         "name": "X-Large Abyssal Shield Booster"
-    }
+    },
+    {
+        "abyssal_id": 48431,
+        "normal_id": 1185,
+        "name": "Small Abyssal Cap Battery"
+    },
+    {
+        "abyssal_id": 48435,
+        "normal_id": 2018,
+        "name": "Medium Abyssal Cap Battery"
+    },
+    {
+        "abyssal_id": 48439,
+        "normal_id": 2020,
+        "name": "Large Abyssal Cap Battery"
+    },
+    {
+        "abyssal_id": 48419,
+        "normal_id": 530,
+        "name": "Small Abyssal Energy Nosferatu"
+    },
+    {
+        "abyssal_id": 48423,
+        "normal_id": 12257,
+        "name": "Medium Abyssal Energy Nosferatu"
+    },
+    {
+        "abyssal_id": 48427,
+        "normal_id": 12261,
+        "name": "Heavy Abyssal Energy Nosferatu"
+    },
 ]
 
 UNIT_STR = {
