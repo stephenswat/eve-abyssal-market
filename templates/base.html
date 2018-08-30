@@ -100,6 +100,16 @@
     </div>
 
     <main class="container">
+      <div class="alert alert-warning" role="alert">
+        Due to sanity limits placed by CCP on the ESI endpoints used by this
+        service it is currently impossible to retrieve more than 10,000 contracts
+        per region. This means that, in some busy regions such as The Forge, I
+        cannot retrieve all available contracts. Therefore, some contracts may
+        be missing and <strong>what is displayed on this site does not represent
+          the entire abyssal market</strong>. For more information please see
+          <a href="https://github.com/esi/esi-issues/issues/1014#issuecomment-416639135">this Github issue</a>.
+      </div>
+
       {% block content %} {% endblock %}
     </main>
 

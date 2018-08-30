@@ -55,3 +55,7 @@
         width: 550px;
     }
 }
+
+.alert-warning {
+    color: #856404;
+}
