@@ -67,8 +67,9 @@ def scan_public_contracts(scan_all=False):
     client = ESI.get_client()
 
     all_contracts = []
+    all_regions = client.request(ESI['get_universe_regions']()).data
 
-    for region in [10000002, 10000043]:
+    for region in all_regions:
         head = client.head(
             ESI['get_contracts_public_region_id'](region_id=region)
         )
