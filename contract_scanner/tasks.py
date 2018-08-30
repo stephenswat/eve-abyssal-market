@@ -66,7 +66,6 @@ def scan_contract(contract_dict):
 def scan_public_contracts(scan_all=False):
     client = ESI.get_client()
 
-    all_contracts = []
     all_regions = client.request(ESI['get_universe_regions']()).data
 
     for region in all_regions:
@@ -81,14 +80,12 @@ def scan_public_contracts(scan_all=False):
                 ESI['get_contracts_public_region_id'](region_id=region, page=page)
             )
 
-            all_contracts += list(data.data)
+            for contract_dict in list(data.data):
+                if contract_dict['type'] not in ['item_exchange', 'auction']:
+                    continue
 
-    for contract_dict in all_contracts:
-        if contract_dict['type'] not in ['item_exchange', 'auction']:
-            continue
-
-        if scan_all or not Contract.objects.filter(id=contract_dict['contract_id']).exists():
-            scan_contract(dict(contract_dict))
+                if scan_all or not Contract.objects.filter(id=contract_dict['contract_id']).exists():
+                    scan_contract(dict(contract_dict))
 
     Contract.objects.filter(
         Q(available=True) & ~Q(id__in={x['contract_id'] for x in all_contracts})
