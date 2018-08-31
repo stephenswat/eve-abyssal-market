@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1>Frequently Asked Questions</h1>
+
+    <p>Please note that not all questions on this page are actually
+    <em>frequently asked</em>. Many of these questions may have been asked only
+    once. Others have never been asked at all and are just predictions, made by
+    me, of what people could ask me in the future.</p>
+
+    <h5>What does this website do?</h5>
+
+    <p>This website scans available public contracts in EVE Online in search of
+    abyssal modules. Any abyssal modules found are presented in a (hopefully)
+    easily filterable way to make it easy for you to get the modules you
+    want.</p>
+
+    <h5>How do I get contracts to show up?</h5>
+
+    <p>The website scans all regions in the game for any public item exchange
+    or auction contract with abyssal modules in them.</p>
+
+    <h5>What do the 'M' and 'A' mean next to a module's price?</h5>
+
+    <p>An <strong>M</strong> means the abyssal module is not the only item in
+    the contract (there are <em>m</em>ultiple items) and an <strong>A</strong>
+    means the contract is an <em>a</em>uction.</p>
+
+    <h5>How do I view contracts in game?</h5>
+
+    <p>Once you've find a module you like there are two ways to open the
+    contract in the EVE client. Firstly, you can click the "log in" button in
+    the top right and then the "ESI" button on any abyssal module to
+    immediately open it in-game. If you don't want to sign in via EVE SSO you
+    can click the "Link" button which will copy some data to your clipboard.
+    You can paste this data into your in-game notepad and then click the newly
+    created link to view the contract.</p>
+
+    <h5>Why are my contracts not showing up?</h5>
+
+    <p>As stated in the big yellow bannner at the top, there is currently a
+    sanity limit on the number of contracts that can be retrieved with the
+    public contract endpoint. This limit is set to 10,000 which is lower than
+    the number of contracts in The Forge. You can either wait for CCP to
+    increase the contract limit on ESI or you can move your contract to
+    Lonetrek or pretty much any other region. Sorry for the inconvenience!</p>
+
+    <h5>How can I get in contact with you?</h5>
+
+    <p>Send me an EVE mail. My main character is <a
+    href="https://evewho.com/pilot/Sharad+Heft">Sharad Heft</a>. You can also
+    send me money if you want, but please don't feel forced.</p>
+
+    <h5>What is your policy regarding trackers or ads?</h5>
+
+    <p>The site serves Google Analytics to give me an idea of how people are
+    using the site. Your interactions are also logged (without sensitive data)
+    in nginx logs. If you have any legitimate issues with this or if you're an
+    EU lawmaker and you're angry at me for violating GDPR or something please
+    let me know. I aim to keep the site free of ads for the foreseeable
+    future.</p>
+
+    <h5>What technologies did you use to build this?</h5>
+
+    <p>The website runs on Django, a popular web development framework for
+    Python. In addition, PostgreSQL is used as the database and Huey is a task
+    queue that performs all kinds of different tasks. The server used is some
+    €10 per month VPS that I rent in the hope that it has enough horsepower to
+    run all the terrible code I put on it.</p>
+
+    <h5>Can I see the source code for this website?</h5>
+
+    <p>Of course! It's available <a
+    href="https://github.com/StephenSwat/eve-abyssal-market">on GitHub</a>. You
+    are also invited to create feature requests and bug reports there.</p>
+
+    <h5>What can you do to me if I log in?</h5>
+
+    <p>I can open contract windows and I can open the information window for
+    Exotic Dancers (Male) in your client at random times. The former is
+    hopefully helpful and I promise not to do the latter. </p>
+
+    <h5>I have a different question and it isn't listed here and I'm angry!</h5>
+
+    <p>Contact me and I might respond to you and/or add your question to this
+    page!</p>
+
+</div>
+
+{% endblock %}

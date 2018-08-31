@@ -27,6 +27,11 @@ urlpatterns = [
         name='open_contract'
     ),
     path(
+        'faq',
+        abyssal_modules.views.HelpView.as_view(),
+        name='faq'
+    ),
+    path(
         '',
         abyssal_modules.views.ModuleList.as_view()
     ),

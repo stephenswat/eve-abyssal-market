@@ -70,6 +70,9 @@
               {% endfor %}
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'abyssal_modules:faq' %}">FAQ</a>
+          </li>
         </ul>
         <ul class="navbar-nav navbar-right">
           {% if user.is_authenticated %}

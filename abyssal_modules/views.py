@@ -3,6 +3,7 @@ import datetime
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
+from django.views.generic.base import TemplateView
 from django.http import HttpResponse, Http404
 from django.db.models import Min, Max, Count, F
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -73,10 +74,10 @@ class TypedModuleList(View):
 
             if a.id in attribute_ranges:
                 offset = 0.02 * min(
-                    abs(attribute_ranges[a.id]['max_val']), 
+                    abs(attribute_ranges[a.id]['max_val']),
                     abs(attribute_ranges[a.id]['min_val'])
                 )
-                
+
                 a.max_val = (attribute_ranges[a.id]['max_val'] + offset) * mult
                 a.min_val = (attribute_ranges[a.id]['min_val'] - offset) * mult
             else:
@@ -119,3 +120,7 @@ class OpenContractView(LoginRequiredMixin, View):
         )
 
         return HttpResponse(status=204)
+
+
+class HelpView(TemplateView):
+    template_name = 'abyssal_modules/help.html'
