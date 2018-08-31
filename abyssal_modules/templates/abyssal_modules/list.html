@@ -30,8 +30,8 @@ contract.</p>
     {% get_abyssal_type_list as type_list %}
     {% for r, l in type_list %}
     <div class="row">
-        <div class="col-md-3 col-12 align-middle">
-            <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
+        <div class="col-md-3 col-12" style="display:flex;align-items:center;">
+            <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png" style="padding-right: 7px;">{{ r }}
         </div>
         <div class="col-md-9 col-12 row m-0 p-0">
             {% for n, i in l %}
