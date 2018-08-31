@@ -33,7 +33,7 @@ class ModuleList(View):
 
         return render(
             request,
-            'abyssal_modules/list.html',
+            'abyssal_modules/home.html',
             {
                 'modules': modules
             }
@@ -85,7 +85,7 @@ class TypedModuleList(View):
 
         return render(
             request,
-            'abyssal_modules/type_module_list.html',
+            'abyssal_modules/list.html',
             {
                 'modules': module_type.modules.filter(
                     contracts__available=True,

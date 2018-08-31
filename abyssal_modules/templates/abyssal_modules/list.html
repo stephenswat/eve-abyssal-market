@@ -1,78 +1,61 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load abyssal_types %}
 {% load humanize %}
+{% load static %}
 {% block content %}
-<div class="jumbotron">
-<h1>What the hell is this?</h1>
 
-<p class="lead"> Welcome to <a
-href="https://mutaplasmid.space/">mutaplasmid.space</a>! This is a
-community-built website to facilitate the trading of abyssal modules in EVE
-Online. With the current contract system, it's hard to find and buy the right
-modules for your spaceship. This service aims to provide you with tools to
-efficiently search for the abyssal modules you want. </p>
-
-<p>Once you've find a module you like there are two ways to open the contract
-in the EVE client. Firstly, you can click the "log in" button in the top right
-and then the "ESI" button on any abyssal module to immediately open it in-game.
-If you don't want to sign in via EVE SSO you can click the "Link" button which
-will copy some data to your clipboard. You can paste this data into your
-in-game notepad and then click the newly created link to view the
-contract.</p>
-
-</div>
-
-<div class="jumbotron">
-<h1>Module Types</h1>
-
-<div class="container">
-    {% get_abyssal_type_list as type_list %}
-    {% for r, l in type_list %}
-    <div class="row">
-        <div class="col-md-3 col-12" style="display:flex;align-items:center;">
-            <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png" style="padding-right: 7px;">{{ r }}
-        </div>
-        <div class="col-md-9 col-12 row m-0 p-0">
-            {% for n, i in l %}
-            <div class="col-{{ l|column_width }} p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
-            {% endfor %}
-        </div>
-    </div>
+<style>
+    {% for at in attributes %}
+    .attr-{{ at.id }}:after {
+        content: " {{ at.unit_str }}";
+    }
     {% endfor %}
-</div>
-
-</div>
-
+</style>
 
 <div class="jumbotron">
-    <h1>Latest Abyssal Modules</h1>
+    <h1>{{ module_type.name }}</h1>
 
-    <table class="table module-table dt-responsive" id="module-table" width="100%">
+    <form>
+        <div class="row">
+        {% for at in attributes %}
+            <div class="form-group col-12 col-md-6">
+                <div class="row">
+                    <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
+                    {% if at.high_is_good %}
+                    <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-min"></span>
+                    <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-max"></span>
+                    {% else %}
+                    <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-min"></span>
+                    <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-max"></span>
+                    {% endif %}
+                </div>
+                <div id="attr-{{ at.id }}-range" class="slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
+            </div>
+        {% endfor %}
+        </div>
+    </form>
+</div>
+
+<div class="jumbotron">
+    <table class="table module-table dt-responsive" id="module-table">
         <thead>
             <tr>
-                <th data-priority="1" width="1px">Icon</th>
-                <th data-priority="11000">Module</th>
-                <th data-priority="2">Attributes</th>
-                <th data-priority="10500" width="120px">Price</th>
+                <th width="1px">Icon</th>
+                {% for at in attributes %}
+                <th data-priority="10500"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                {% endfor %}
+                <th width="120px">Price</th>
                 <th data-priority="9500" width="1px">Open</th>
             </tr>
         </thead>
         <tbody>
             {% for m in modules %}
-            <tr class="item">
+            <tr>
                 <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
-                <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
-                <td>
-                    <div class="row">
-                        {% for a in m.attribute_list %}
-                        <div class="col-12 col-md-4">
-                            <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
-                            {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
-                        </div>
-                        {% endfor %}
-                    </div>
+                {% for a in m.attribute_list %}
+                <td class="attr-{{ a.attribute.id }}">
+                    {{ a.real_value|floatformat }}
                 </td>
+                {% endfor %}
                 <td data-sort="{{ m.contract_price }}">
                     {{ m.contract_price|intword }} ISK
                     {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items">M</span>{% endif %}
@@ -102,15 +85,61 @@ contract.</p>
 
 {% block trailing_js %}
 <script>
-$(document).ready(function () {
-    $('#module-table').DataTable({
-        "columnDefs": [
-            { "orderable": false, "targets": 0 },
-            { "orderable": false, "targets": 2 },
-            { "orderable": false, "targets": 4 },
-        ],
-        "order": []
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            {% for at in attributes %}
+            var value = data[1 + {{ forloop.counter0 }}];
+
+            if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
+                return false;
+            }
+            {% endfor %}
+
+            return true;
+        }
+    );
+
+    var attr_val = {
+        {% for at in attributes %}
+        {{ at.id }}: [{{ at.min_val }}, {{ at.max_val }}],
+        {% endfor %}
+    }
+
+    var table;
+
+    $(document).ready(function () {
+        table = $('#module-table').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 0 }
+            ],
+            "order": [[1, "asc"]]
+        });
+
+        update_labels();
     });
-});
+
+    function update_labels() {
+        {% for at in attributes %}
+        $("#attr-{{ at.id }}-min").text(attr_val[{{ at.id }}][0].toFixed(1));
+        $("#attr-{{ at.id }}-max").text(attr_val[{{ at.id }}][1].toFixed(1));
+        {% endfor %}
+    }
+
+    {% for at in attributes %}
+        $(function () {
+            $("#attr-{{ at.id }}-range").slider({
+                range: true,
+                min: attr_val[{{ at.id }}][0],
+                max: attr_val[{{ at.id }}][1],
+                step: 0.01,
+                values: attr_val[{{ at.id }}],
+                slide: function (event, ui) {
+                    attr_val[{{ at.id }}] = ui.values;
+                    table.draw();
+                    update_labels();
+                }
+            });
+        });
+    {% endfor %}
 </script>
 {% endblock %}
