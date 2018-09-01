@@ -154,6 +154,8 @@ class ModuleAttribute(models.Model):
     def real_value(self):
         if self.attribute.id == 73:
             return self.value / 1000
+        elif self.attribute.id == 1795:
+            return self.value / 1000
         elif self.attribute.id == 147:
             return self.value * 100
         else:

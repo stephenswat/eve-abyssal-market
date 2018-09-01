@@ -54,6 +54,8 @@ class TypedModuleList(View):
         for a in attributes:
             if a.id == 73:
                 mult = 0.001
+            elif a.id == 1795:
+                mult = 0.001
             elif a.id == 147:
                 mult = 100
             else:
