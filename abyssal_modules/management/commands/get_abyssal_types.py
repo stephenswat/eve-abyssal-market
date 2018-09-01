@@ -3,16 +3,12 @@ from tqdm import tqdm
 from django.core.management.base import BaseCommand
 
 from eve_esi import ESI
-from abyssal_modules.models import ModuleType, ModuleDogmaAttribute
+from abyssal_modules.models import ModuleType, ModuleDogmaAttribute, TypeAttribute
 from ._abyssal_primitive import ITEMS, UNIT_STR
 
 
 class Command(BaseCommand):
     help = 'Imports abyssal types and attributes'
-
-    INTERESTING = [
-        6, 20, 30, 50, 54, 67, 68, 72, 73, 84, 97, 105, 554, 983, 1159, 2044, 2267
-    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,6 +16,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for i in tqdm(ITEMS):
+            relevant = dict(i['relevant_attributes'])
+
             type_obj, _ = ModuleType.objects.update_or_create(
                 id=i['abyssal_id'],
                 defaults={'name': i['name']}
@@ -30,25 +28,27 @@ class Command(BaseCommand):
             ).data['dogma_attributes']
 
             for a in items:
-                self.scan_item(a['attribute_id'], type_obj)
+                attr_data = self.client.request(
+                    ESI['get_dogma_attributes_attribute_id'](attribute_id=a['attribute_id'])
+                ).data
 
-    def scan_item(self, item_id, item_type):
-        attr_data = self.client.request(
-            ESI['get_dogma_attributes_attribute_id'](attribute_id=item_id)
-        ).data
+                if not attr_data.get('published', False):
+                    continue
 
-        if not attr_data.get('published', False):
-            return
+                attr_obj, _ = ModuleDogmaAttribute.objects.update_or_create(
+                    id=attr_data['attribute_id'],
+                    defaults={
+                        'name': attr_data['display_name'],
+                        'icon_id': attr_data.get('icon_id', 0),
+                        'unit_str': UNIT_STR.get(attr_data.get('unit_id', -1), ''),
+                    }
+                )
 
-        attr_obj, _ = ModuleDogmaAttribute.objects.update_or_create(
-            id=attr_data['attribute_id'],
-            defaults={
-                'name': attr_data['display_name'],
-                'high_is_good': attr_data.get('high_is_good', None),
-                'icon_id': attr_data.get('icon_id', 0),
-                'unit_str': UNIT_STR.get(attr_data.get('unit_id', -1), ''),
-                'interesting': attr_data['attribute_id'] in self.INTERESTING
-            }
-        )
-
-        item_type.attributes.add(attr_obj)
+                TypeAttribute.objects.update_or_create(
+                    type=type_obj,
+                    attribute=attr_obj,
+                    defaults={
+                        'high_is_good': relevant.get(attr_data['attribute_id'], attr_data.get('high_is_good', None)),
+                        'display': attr_data['attribute_id'] in relevant
+                    }
+                )

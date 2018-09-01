@@ -16,28 +16,12 @@ from eve_esi import ESI
 
 class ModuleList(View):
     def get(self, request):
-        modules = (
-            Module
-            .objects
-            .filter(
-                contracts__available=True,
-                contracts__expires_at__gte=timezone.now()
-            )
-            .annotate(
-                contract_price=F('contracts__price'),
-                contract_id=F('contracts__id'),
-                contract_single=F('contracts__single_item'),
-                contract_auction=F('contracts__auction')
-            )
-            .order_by('-first_seen')[:100]
-        )
+        modules = Module.available.order_by('-first_seen')[:100]
 
         return render(
             request,
             'abyssal_modules/home.html',
-            {
-                'modules': modules
-            }
+            {'modules': modules}
         )
 
 
@@ -50,13 +34,11 @@ class TypedModuleList(View):
 
         attributes = list(
             module_type.attributes
-            .filter(interesting=True)
+            .filter(typeattribute__display=True)
+            .annotate(high_is_good=F("typeattribute__high_is_good"))
             .order_by('id')
             .all()
         )
-
-        if (type_id == 47702):
-            attributes.remove(module_type.attributes.get(id=2044))
 
         attribute_ranges = {
             x['attribute__id']: x
@@ -70,7 +52,12 @@ class TypedModuleList(View):
         }
 
         for a in attributes:
-            mult = 0.001 if a.id == 73 else 1.0
+            if a.id == 73:
+                mult = 0.001
+            elif a.id == 147:
+                mult = 100
+            else:
+                mult = 1
 
             if a.id in attribute_ranges:
                 offset = 0.02 * min(
@@ -88,15 +75,7 @@ class TypedModuleList(View):
             request,
             'abyssal_modules/list.html',
             {
-                'modules': module_type.modules.filter(
-                    contracts__available=True,
-                    contracts__expires_at__gte=timezone.now()
-                ).annotate(
-                    contract_price=F('contracts__price'),
-                    contract_id=F('contracts__id'),
-                    contract_single=F('contracts__single_item'),
-                    contract_auction=F('contracts__auction')
-                ),
+                'modules': Module.available.filter(type=module_type),
                 'module_type': module_type,
                 'attributes': attributes
             }

@@ -1,188 +1,243 @@
+RELEVANT_ATTRIBUTES = {
+    'microwarpdrive': [(6, False), (147, True), (20, True), (30, False), (554, False), (50, False)],
+    'afterburner': [(6, False), (20, True), (30, False), (50, False)],
+    'shield_extender': [(72, True), (50, False), (30, False), (983, False)],
+    'armor_plates': [(50, False), (30, False), (796, False), (1159, True)],
+    'shield_booster': [(50, False), (30, False), (68, True), (6, False), (73, False)],
+    'armor_repairer': [(50, False), (30, False), (84, True), (6, False), (73, False)],
+    'ancil_shield_booster': [(50, False), (30, False), (68, True), (6, False), (73, False), (1795, False)],
+    'ancil_armor_repairer': [(50, False), (30, False), (84, True), (6, False), (73, False), (1795, False)],
+    'energy_neutralizer': [(50, False), (30, False), (6, True), (54, True), (2044, True), (97, True)],
+    'energy_nosferatu': [(50, False), (30, False), (54, True), (2044, True), (90, True)],
+    'cap_battery': [(50, False), (30, False), (2267, False), (67, True)],
+    'warp_scrambler': [(50, False), (6, False), (54, True), (105, True)],
+    'warp_disruptor': [(50, False), (6, False), (54, True)],
+    'stasis_webifier': [(50, False), (30, False), (6, False), (54, True), (20, False)],
+
+}
+
 ITEMS = [
     {
         "abyssal_id": 47749,
         "normal_id": 439,
-        "name": "1MN Abyssal Afterburner"
+        "name": "1MN Abyssal Afterburner",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['afterburner'],
     },
     {
         "abyssal_id": 47769,
         "normal_id": 523,
-        "name": "Small Abyssal Armor Repairer"
+        "name": "Small Abyssal Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_repairer'],
     },
     {
         "abyssal_id": 47817,
         "normal_id": 11299,
-        "name": "Medium Abyssal Armor Plates"
+        "name": "Medium Abyssal Armor Plates",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_plates'],
     },
     {
         "abyssal_id": 47820,
         "normal_id": 11279,
-        "name": "Large Abyssal Armor Plates"
+        "name": "Large Abyssal Armor Plates",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_plates'],
     },
     {
         "abyssal_id": 47836,
         "normal_id": 32772,
-        "name": "Medium Abyssal Ancillary Shield Booster"
+        "name": "Medium Abyssal Ancillary Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_shield_booster'],
     },
     {
         "abyssal_id": 47838,
         "normal_id": 4391,
-        "name": "Large Abyssal Ancillary Shield Booster"
+        "name": "Large Abyssal Ancillary Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_shield_booster'],
     },
     {
         "abyssal_id": 47840,
         "normal_id": 32780,
-        "name": "X-Large Abyssal Ancillary Shield Booster"
+        "name": "X-Large Abyssal Ancillary Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_shield_booster'],
     },
     {
         "abyssal_id": 47846,
         "normal_id": 33103,
-        "name": "Large Abyssal Ancillary Armor Repairer"
+        "name": "Large Abyssal Ancillary Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_armor_repairer'],
     },
     {
         "abyssal_id": 47781,
         "normal_id": 399,
-        "name": "Small Abyssal Shield Booster"
+        "name": "Small Abyssal Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_booster'],
     },
     {
         "abyssal_id": 47804,
         "normal_id": 3829,
-        "name": "Medium Abyssal Shield Extender"
+        "name": "Medium Abyssal Shield Extender",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_extender'],
     },
     {
         "abyssal_id": 47808,
         "normal_id": 3839,
-        "name": "Large Abyssal Shield Extender"
+        "name": "Large Abyssal Shield Extender",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_extender'],
     },
     {
         "abyssal_id": 47828,
         "normal_id": 12265,
-        "name": "Medium Abyssal Energy Neutralizer"
+        "name": "Medium Abyssal Energy Neutralizer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_neutralizer'],
     },
     {
         "abyssal_id": 47736,
         "normal_id": 3242,
-        "name": "Abyssal Warp Disruptor"
+        "name": "Abyssal Warp Disruptor",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['warp_disruptor'],
     },
     {
         "abyssal_id": 47745,
         "normal_id": 12054,
-        "name": "500MN Abyssal Microwarpdrive"
+        "name": "500MN Abyssal Microwarpdrive",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['microwarpdrive'],
     },
     {
         "abyssal_id": 47753,
         "normal_id": 12056,
-        "name": "10MN Abyssal Afterburner"
+        "name": "10MN Abyssal Afterburner",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['afterburner'],
     },
     {
         "abyssal_id": 47757,
         "normal_id": 12066,
-        "name": "100MN Abyssal Afterburner"
+        "name": "100MN Abyssal Afterburner",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['afterburner'],
     },
     {
         "abyssal_id": 47773,
         "normal_id": 3528,
-        "name": "Medium Abyssal Armor Repairer"
+        "name": "Medium Abyssal Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_repairer'],
     },
     {
         "abyssal_id": 47789,
         "normal_id": 10838,
-        "name": "Large Abyssal Shield Booster"
+        "name": "Large Abyssal Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_booster'],
     },
     {
         "abyssal_id": 47832,
         "normal_id": 12269,
-        "name": "Heavy Abyssal Energy Neutralizer"
+        "name": "Heavy Abyssal Energy Neutralizer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_neutralizer'],
     },
     {
         "abyssal_id": 47702,
         "normal_id": 526,
-        "name": "Abyssal Stasis Webifier"
+        "name": "Abyssal Stasis Webifier",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['stasis_webifier'],
     },
     {
         "abyssal_id": 47732,
         "normal_id": 447,
-        "name": "Abyssal Warp Scrambler"
+        "name": "Abyssal Warp Scrambler",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['warp_scrambler'],
     },
     {
         "abyssal_id": 47777,
         "normal_id": 3538,
-        "name": "Large Abyssal Armor Repairer"
+        "name": "Large Abyssal Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_repairer'],
     },
     {
         "abyssal_id": 47785,
         "normal_id": 10836,
-        "name": "Medium Abyssal Shield Booster"
+        "name": "Medium Abyssal Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_booster'],
     },
     {
         "abyssal_id": 47800,
         "normal_id": 377,
-        "name": "Small Abyssal Shield Extender"
+        "name": "Small Abyssal Shield Extender",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_extender'],
     },
     {
         "abyssal_id": 47812,
         "normal_id": 11295,
-        "name": "Small Abyssal Armor Plates"
+        "name": "Small Abyssal Armor Plates",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_plates'],
     },
     {
         "abyssal_id": 47824,
         "normal_id": 533,
-        "name": "Small Abyssal Energy Neutralizer"
+        "name": "Small Abyssal Energy Neutralizer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_neutralizer'],
     },
     {
         "abyssal_id": 47842,
         "normal_id": 33076,
-        "name": "Small Abyssal Ancillary Armor Repairer"
+        "name": "Small Abyssal Ancillary Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_armor_repairer'],
     },
     {
         "abyssal_id": 47844,
         "normal_id": 33101,
-        "name": "Medium Abyssal Ancillary Armor Repairer"
+        "name": "Medium Abyssal Ancillary Armor Repairer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_armor_repairer'],
     },
     {
         "abyssal_id": 47408,
         "normal_id": 12054,
-        "name": "50MN Abyssal Microwarpdrive"
+        "name": "50MN Abyssal Microwarpdrive",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['microwarpdrive'],
     },
     {
         "abyssal_id": 47740,
         "normal_id": 434,
-        "name": "5mn Abyssal Microwarpdrive"
+        "name": "5mn Abyssal Microwarpdrive",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['microwarpdrive'],
     },
     {
         "abyssal_id": 47793,
         "normal_id": 10840,
-        "name": "X-Large Abyssal Shield Booster"
+        "name": "X-Large Abyssal Shield Booster",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_booster'],
     },
     {
         "abyssal_id": 48431,
         "normal_id": 1185,
-        "name": "Small Abyssal Cap Battery"
+        "name": "Small Abyssal Cap Battery",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['cap_battery'],
     },
     {
         "abyssal_id": 48435,
         "normal_id": 2018,
-        "name": "Medium Abyssal Cap Battery"
+        "name": "Medium Abyssal Cap Battery",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['cap_battery'],
     },
     {
         "abyssal_id": 48439,
         "normal_id": 2020,
-        "name": "Large Abyssal Cap Battery"
+        "name": "Large Abyssal Cap Battery",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['cap_battery'],
     },
     {
         "abyssal_id": 48419,
         "normal_id": 530,
-        "name": "Small Abyssal Energy Nosferatu"
+        "name": "Small Abyssal Energy Nosferatu",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_nosferatu'],
     },
     {
         "abyssal_id": 48423,
         "normal_id": 12257,
-        "name": "Medium Abyssal Energy Nosferatu"
+        "name": "Medium Abyssal Energy Nosferatu",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_nosferatu'],
     },
     {
         "abyssal_id": 48427,
         "normal_id": 12261,
-        "name": "Heavy Abyssal Energy Nosferatu"
+        "name": "Heavy Abyssal Energy Nosferatu",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_nosferatu'],
     },
 ]
 

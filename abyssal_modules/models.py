@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.db import transaction
+from django.db.models import OuterRef, Subquery, F
 
 from eve_esi import ESI
 from contract_scanner.models import Contract
@@ -39,11 +40,8 @@ class ModuleDogmaAttribute(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
 
-    high_is_good = models.NullBooleanField()
     icon_id = models.IntegerField()
     unit_str = models.CharField(max_length=16)
-
-    interesting = models.BooleanField()
 
     @property
     def icon_path(self):
@@ -59,6 +57,7 @@ class ModuleType(models.Model):
 
     attributes = models.ManyToManyField(
         ModuleDogmaAttribute,
+        through='TypeAttribute',
         related_name='+'
     )
 
@@ -68,15 +67,36 @@ class ModuleType(models.Model):
 
 class ModuleManager(models.Manager):
     def get_queryset(self):
-        return super(ModuleManager, self).get_queryset().prefetch_related(
-            'moduleattribute_set__attribute',
-            'type',
-            'creator'
+        return (
+            super().get_queryset()
+            .prefetch_related(
+                'moduleattribute_set__attribute',
+                'type',
+                'creator'
+            )
+            .annotate(
+                contract_price=F('contracts__price'),
+                contract_id=F('contracts__id'),
+                contract_single=F('contracts__single_item'),
+                contract_auction=F('contracts__auction')
+            )
+        )
+
+
+class AvailableModuleManager(ModuleManager):
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .filter(
+                contracts__available=True,
+                contracts__expires_at__gte=timezone.now()
+            )
         )
 
 
 class Module(models.Model):
     objects = ModuleManager()
+    available = AvailableModuleManager()
 
     id = models.BigIntegerField(primary_key=True)
     type = models.ForeignKey(
@@ -107,9 +127,18 @@ class Module(models.Model):
     def attribute_list(self):
         return sorted(
             [
-                x for x in self.moduleattribute_set.all()
-                if x.attribute.interesting
-                and not (self.type.id == 47702 and x.attribute.id == 2044)
+                x for x in self.moduleattribute_set
+                .annotate(
+                    relevant=Subquery(
+                        TypeAttribute.objects
+                        .filter(
+                            type=self.type,
+                            attribute=OuterRef('attribute')
+                        )
+                        .values('display')[:1]
+                    )
+                )
+                .filter(relevant=True)
             ],
             key=lambda x: x.attribute_id
         )
@@ -125,5 +154,15 @@ class ModuleAttribute(models.Model):
     def real_value(self):
         if self.attribute.id == 73:
             return self.value / 1000
+        elif self.attribute.id == 147:
+            return self.value * 100
+        else:
+            return self.value
 
-        return self.value
+
+class TypeAttribute(models.Model):
+    type = models.ForeignKey(ModuleType, models.CASCADE)
+    attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
+
+    display = models.BooleanField(default=False)
+    high_is_good = models.NullBooleanField()
