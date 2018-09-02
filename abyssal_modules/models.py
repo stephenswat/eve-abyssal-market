@@ -74,12 +74,6 @@ class ModuleManager(models.Manager):
                 'type',
                 'creator'
             )
-            .annotate(
-                contract_price=F('contracts__price'),
-                contract_id=F('contracts__id'),
-                contract_single=F('contracts__single_item'),
-                contract_auction=F('contracts__auction')
-            )
         )
 
 
@@ -90,6 +84,12 @@ class AvailableModuleManager(ModuleManager):
             .filter(
                 contracts__available=True,
                 contracts__expires_at__gte=timezone.now()
+            )
+            .annotate(
+                contract_price=F('contracts__price'),
+                contract_id=F('contracts__id'),
+                contract_single=F('contracts__single_item'),
+                contract_auction=F('contracts__auction')
             )
         )
 
