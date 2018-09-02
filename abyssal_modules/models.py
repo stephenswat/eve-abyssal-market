@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, F
+from django.db.models import OuterRef, Subquery, F, Q, Value
 
 from eve_esi import ESI
 from contract_scanner.models import Contract
@@ -72,7 +72,6 @@ class ModuleManager(models.Manager):
             .prefetch_related(
                 'moduleattribute_set__attribute',
                 'type',
-                'creator'
             )
         )
 
@@ -126,21 +125,25 @@ class Module(models.Model):
     @property
     def attribute_list(self):
         return sorted(
-            [
-                x for x in self.moduleattribute_set
-                .annotate(
-                    relevant=Subquery(
-                        TypeAttribute.objects
-                        .filter(
-                            type=self.type,
-                            attribute=OuterRef('attribute')
-                        )
-                        .values('display')[:1]
-                    )
-                )
-                .filter(relevant=True)
-            ],
+            [x for x in self.moduleattribute_set.all() if x.display],
             key=lambda x: x.attribute_id
+        )
+
+
+class ModuleAttributeManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .annotate(
+                display=Subquery(
+                    TypeAttribute.objects
+                    .filter(
+                        type=OuterRef('module__type'),
+                        attribute=OuterRef('attribute')
+                    )
+                    .values('display')[:1]
+                )
+            )
         )
 
 
@@ -149,6 +152,8 @@ class ModuleAttribute(models.Model):
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
 
     value = models.FloatField()
+
+    objects = ModuleAttributeManager()
 
     @property
     def real_value(self):
