@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'eve_esi',
     'abyssal_modules',
     'contract_scanner',
+    'price_predictor',
     'huey.contrib.djhuey',
     'bootstrap4',
     'django.contrib.humanize',

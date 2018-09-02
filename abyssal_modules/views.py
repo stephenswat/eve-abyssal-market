@@ -13,6 +13,8 @@ from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
 )
 from eve_esi import ESI
+from price_predictor.models import PricePredictor
+
 
 class ModuleList(View):
     def get(self, request):
@@ -87,6 +89,17 @@ class TypedModuleList(View):
 class ModuleView(DetailView):
     model = Module
     template_name = 'abyssal_modules/module.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        try:
+            price_prediction = PricePredictor.predict_price(self.object)
+        except Exception:
+            price_prediction = None
+
+        context['prediction'] = price_prediction
+        return context
 
 
 class CreatorView(DetailView):

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+{% load price_predictor %}
 {% block content %}
 <div class="jumbotron">
     <h1>{{ object.creator.name }}'s Modified {{ object.type.name }}</h1>
@@ -26,6 +28,16 @@
             </dl>
         </div>
     </div>
+
+    {% if prediction %}
+    <h4>Price Estimation</h4>
+    <dl>
+        <dt>Estimated Value</dt>
+        <dd>{{ prediction.price|intword }} ISK</dd>
+        <dt>Confidence</dt>
+        <dd>{{ prediction.confidence|prediction_confidence }} ({{ prediction.confidence|floatformat:2 }})</dd>
+    </dl>
+    {% endif %}
 </div>
 
 {% endblock %}
