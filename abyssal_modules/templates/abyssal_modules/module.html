@@ -31,6 +31,12 @@
 
     {% if prediction %}
     <h4>Price Estimation</h4>
+
+    <div class="alert alert-danger">These predictions are based on machine
+    learning models and can range anywhere from completely ridiculous to
+    somewhat accurate. <strong>Always</strong> use your own judgement when
+    buying and selling abyssal modules.</div>
+
     <dl>
         <dt>Estimated Value</dt>
         <dd>{{ prediction.price|intword }} ISK</dd>
