@@ -29,7 +29,7 @@ def create_models():
         samples, features = [], []
 
         for x in mods:
-            samples.append(x.contract_price / 1_000_000)
+            samples.append(x.contract_price / 1000000)
             features.append([y.value for y in x.attribute_list])
 
         scaler = StandardScaler()

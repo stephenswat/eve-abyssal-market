@@ -25,6 +25,6 @@ class PricePredictor(models.Model):
         scaled_features = scaler.transform([[y.value for y in module.attribute_list]])
 
         return {
-            'price': model.predict(scaled_features)[0] * 1_000_000,
+            'price': model.predict(scaled_features)[0] * 1000000,
             'confidence': model_row.quality
         }
