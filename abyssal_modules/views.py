@@ -118,3 +118,7 @@ class OpenContractView(LoginRequiredMixin, View):
 
 class HelpView(TemplateView):
     template_name = 'abyssal_modules/help.html'
+
+
+class LegalView(TemplateView):
+    template_name = 'abyssal_modules/legal.html'
