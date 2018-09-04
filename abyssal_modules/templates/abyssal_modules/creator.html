@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
 {% block content %}
 <div class="jumbotron">
     <h1>{{ object.name }}</h1>
