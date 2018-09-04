@@ -56,6 +56,12 @@
     }
 }
 
+@media screen and (max-device-width: 640px) {
+    .btn-copy-contract-link {
+        display: none !important;
+    }
+}
+
 .alert-warning {
     color: #856404;
 }
