@@ -34,52 +34,23 @@ class TypedModuleList(View):
         except ModuleType.DoesNotExist:
             raise Http404("Module type does not exist.")
 
-        attributes = list(
-            module_type.attributes
-            .filter(typeattribute__display=True)
-            .annotate(high_is_good=F("typeattribute__high_is_good"))
-            .order_by('id')
-            .all()
-        )
-
-        attribute_ranges = {
-            x['attribute__id']: x
-            for x in ModuleAttribute.objects
-            .filter(
-                module__type__id=type_id,
-                attribute__in=attributes
-            )
-            .values('attribute__id')
-            .annotate(min_val=Min('value'), max_val=Max('value'))
-        }
+        modules = Module.available.filter(type=module_type)
+        attributes = module_type.attribute_list
 
         for a in attributes:
-            if a.id == 73:
-                mult = 0.001
-            elif a.id == 1795:
-                mult = 0.001
-            elif a.id == 147:
-                mult = 100
-            else:
-                mult = 1
+            min_val = min(x.attribute_dict[a.id].real_value for x in modules)
+            max_val = max(x.attribute_dict[a.id].real_value for x in modules)
 
-            if a.id in attribute_ranges:
-                offset = 0.02 * min(
-                    abs(attribute_ranges[a.id]['max_val']),
-                    abs(attribute_ranges[a.id]['min_val'])
-                )
+            offset = 0.02 * min(abs(min_val), abs(max_val))
 
-                a.max_val = (attribute_ranges[a.id]['max_val'] + offset) * mult
-                a.min_val = (attribute_ranges[a.id]['min_val'] - offset) * mult
-            else:
-                a.min_val = 0.0
-                a.max_val = 100.0
+            a.max_val = (max_val + offset)
+            a.min_val = (min_val - offset)
 
         return render(
             request,
             'abyssal_modules/list.html',
             {
-                'modules': Module.available.filter(type=module_type),
+                'modules': modules,
                 'module_type': module_type,
                 'attributes': attributes
             }

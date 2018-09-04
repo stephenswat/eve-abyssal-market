@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When
+from django.utils.functional import cached_property
 
 from eve_esi import ESI
 from contract_scanner.models import Contract
@@ -60,6 +61,16 @@ class ModuleType(models.Model):
         through='TypeAttribute',
         related_name='+'
     )
+
+    @property
+    def attribute_list(self):
+        return list(
+            self.attributes
+            .filter(typeattribute__display=True)
+            .annotate(high_is_good=F("typeattribute__high_is_good"))
+            .order_by('id')
+            .all()
+        )
 
     def __str__(self):
         return self.name
@@ -122,12 +133,19 @@ class Module(models.Model):
 
     first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
 
-    @property
+    @cached_property
     def attribute_list(self):
         return sorted(
-            [x for x in self.moduleattribute_set.all() if x.display],
-            key=lambda x: x.attribute_id
+            self.attribute_dict.values(),
+            key=lambda x: x.attribute.id
         )
+
+    @cached_property
+    def attribute_dict(self):
+        return {
+            x.attribute.id: x
+            for x in self.moduleattribute_set.all() if x.display
+        }
 
 
 class ModuleAttributeManager(models.Manager):
