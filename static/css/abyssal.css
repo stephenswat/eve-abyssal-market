@@ -63,3 +63,7 @@
 html {
     overflow-y:scroll;
 }
+
+.module-table>tbody>tr>td {
+    vertical-align: middle;
+}
