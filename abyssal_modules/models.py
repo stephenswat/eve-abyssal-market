@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, F, Q, Value
+from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When
 
 from eve_esi import ESI
 from contract_scanner.models import Contract
@@ -142,6 +142,11 @@ class ModuleAttributeManager(models.Manager):
                         attribute=OuterRef('attribute')
                     )
                     .values('display')[:1]
+                ),
+                real_value=Case(
+                    When(attribute_id__in=[73, 1795], then=F('value') * Value(0.001)),
+                    When(attribute_id__in=[147], then=F('value') * Value(100)),
+                    default=F('value')
                 )
             )
         )
@@ -154,17 +159,6 @@ class ModuleAttribute(models.Model):
     value = models.FloatField()
 
     objects = ModuleAttributeManager()
-
-    @property
-    def real_value(self):
-        if self.attribute.id == 73:
-            return self.value / 1000
-        elif self.attribute.id == 1795:
-            return self.value / 1000
-        elif self.attribute.id == 147:
-            return self.value * 100
-        else:
-            return self.value
 
 
 class TypeAttribute(models.Model):
