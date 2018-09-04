@@ -39,12 +39,12 @@
     <table class="table module-table dt-responsive" id="module-table">
         <thead>
             <tr>
-                <th width="1px">Icon</th>
+                <th width="1px" data-orderable="false">Icon</th>
                 {% for at in attributes %}
-                <th data-priority="10500"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                <th data-priority="10500" data-name="attr-{{ at.id }}"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
-                <th width="120px">Price</th>
-                <th data-priority="9500" width="1px">Open</th>
+                <th width="120px" data-name="price">Price</th>
+                <th data-priority="9500" width="1px" data-orderable="false">Open</th>
             </tr>
         </thead>
         <tbody>
@@ -109,9 +109,6 @@
 
     $(document).ready(function () {
         table = $('#module-table').DataTable({
-            "columnDefs": [
-                { "orderable": false, "targets": 0 }
-            ],
             "order": [[1, "asc"]]
         });
 
