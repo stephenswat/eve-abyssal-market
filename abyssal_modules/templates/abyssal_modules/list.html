@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load static %}
+{% load module_stats %}
 {% block content %}
 
 <style>
@@ -19,7 +20,7 @@
         {% for at in attributes %}
             <div class="form-group col-12 col-md-6">
                 <div class="row">
-                    <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
+                    <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}{% if at.derived %}<span style="text-muted" title="This is a derived attribute.">*</span>{% endif %}</label>
                     {% if at.high_is_good %}
                     <span class="col-3 attr-{{ at.id }} range-min" id="attr-{{ at.id }}-min"></span>
                     <span class="col-3 attr-{{ at.id }} range-max" id="attr-{{ at.id }}-max"></span>
@@ -51,8 +52,8 @@
             {% for m in modules %}
             <tr>
                 <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
-                {% for a in m.attribute_list %}
-                <td class="attr-{{ a.attribute.id }}">{{ a.real_value|floatformat }}</td>
+                {% for a in attributes %}
+                <td class="attr-{{ a.id }}">{{ m|get_attribute_value:a.id|floatformat }}</td>
                 {% endfor %}
                 <td data-sort="{{ m.contract_price }}">
                     {{ m.contract_price|intword }} ISK

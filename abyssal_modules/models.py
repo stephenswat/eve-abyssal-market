@@ -8,6 +8,42 @@ from eve_esi import ESI
 from contract_scanner.models import Contract
 
 
+DERIVED_ATTRIBUTES = {
+    100000: {
+        'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840],
+        'name': 'Shield boost per second',
+        'icon_id': 68,
+        'unit_str': 'HP/s',
+        'value': lambda x: x.get_value(68) / x.get_value(73),
+        'high_is_good': True
+    },
+    100001: {
+        'types': [47769, 47773, 47777, 47842, 47844, 47846],
+        'name': 'Armor repair per second',
+        'icon_id': 68,
+        'unit_str': 'HP/s',
+        'value': lambda x: x.get_value(84) / x.get_value(73),
+        'high_is_good': True
+    },
+    100002: {
+        'types': [47781, 47785, 47789, 47793],
+        'name': 'Shield boost per capacitor',
+        'icon_id': 68,
+        'unit_str': 'HP/GJ',
+        'value': lambda x: x.get_value(68) / x.get_value(6),
+        'high_is_good': True
+    },
+    100003: {
+        'types': [47769, 47773, 47777, 47842, 47844, 47846],
+        'name': 'Armor repair per capacitor',
+        'icon_id': 68,
+        'unit_str': 'HP/GJ',
+        'value': lambda x: x.get_value(84) / x.get_value(6),
+        'high_is_good': True
+    },
+}
+
+
 class EveCharacterManager(models.Manager):
     def get_or_create_by_id(self, character_id):
         try:
@@ -48,6 +84,10 @@ class ModuleDogmaAttribute(models.Model):
     def icon_path(self):
         return "/img/attributes/%d.png" % self.id
 
+    @property
+    def derived(self):
+        return getattr(self, '_derived', False)
+
     def __str__(self):
         return self.name
 
@@ -64,13 +104,31 @@ class ModuleType(models.Model):
 
     @property
     def attribute_list(self):
-        return list(
+        attrs = list(
             self.attributes
             .filter(typeattribute__display=True)
             .annotate(high_is_good=F("typeattribute__high_is_good"))
             .order_by('id')
             .all()
         )
+
+        for attr_id, data in DERIVED_ATTRIBUTES.items():
+            if self.id not in data['types']:
+                continue
+
+            new_attr = ModuleDogmaAttribute(
+                id=attr_id,
+                name=data['name'],
+                icon_id=data['icon_id'],
+                unit_str=data['unit_str']
+            )
+
+            new_attr._derived = True
+            new_attr.high_is_good = data['high_is_good']
+
+            attrs.append(new_attr)
+
+        return attrs
 
     def __str__(self):
         return self.name
@@ -146,6 +204,16 @@ class Module(models.Model):
             x.attribute.id: x
             for x in self.moduleattribute_set.all() if x.display
         }
+
+    def get_value(self, attr_id):
+        if attr_id in DERIVED_ATTRIBUTES:
+            return DERIVED_ATTRIBUTES[attr_id]['value'](self)
+
+        for x in self.moduleattribute_set.all():
+            if x.attribute.id == attr_id:
+                return x.real_value
+        else:
+            raise ValueError("Object does not have an attribute %d." % attr_id)
 
 
 class ModuleAttributeManager(models.Manager):
