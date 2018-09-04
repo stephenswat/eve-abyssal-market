@@ -41,7 +41,7 @@
             <tr>
                 <th width="1px" data-orderable="false">Icon</th>
                 {% for at in attributes %}
-                <th data-priority="10500" data-name="attr-{{ at.id }}"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                <th data-priority="10500" data-name="attr-{{ at.id }}" data-type="num"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
                 <th width="120px" data-name="price">Price</th>
                 <th data-priority="9500" width="1px" data-orderable="false">Open</th>
@@ -52,9 +52,7 @@
             <tr>
                 <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
                 {% for a in m.attribute_list %}
-                <td class="attr-{{ a.attribute.id }}">
-                    {{ a.real_value|floatformat }}
-                </td>
+                <td class="attr-{{ a.attribute.id }}">{{ a.real_value|floatformat }}</td>
                 {% endfor %}
                 <td data-sort="{{ m.contract_price }}">
                     {{ m.contract_price|intword }} ISK
@@ -85,34 +83,43 @@
 
 {% block trailing_js %}
 <script>
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            {% for at in attributes %}
-            var value = data[1 + {{ forloop.counter0 }}];
-
-            if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
-                return false;
-            }
-            {% endfor %}
-
-            return true;
-        }
-    );
-
-    var attr_val = {
-        {% for at in attributes %}
-        {{ at.id }}: [{{ at.min_val }}, {{ at.max_val }}],
-        {% endfor %}
-    }
-
     var table;
+    var attr_val = {};
 
     $(document).ready(function () {
         table = $('#module-table').DataTable({
             "order": [[1, "asc"]]
         });
 
+        {% for at in attributes %}
+        data = table
+            .column(1 + {{ forloop.counter0 }})
+            .data()
+            .map(function (n) { return parseFloat(n); })
+            .sort(function (a, b) { return a - b; });
+
+        attr_val[{{ at.id }}] = [data[0], data.reverse()[0]],
+        {% endfor %}
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                {% for at in attributes %}
+                var value = data[1 + {{ forloop.counter0 }}];
+
+                if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
+                    return false;
+                }
+                {% endfor %}
+
+                return true;
+            }
+        );
+
         update_labels();
+
+        {% for at in attributes %}
+        initialize_slider({{ at.id }});
+        {% endfor %}
     });
 
     function update_labels() {
@@ -122,21 +129,21 @@
         {% endfor %}
     }
 
-    {% for at in attributes %}
-        $(function () {
-            $("#attr-{{ at.id }}-range").slider({
-                range: true,
-                min: attr_val[{{ at.id }}][0],
-                max: attr_val[{{ at.id }}][1],
-                step: 0.01,
-                values: attr_val[{{ at.id }}],
-                slide: function (event, ui) {
-                    attr_val[{{ at.id }}] = ui.values;
-                    table.draw();
-                    update_labels();
-                }
-            });
+    function initialize_slider(attr_id) {
+        $("#attr-" + attr_id + "-range").slider({
+            range: true,
+            min: attr_val[attr_id][0],
+            max: attr_val[attr_id][1],
+            step: 0.01,
+            values: attr_val[attr_id],
+            slide: function (event, ui) {
+                attr_val[attr_id] = ui.values;
+                table.draw();
+                update_labels();
+            }
         });
-    {% endfor %}
+    }
+
+
 </script>
 {% endblock %}

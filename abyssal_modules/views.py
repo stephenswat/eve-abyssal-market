@@ -37,15 +37,6 @@ class TypedModuleList(View):
         modules = Module.available.filter(type=module_type)
         attributes = module_type.attribute_list
 
-        for a in attributes:
-            min_val = min(x.attribute_dict[a.id].real_value for x in modules)
-            max_val = max(x.attribute_dict[a.id].real_value for x in modules)
-
-            offset = 0.02 * min(abs(min_val), abs(max_val))
-
-            a.max_val = (max_val + offset)
-            a.min_val = (min_val - offset)
-
         return render(
             request,
             'abyssal_modules/list.html',
