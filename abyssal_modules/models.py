@@ -53,12 +53,12 @@ class EveCharacterManager(models.Manager):
                 ESI['get_characters_character_id'](character_id=character_id)
             ).data
 
-            character = EveCharacter(
+            character, _ = EveCharacter.objects.update_or_create(
                 id=character_id,
-                name=character_data['name']
+                defaults={
+                    'name': character_data['name']
+                }
             )
-
-            character.save()
 
             return character
 
