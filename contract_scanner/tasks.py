@@ -39,9 +39,15 @@ def scan_contract(contract_dict):
 
         contract.available = True
 
-        data = client.request(
+        req = client.request(
             ESI['get_contracts_public_items_contract_id'](contract_id=contract.id)
-        ).data
+        )
+
+        # This prevents us from shitting the bed on contracts that are cached but have been accepted since
+        if req.status == 204 and req.data is None:
+            return
+
+        data = req.data
 
         contract.single_item = (len(data) == 1)
 
