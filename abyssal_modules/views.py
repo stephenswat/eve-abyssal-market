@@ -4,16 +4,20 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
-from django.http import HttpResponse, Http404
+from django.views.generic.edit import FormView
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.db.models import Min, Max, Count, F
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+from django.urls import reverse
 
 from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
 )
 from eve_esi import ESI
 from price_predictor.models import PricePredictor
+from abyssal_modules.forms import ModuleLinkForm
+from abyssal_modules.tasks import create_module_helper
 
 
 class ModuleList(View):
@@ -67,6 +71,29 @@ class ModuleView(DetailView):
 class CreatorView(DetailView):
     model = EveCharacter
     template_name = 'abyssal_modules/creator.html'
+
+
+class AppraisalView(FormView):
+    form_class = ModuleLinkForm
+    template_name = 'abyssal_modules/appraisal.html'
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        # form.send_email()
+        # return super().form_valid(form)
+
+        type_id, item_id = form.cleaned_data['text']
+
+        module = create_module_helper(type_id, item_id)
+
+        return HttpResponseRedirect(
+            reverse(
+                'abyssal_modules:module_view',
+                kwargs={'pk': module.id}
+            )
+        )
+
 
 
 class OpenContractView(LoginRequiredMixin, View):

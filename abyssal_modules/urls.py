@@ -27,6 +27,11 @@ urlpatterns = [
         name='open_contract'
     ),
     path(
+        'appraisal',
+        abyssal_modules.views.AppraisalView.as_view(),
+        name='appraisal'
+    ),
+    path(
         '',
         abyssal_modules.views.ModuleList.as_view()
     ),
