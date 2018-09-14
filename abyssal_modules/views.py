@@ -18,7 +18,7 @@ from price_predictor.models import PricePredictor
 
 class ModuleList(View):
     def get(self, request):
-        modules = Module.available.order_by('-first_seen')[:100]
+        modules = Module.available.order_by('-first_seen')[:50]
 
         return render(
             request,
