@@ -78,3 +78,8 @@ html {
     padding-top: 2rem !important;
     padding-bottom: 2rem !important;
 }
+
+.btn-mini {
+    height: 24px;
+    padding: 0px;
+}

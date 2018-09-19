@@ -23,6 +23,17 @@
             <dt>Mutaplasmid</dt>
             <dd>{{ object.mutator_type_id }}</dd>
         </dl>
+        <dl class="col-3">
+            <dt>Open</dt>
+            <dd>
+                <button
+                    class="btn btn-primary btn-mini btn-copy-contract-link btn-open-contract"
+                    data-clipboard-text="<url=showinfo:{{ object.type_id }}//{{ object.id }}>Module {{ object.id }}</url>"
+                >
+                    Link
+                </button>
+            </dd>
+        </dl>
     </div>
 
     <h4>Attributes</h4>
