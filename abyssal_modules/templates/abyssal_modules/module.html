@@ -37,9 +37,9 @@
         {% endfor %}
     </div>
 
-    {% if prediction %}
     <h4>Price Estimation</h4>
 
+    {% if prediction %}
     <div class="alert alert-danger">These predictions are based on machine
     learning models and can range anywhere from completely ridiculous to
     somewhat accurate. <strong>Always</strong> use your own judgement when
@@ -55,6 +55,12 @@
             <dd>{{ prediction.confidence|prediction_confidence }} ({{ prediction.confidence|floatformat:2 }})</dd>
         </dl>
     </div>
+    {% else %}
+
+    <p>Unfortunately, we have no reliable price model for this module type.
+    This is usually caused by a very low number of contracts for this type of
+    module.</p>
+
     {% endif %}
 </div>
 
