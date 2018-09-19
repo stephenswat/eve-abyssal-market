@@ -33,8 +33,13 @@
     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <div class="container">
-        <a class="navbar-brand" href="/">Abyssal Market</a>
+      <a class="navbar-brand" href="/">Abyssal Market</a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggled">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar-toggled">
         <ul class="navbar-nav navbar-fill">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
