@@ -13,7 +13,7 @@
     <div class="row">
         <dl class="col-3">
             <dt>Creator</dt>
-            <dd>{{ object.creator.name }}</dd>
+            <dd><a href="{% url 'abyssal_modules:creator_view' pk=object.creator.id %}">{{ object.creator.name }}</a></dd>
         </dl>
         <dl class="col-3">
             <dt>Original Module</dt>
