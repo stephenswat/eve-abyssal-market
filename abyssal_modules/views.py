@@ -72,6 +72,11 @@ class CreatorView(DetailView):
     model = EveCharacter
     template_name = 'abyssal_modules/creator.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['modules'] = self.object.creations.all()
+        return context
+
 
 class AppraisalView(FormView):
     form_class = ModuleLinkForm
