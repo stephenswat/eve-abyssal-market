@@ -6,7 +6,8 @@ from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.db.models import Min, Max, Count, F
+from django.db.models import Min, Max, Count, F, Window
+from django.db.models.functions import Trunc
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.urls import reverse
@@ -109,3 +110,29 @@ class OpenContractView(LoginRequiredMixin, View):
         )
 
         return HttpResponse(status=204)
+
+
+class StatisticsList(View):
+    def get(self, request):
+        type_query = Module.objects.values('type__name').annotate(count=Count('id')).order_by('-count')
+
+        type_breakdown = [(x['type__name'], x['count']) for x in type_query[:20]]
+        type_breakdown.append(('Other', sum(x['count'] for x in type_query[20:])))
+
+        module_count_query = Module.objects.annotate(hour=Trunc('first_seen', 'hour')).annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc())).values('hour', 'cumsum').distinct('hour')
+        module_count_data = [(x['hour'].strftime(r"%Y%m%dT%H%M%S"), x['cumsum']) for x in module_count_query]
+
+        prolific_creators = EveCharacter.objects.annotate(creation_count=Count('creations')).order_by('-creation_count')[:5]
+
+        traded_modules = Module.objects.annotate(contract_count=Count('contracts')).order_by('-contract_count')[:5]
+
+        return render(
+            request,
+            'abyssal_modules/statistics.html',
+            {
+                'type_breakdown': type_breakdown,
+                'module_count_data': module_count_data,
+                'prolific_creators': prolific_creators,
+                'traded_modules': traded_modules,
+            }
+        )

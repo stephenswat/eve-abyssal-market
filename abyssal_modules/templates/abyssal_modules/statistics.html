@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+<div class="jumbotron">
+    <h1>Statistics</h1>
+
+    <h4>Modules known</h4>
+    <div style="height: 300px">
+        <canvas id="module-count-history"></canvas>
+    </div>
+
+    <h4>Type breakdown</h4>
+    <div style="height: 300px">
+        <canvas id="type-breakdown-pie"></canvas>
+    </div>
+
+    {% comment %} <h4>Available contracts</h4>
+
+    <p class="text-muted">Coming soon, when the developer figures out how to
+    not be bad at database design.</p>
+
+    <h4>Region breakdown</h4>
+
+    <p class="text-muted">Coming soon, when the developer figures out how to
+    not be bad at database design.</p> {% endcomment %}
+
+    <div class="row">
+        <div class="col-6">
+            <h4>Most prolific creators</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Creator</th>
+                        <th scope="col">Module count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in prolific_creators %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><img class="avatar" src="https://image.eveonline.com/Character/92321562_32.jpg"><a href="{% url 'abyssal_modules:creator_view' pk=c.id %}">{{ c.name }}</a></td>
+                        <td>{{ c.creation_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Most traded modules</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Module</th>
+                        <th scope="col">Contract count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in traded_modules %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><img src="https://image.eveonline.com/Type/47773_32.png"><a href="{% url 'abyssal_modules:module_view' pk=c.id %}">Module {{ c.id }}</a></td>
+                        <td>{{ c.contract_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block trailing_js %}
+<script>
+Chart.defaults.global.defaultFontColor = 'white';
+
+var colours = [
+    'rgb(255, 0, 41)',
+    'rgb(55, 126, 184)',
+    'rgb(102, 166, 30)',
+    'rgb(152, 78, 163)',
+    'rgb(0, 210, 213)',
+    'rgb(255, 127, 0)',
+    'rgb(175, 141, 0)',
+    'rgb(127, 128, 205)',
+    'rgb(179, 233, 0)',
+    'rgb(196, 46, 96)',
+    'rgb(166, 86, 40)',
+    'rgb(247, 129, 191)',
+    'rgb(141, 211, 199)',
+    'rgb(190, 186, 218)',
+    'rgb(251, 128, 114)',
+    'rgb(128, 177, 211)',
+    'rgb(253, 180, 98)',
+    'rgb(252, 205, 229)',
+    'rgb(188, 128, 189)',
+    'rgb(255, 237, 111)',
+    'rgb(189, 189, 189)'
+]
+
+
+var config_module_count_history = {
+    type: 'line',
+    data: {
+        datasets: [{
+            data: [
+                {% for t, c in module_count_data %}
+                {
+                    't': "{{ t }}",
+                    'y': {{ c }}
+                },
+                {% endfor %}
+            ],
+            backgroundColor: 'rgb(189, 189, 189)',
+            lineTension: 0
+        }],
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            position: "none"
+        },
+        scales: {
+            xAxes: [{
+                type: "time",
+                time: {
+                    unit: 'day',
+                }
+            }]
+        },
+    }
+};
+
+
+var config_type_breakdown_pie = {
+    type: 'pie',
+    data: {
+        datasets: [{
+            data: [
+                {% for n, c in type_breakdown %}{{ c }},{% endfor %}
+            ],
+            backgroundColor: colours,
+        }],
+        labels: [
+            {% for n, c in type_breakdown %}"{{ n }}",{% endfor %}
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            position: "right"
+        }
+    }
+};
+
+window.onload = function() {
+    new Chart(document.getElementById('module-count-history').getContext('2d'), config_module_count_history);
+
+    new Chart(document.getElementById('type-breakdown-pie').getContext('2d'), config_type_breakdown_pie);
+};
+
+</script>
+{% endblock %}

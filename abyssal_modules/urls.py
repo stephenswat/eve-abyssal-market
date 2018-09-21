@@ -32,6 +32,11 @@ urlpatterns = [
         name='appraisal'
     ),
     path(
+        'statistics/',
+        abyssal_modules.views.StatisticsList.as_view(),
+        name='statistics'
+    ),
+    path(
         '',
         abyssal_modules.views.ModuleList.as_view()
     ),
