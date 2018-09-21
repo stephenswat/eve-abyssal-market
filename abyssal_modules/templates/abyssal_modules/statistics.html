@@ -45,7 +45,7 @@
                     {% for c in prolific_creators %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td><img class="avatar" src="https://image.eveonline.com/Character/92321562_32.jpg"><a href="{% url 'abyssal_modules:creator_view' pk=c.id %}">{{ c.name }}</a></td>
+                        <td><img class="avatar" src="https://image.eveonline.com/Character/{{ c.id }}_32.jpg"><a href="{% url 'abyssal_modules:creator_view' pk=c.id %}">{{ c.name }}</a></td>
                         <td>{{ c.creation_count }}</td>
                     </tr>
                     {% endfor %}
@@ -67,7 +67,7 @@
                     {% for c in traded_modules %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td><img src="https://image.eveonline.com/Type/47773_32.png"><a href="{% url 'abyssal_modules:module_view' pk=c.id %}">Module {{ c.id }}</a></td>
+                        <td><img src="https://image.eveonline.com/Type/{{ c.type.id }}_32.png"><a href="{% url 'abyssal_modules:module_view' pk=c.id %}">Module {{ c.id }}</a></td>
                         <td>{{ c.contract_count }}</td>
                     </tr>
                     {% endfor %}
