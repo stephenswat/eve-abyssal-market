@@ -65,6 +65,7 @@ class ModuleView(DetailView):
             price_prediction = None
 
         context['prediction'] = price_prediction
+        context['contracts'] = self.object.contracts.all()
         return context
 
 

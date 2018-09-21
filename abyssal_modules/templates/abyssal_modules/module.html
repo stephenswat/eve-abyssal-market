@@ -73,7 +73,40 @@
     module.</p>
 
     {% endif %}
+
+    <h4>Contract history</h4>
+
+    <table class="table contract-table dt-responsive" id="contract-table" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Issued</th>
+                <th>Expires</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in contracts %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.issued_at }}</td>
+                <td>{{ c.expires_at }}</td>
+                <td>{{ c.price|intword }} ISK</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}
 1
+
+{% block trailing_js %}
+<script>
+$(document).ready(function () {
+    $('#contract-table').DataTable({
+        "order": []
+    });
+});
+</script>
+{% endblock %}
