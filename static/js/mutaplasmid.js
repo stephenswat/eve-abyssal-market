@@ -14,7 +14,7 @@ $.ajaxSetup({
 function open_contract(e) {
     $.ajax({
         type: "POST",
-        url: "/view_contract",
+        url: "/view_contract/",
         data: { contract_id: e.data('contract-id') },
         success: function () {
             setTooltip(e, 'Opened!');

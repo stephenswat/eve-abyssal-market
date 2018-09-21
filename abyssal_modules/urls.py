@@ -7,27 +7,27 @@ app_name = 'abyssal_modules'
 
 urlpatterns = [
     path(
-        'type/<int:type_id>',
+        'type/<int:type_id>/',
         abyssal_modules.views.TypedModuleList.as_view(),
         name='type_module_list'
     ),
     path(
-        'module/<int:pk>',
+        'module/<int:pk>/',
         abyssal_modules.views.ModuleView.as_view(),
         name='module_view'
     ),
     path(
-        'creator/<int:pk>',
+        'creator/<int:pk>/',
         abyssal_modules.views.CreatorView.as_view(),
         name='creator_view'
     ),
     path(
-        'view_contract',
+        'view_contract/',
         abyssal_modules.views.OpenContractView.as_view(),
         name='open_contract'
     ),
     path(
-        'appraisal',
+        'appraisal/',
         abyssal_modules.views.AppraisalView.as_view(),
         name='appraisal'
     ),
