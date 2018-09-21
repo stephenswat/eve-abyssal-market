@@ -194,7 +194,7 @@ ITEMS = [
     {
         "abyssal_id": 47740,
         "normal_id": 434,
-        "name": "5mn Abyssal Microwarpdrive",
+        "name": "5MN Abyssal Microwarpdrive",
         "relevant_attributes": RELEVANT_ATTRIBUTES['microwarpdrive'],
     },
     {
