@@ -89,6 +89,7 @@
 <script>
     var table;
     var attr_val = {};
+    var column_ids = {};
 
     $(document).ready(function () {
         table = $('#module-table').DataTable({
@@ -97,18 +98,21 @@
 
         {% for at in attributes %}
         data = table
-            .column(1 + {{ forloop.counter0 }})
+            .column("attr-{{ at.id }}:name")
             .data()
             .map(function (n) { return parseFloat(n); })
             .sort(function (a, b) { return a - b; });
 
         attr_val[{{ at.id }}] = [data[0], data.reverse()[0]],
+        column_ids[{{ at.id }}] = table.column("attr-{{ at.id }}:name").index();
         {% endfor %}
+
+        column_ids["price"] = table.column("price:name").index();
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 {% for at in attributes %}
-                var value = data[1 + {{ forloop.counter0 }}];
+                var value = data[column_ids[{{ at.id }}]];
 
                 if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
                     return false;
