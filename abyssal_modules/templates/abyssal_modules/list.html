@@ -92,7 +92,8 @@
 
     $(document).ready(function () {
         table = $('#module-table').DataTable({
-            "order": [[1, "asc"]]
+            "order": [[1, "asc"]],
+            "searching": false
         });
 
         {% for at in attributes %}
