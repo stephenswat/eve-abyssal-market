@@ -35,6 +35,14 @@
                 <div id="attr-{{ at.id }}-range" class="slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
             </div>
         {% endfor %}
+        </div><br>
+        <div class="row">
+            <div class="col-6">
+                <input type="checkbox" name="filter-show-auctions" class="update-filter" checked> Show auctions
+            </div>
+            <div class="col-6">
+                <input type="checkbox" name="filter-show-multi-item" class="update-filter" checked> Show multi-item contracts
+            </div>
         </div>
     </form>
 </div>
@@ -49,6 +57,8 @@
                 {% endfor %}
                 <th width="120px" data-name="price">Price</th>
                 <th data-priority="9500" width="1px" data-orderable="false">Open</th>
+                <th data-visible="false" data-name="auction">Auction</th>
+                <th data-visible="false" data-name="multi-item">Multi-item</th>
             </tr>
         </thead>
         <tbody>
@@ -78,6 +88,8 @@
                         Link
                     </button>
                 </td>
+                <td>{{ m.contract_auction|yesno:"1,0" }}</td>
+                <td>{{ m.contract_single|yesno:"0,1" }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -90,6 +102,10 @@
     var table;
     var attr_val = {};
     var column_ids = {};
+
+    $(".update-filter").change(function () {
+        table.draw();
+    });
 
     $(document).ready(function () {
         table = $('#module-table').DataTable({
@@ -108,6 +124,8 @@
         {% endfor %}
 
         column_ids["price"] = table.column("price:name").index();
+        column_ids["auction"] = table.column("auction:name").index();
+        column_ids["multi-item"] = table.column("multi-item:name").index();
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
@@ -119,10 +137,19 @@
                 }
                 {% endfor %}
 
+                if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == 1) {
+                    return false;
+                }
+
+                if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == 1) {
+                    return false;
+                }
+
                 return true;
             }
         );
 
+        table.draw();
         update_labels();
 
         {% for at in attributes %}
