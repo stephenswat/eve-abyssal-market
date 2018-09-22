@@ -28,3 +28,4 @@ class Contract(models.Model):
     modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')
 
     location_id = models.BigIntegerField(db_index=True)
+    region_id = models.BigIntegerField(db_index=True)

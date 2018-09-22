@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 @db_task(retries=10, retry_delay=60)
-def scan_contract(contract_dict):
+def scan_contract(contract_dict, region_id):
     abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
 
     client = ESI.get_client()
@@ -33,6 +33,7 @@ def scan_contract(contract_dict):
                 'expires_at': contract_dict['date_expired'].v,
                 'single_item': False,
                 'location_id': contract_dict['start_location_id'],
+                'region_id': region_id,
                 'auction': (contract_dict['type'] == 'auction')
             }
         )
@@ -101,9 +102,9 @@ def scan_public_contracts(scan_all=False):
                         contract.save()
 
                     if scan_all:
-                        scan_contract(dict(contract_dict))
+                        scan_contract(dict(contract_dict), region)
                 except Contract.DoesNotExist:
-                    scan_contract(dict(contract_dict))
+                    scan_contract(dict(contract_dict), region)
 
     Contract.objects.filter(
         Q(available=True) & ~Q(id__in=all_contract_ids)
