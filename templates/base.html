@@ -79,8 +79,7 @@
           {% if user.is_authenticated %}
             <li class="nav-item my-auto">
               <span class="nav-link p-0">
-                <img src="https://image.eveonline.com/Character/{{ user.character_id}}_32.jpg" />
-                <span class="py-auto">{{ user.name }}</span>
+                <img src="https://image.eveonline.com/Character/{{ user.character_id}}_32.jpg" class="avatar" />{{ user.name }}
               </span>
             </li>
             <li class="nav-item">

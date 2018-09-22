@@ -67,7 +67,7 @@
                     {% for c in traded_modules %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td><img src="https://image.eveonline.com/Type/{{ c.type.id }}_32.png"><a href="{% url 'abyssal_modules:module_view' pk=c.id %}">Module {{ c.id }}</a></td>
+                        <td><img src="https://image.eveonline.com/Type/{{ c.type.id }}_32.png" class="module-icon"><a href="{% url 'abyssal_modules:module_view' pk=c.id %}">Module {{ c.id }}</a></td>
                         <td>{{ c.contract_count }}</td>
                     </tr>
                     {% endfor %}
