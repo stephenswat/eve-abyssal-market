@@ -25,7 +25,7 @@ class Contract(models.Model):
     single_item = models.BooleanField()
     auction = models.BooleanField()
 
-    modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts')
+    modules = models.ManyToManyField('abyssal_modules.Module', related_name='contracts', editable=False)
 
     location_id = models.BigIntegerField(db_index=True)
     region_id = models.BigIntegerField(db_index=True)
