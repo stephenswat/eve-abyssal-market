@@ -28,6 +28,11 @@
     background-position: 50% !important;
 }
 
+.slider-neutral>.ui-slider-range {
+    background-image: url("/static/img/abyss_slider_neutral_right.png") !important;
+    background-position: 50% !important;
+}
+
 .ui-slider-handle {
     height: 14px !important;
     border: none !important;
