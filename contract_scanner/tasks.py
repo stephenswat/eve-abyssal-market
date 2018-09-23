@@ -44,6 +44,14 @@ def scan_contract(contract_dict, region_id):
             ESI['get_contracts_public_items_contract_id'](contract_id=contract.id)
         )
 
+        # This happens if a contract is deleted.
+        if req.status == 404:
+            return
+
+        # Not totally sure when this happens...
+        if req.status == 403:
+            return
+
         # This prevents us from shitting the bed on contracts that are cached but have been accepted since
         if req.status == 204 and req.data is None:
             return
