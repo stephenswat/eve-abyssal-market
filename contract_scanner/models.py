@@ -19,8 +19,8 @@ class Contract(models.Model):
     issued_at = models.DateTimeField()
     expires_at = models.DateTimeField()
 
-    seen_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    seen_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
 
     single_item = models.BooleanField()
     auction = models.BooleanField()
