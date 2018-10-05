@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load cache %}
 
 {% block title %}Statistics{% endblock %}
 
@@ -108,7 +109,6 @@ var colours = [
     'rgb(255, 237, 111)',
     'rgb(189, 189, 189)'
 ]
-
 
 var config_module_count_history = {
     type: 'line',

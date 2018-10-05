@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cache %}
 {% load abyssal_types %}
 {% load humanize %}
 
@@ -41,6 +42,7 @@
                 <th data-priority="9500" width="1px" data-orderable="false">Open</th>
             </tr>
         </thead>
+        {% cache 900 homepage_module_list %}
         <tbody>
             {% for m in modules %}
             <tr class="item">
@@ -79,6 +81,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endcache %}
     </table>
 </div>
 {% endblock %}

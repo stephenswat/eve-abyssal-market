@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'availability_alerts',
     'huey.contrib.djhuey',
     'bootstrap4',
+    'django_redis',
     'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load cache %}
 {% load static %}
 {% load module_stats %}
 
@@ -87,6 +88,7 @@
                 <th data-visible="false" data-name="true-price">True Price</th>
             </tr>
         </thead>
+        {% cache 900 module_list module_type.id %}
         <tbody>
             {% for m in modules %}
             <tr>
@@ -120,6 +122,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endcache %}
     </table>
 </div>
 {% endblock %}
