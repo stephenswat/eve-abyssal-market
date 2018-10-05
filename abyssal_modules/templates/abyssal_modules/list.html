@@ -83,9 +83,9 @@
                 {% endfor %}
                 <th width="120px" data-name="price">Price</th>
                 <th data-priority="9500" width="1px" data-orderable="false">Open</th>
-                <th data-visible="false" data-name="auction">Auction</th>
-                <th data-visible="false" data-name="multi-item">Multi-item</th>
-                <th data-visible="false" data-name="true-price">True Price</th>
+                <th data-visible="false" data-name="auction" class="d-none">Auction</th>
+                <th data-visible="false" data-name="multi-item" class="d-none">Multi-item</th>
+                <th data-visible="false" data-name="true-price" class="d-none">True Price</th>
             </tr>
         </thead>
         {% cache 900 module_list module_type.id %}
@@ -116,9 +116,9 @@
                         Link
                     </button>
                 </td>
-                <td>{{ m.contract_auction|yesno:"1,0" }}</td>
-                <td>{{ m.contract_single|yesno:"0,1" }}</td>
-                <td>{{ m.contract_price }}</td>
+                <td class="d-none">{{ m.contract_auction|yesno:"1,0" }}</td>
+                <td class="d-none">{{ m.contract_single|yesno:"0,1" }}</td>
+                <td class="d-none">{{ m.contract_price }}</td>
             </tr>
             {% endfor %}
         </tbody>
