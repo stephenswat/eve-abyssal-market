@@ -18,7 +18,9 @@ def get_abyssal_type_list():
         ("Energy Neutralizers", [("Small", 47824), ("Medium", 47828), ("Heavy", 47832)]),
         ("Energy Nosferatus", [("Small", 48419), ("Medium", 48423), ("Heavy", 48427)]),
         ("Cap Batteries", [("Small", 48431), ("Medium", 48435), ("Large", 48439)]),
-        ("Tackle Modules", [("Stasis Webifiers", 47702), ("Warp Scramblers", 47732), ("Warp Disruptors", 47736)]),
+        ("Stasis Webifiers", [("Stasis Webifiers", 47702)]),
+        ("Warp Scramblers", [("Warp Scramblers", 47732)]),
+        ("Warp Disruptors", [("Warp Disruptors", 47736)]),
     ]
 
 @register.filter()
