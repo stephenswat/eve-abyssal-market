@@ -31,8 +31,8 @@ def create_module_helper(type_id, item_id):
         res = Module(
             id=item_id,
             type_id=type_id,
-            mutator_type_id=module_data['mutator_type_id'],
-            source_type_id=module_data['source_type_id'],
+            mutator_id=module_data['mutator_type_id'],
+            source_id=module_data['source_type_id'],
             creator=character
         )
 

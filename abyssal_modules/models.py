@@ -5,6 +5,7 @@ from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When
 from django.utils.functional import cached_property
 
 from eve_esi import ESI
+from eve_sde.models import InvType
 from contract_scanner.models import Contract
 
 
@@ -174,8 +175,16 @@ class Module(models.Model):
         db_index=True
     )
 
-    mutator_type_id = models.IntegerField()
-    source_type_id = models.IntegerField()
+    mutator = models.ForeignKey(
+        InvType,
+        models.CASCADE,
+        related_name='+',
+    )
+    source = models.ForeignKey(
+        InvType,
+        models.CASCADE,
+        related_name='+',
+    )
 
     creator = models.ForeignKey(
         EveCharacter,

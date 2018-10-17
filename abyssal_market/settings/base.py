@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 INSTALLED_APPS = [
     'eve_auth',
     'eve_esi',
+    'eve_sde',
     'eve_mail_queue',
     'abyssal_modules',
     'contract_scanner',
