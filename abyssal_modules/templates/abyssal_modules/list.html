@@ -98,7 +98,7 @@
                 {% endfor %}
                 <td data-sort="{{ m.contract_price }}">
                     <span class="price-field">{{ m.contract_price|intword }}</span><!--
-                    -->{% if not m.contract_single %}<span class="annotation-multi-item text-muted" title="This contract includes other items"></span>{% endif %}<!--
+                    -->{% if not m.contract_single %}<span class="annotation-multi-item text-muted" title="This contract includes other items."></span>{% endif %}<!--
                     -->{% if m.contract_auction %}<span class="annotation-auction text-muted" title="This is an auction. Price may be delayed by up to 30 minutes."></span>{% endif %}
                 </td>
                 <td class="contract-button-container">

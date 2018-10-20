@@ -83,7 +83,7 @@
                 </td>
                 <td data-sort="{{ m.contract_price }}">
                     {{ m.contract_price|intword }} ISK
-                    {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items">M</span>{% endif %}
+                    {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items.">M</span>{% endif %}
                     {% if m.contract_auction %}<span class="text-muted" title="This is an auction. Price may be delayed by up to 30 minutes.">A</span>{% endif %}
                 </td>
                 <td class="contract-button-container">
