@@ -105,7 +105,6 @@
                     <button
                         class="btn btn-primary btn-open-contract-esi btn-open-contract"
                         data-contract-id="{{ m.contract_id }}"
-                        {% if not request.user.is_authenticated %}disabled{% endif %}
                     >
                         ESI
                     </button>&nbsp;
@@ -139,6 +138,10 @@
     });
 
     $(document).ready(function () {
+        {% if not request.user.is_authenticated %}
+        $('.btn-open-contract-esi').prop('disabled', true);
+        {% endif %}
+
         table = $('#module-table').DataTable({
             "order": [[1, "asc"]]
         });
