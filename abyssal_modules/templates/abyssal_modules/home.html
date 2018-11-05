@@ -7,7 +7,7 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron my-4">
 <h1>Module Types</h1>
 
 <div class="container">
@@ -51,8 +51,21 @@
 
 </div>
 
+<div class="row my-4">
+  <div class="col-sm-12">
+       <div class="card flex-row">
+        <div class="card-header border-0">
+            <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
+        </div>
+        <div class="card-block p-3">
+            <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
+            <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
+        </div>
+    </div>
+  </div>
+</div>
 
-<div class="jumbotron">
+<div class="jumbotron my-4">
     <h2>Latest Abyssal Modules</h2>
 
     <table class="table module-table dt-responsive" id="module-table" width="100%">
