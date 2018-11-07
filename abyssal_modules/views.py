@@ -119,8 +119,8 @@ class StatisticsList(View):
         type_breakdown = [(x['type__name'], x['count']) for x in type_query[:20]]
         type_breakdown.append(('Other', sum(x['count'] for x in type_query[20:])))
 
-        module_count_query = Module.objects.annotate(hour=Trunc('first_seen', 'hour')).annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc())).values('hour', 'cumsum').distinct('hour')
-        module_count_data = [(x['hour'].strftime(r"%Y%m%dT%H%M%S"), x['cumsum']) for x in module_count_query]
+        module_count_query = Module.objects.annotate(hour=Trunc('first_seen', 'day')).annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc())).values('hour', 'cumsum').distinct('hour')
+        module_count_data = [(x['hour'].strftime(r"%Y%m%d"), x['cumsum']) for x in module_count_query]
 
         prolific_creators = EveCharacter.objects.annotate(creation_count=Count('creations')).order_by('-creation_count')[:5]
 
