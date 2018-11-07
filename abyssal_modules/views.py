@@ -122,9 +122,9 @@ class StatisticsList(View):
         module_count_query = Module.objects.annotate(hour=Trunc('first_seen', 'day')).annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc())).values('hour', 'cumsum').distinct('hour')
         module_count_data = [(x['hour'].strftime(r"%Y%m%d"), x['cumsum']) for x in module_count_query]
 
-        prolific_creators = EveCharacter.objects.annotate(creation_count=Count('creations')).order_by('-creation_count')[:5]
+        prolific_creators = EveCharacter.objects.annotate(creation_count=Count('creations')).order_by('-creation_count')[:8]
 
-        traded_modules = Module.objects.annotate(contract_count=Count('contracts')).order_by('-contract_count')[:5]
+        traded_modules = Module.objects.annotate(contract_count=Count('contracts')).order_by('-contract_count')[:8]
 
         return render(
             request,
