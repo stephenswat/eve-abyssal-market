@@ -104,3 +104,7 @@ html {
     max-width: 128px;
     max-height: 128px;
 }
+
+.stats-table>tbody>tr>td,.stats-table>tbody>tr>th {
+    vertical-align: middle;
+}
