@@ -21,6 +21,7 @@ def get_abyssal_type_list():
         ("Stasis Webifiers", [("Stasis Webifiers", 47702)]),
         ("Warp Scramblers", [("Warp Scramblers", 47732)]),
         ("Warp Disruptors", [("Warp Disruptors", 47736)]),
+        ("Damage Modules", [("Gyrostabilizer", 49730), ("Mag. Field Stab.", 49722), ("Heat Sink", 49726), ("Ballistic Control", 49738), ("Entropic Sink", 49734)]),
     ]
 
 @register.filter()

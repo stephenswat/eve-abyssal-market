@@ -13,7 +13,8 @@ RELEVANT_ATTRIBUTES = {
     'warp_scrambler': [(50, False), (6, False), (54, True), (105, True)],
     'warp_disruptor': [(50, False), (6, False), (54, True)],
     'stasis_webifier': [(50, False), (30, False), (6, False), (54, True), (20, False)],
-
+    'damage_mod': [(50, False), (64, True), (204, False)],
+    'damage_mod_bcs': [(50, False), (213, True), (204, False)],
 }
 
 ITEMS = [
@@ -238,6 +239,36 @@ ITEMS = [
         "normal_id": 12261,
         "name": "Heavy Abyssal Energy Nosferatu",
         "relevant_attributes": RELEVANT_ATTRIBUTES['energy_nosferatu'],
+    },
+    {
+        "abyssal_id": 49730,
+        "normal_id": 520,
+        "name": "Abyssal Gyrostabilizer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod'],
+    },
+    {
+        "abyssal_id": 49722,
+        "normal_id": 9944,
+        "name": "Abyssal Magnetic Field Stabilizer",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod'],
+    },
+    {
+        "abyssal_id": 49726,
+        "normal_id": 2363,
+        "name": "Abyssal Heat Sink",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod'],
+    },
+    {
+        "abyssal_id": 49738,
+        "normal_id": 12274,
+        "name": "Abyssal Ballistic Control System",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod_bcs'],
+    },
+    {
+        "abyssal_id": 49734,
+        "normal_id": 47908,
+        "name": "Abyssal Entropic Radiation Sink",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod'],
     },
 ]
 
