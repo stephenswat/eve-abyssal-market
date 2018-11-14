@@ -6,8 +6,24 @@
     height: 75px;
 }
 
+.module-dropdown {
+    padding: 0px;
+}
+
 .navbar-fill {
     flex-grow: 1.0;
+}
+
+.module-accordion-header {
+    padding: 0px;
+}
+
+.module-accordion-button {
+    padding: 4px 8px 4px 8px;
+}
+
+.list-group-item {
+    padding: 8px;
 }
 
 .ui-slider {
@@ -53,12 +69,6 @@
 
 .btn-open-contract {
     width: 60px;
-}
-
-@media screen and (min-device-width: 640px) {
-    .module-dropdown {
-        width: 550px;
-    }
 }
 
 @media screen and (max-device-width: 640px) {

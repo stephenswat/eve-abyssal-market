@@ -41,28 +41,33 @@
 
       <div class="collapse navbar-collapse" id="navbar-toggled">
         <ul class="navbar-nav navbar-fill">
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown dropdown-accordion" data-accordion="#module-accordion">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
               Modules
             </a>
-            <div class="dropdown-menu module-dropdown" aria-labelledby="navbarDropdown">
-              {% get_abyssal_type_list as type_list %}
-
-              {% for r, l in type_list %}
-              <div class="dropdown-item">
-                <div class="row">
-                  <div class="col-12 col-md-4 align-middle">
-                    <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
+            <div class="dropdown-menu module-dropdown ">
+              <div class="accordion" id="accordionExample">
+                {% get_abyssal_type_list as type_list %}
+                {% for r, l in type_list %}
+                <div class="card">
+                  <div class="card-header module-accordion-header" id="module-group-heading-{{ l.0.1 }}">
+                    <h5 class="mb-0">
+                      <a class="btn btn-link module-accordion-button" type="button" data-toggle="collapse" href="#module-group-collapse-{{ l.0.1 }}">
+                        <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
+                      </a>
+                    </h5>
                   </div>
-                  <div class="col-12 col-md-8 row">
-                    {% for n, i in l %}
-                    <a class="col-{{ l|column_width }}" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a>
-                    {% endfor %}
+
+                  <div id="module-group-collapse-{{ l.0.1 }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                      <div class="list-group">
+                        {% for n, i in l %}
+                          <a href="{% url 'abyssal_modules:type_module_list' i %}" class="list-group-item list-group-item-action">{{ n }}</a>
+                        {% endfor %}
+                      </div>
                   </div>
                 </div>
+                {% endfor %}
               </div>
-
-              {% endfor %}
             </div>
           </li>
           <li class="nav-item">
@@ -138,6 +143,24 @@
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="{% static 'js/mutaplasmid.js' %}"></script>
+
+    <script>
+      $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
+        console.log("Yyoyoy")
+        var accordion = $(this).find($(this).data('accordion'));
+        accordion.find('.collapse').collapse('hide');
+      });
+
+      $('.dropdown-accordion').on('click', 'a[data-toggle="collapse"]', function (event) {
+        console.log("1")
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("2")
+        $($(this).data('parent')).find('.panel-collapse.in').collapse('hide');
+        $($(this).attr('href')).collapse('show');
+      })
+
+    </script>
 
     {% block trailing_js %} {% endblock %}
   </body>
