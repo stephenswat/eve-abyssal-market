@@ -13,8 +13,8 @@ RELEVANT_ATTRIBUTES = {
     'warp_scrambler': [(50, False), (6, False), (54, True), (105, True)],
     'warp_disruptor': [(50, False), (6, False), (54, True)],
     'stasis_webifier': [(50, False), (30, False), (6, False), (54, True), (20, False)],
-    'damage_mod': [(50, False), (64, True), (204, False)],
-    'damage_mod_bcs': [(50, False), (213, True), (204, False)],
+    'damage_mod': [(50, False), (64, True), (204, True)],
+    'damage_mod_bcs': [(50, False), (213, True), (204, True)],
 }
 
 ITEMS = [
