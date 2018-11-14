@@ -43,7 +43,7 @@ DERIVED_ATTRIBUTES = {
         'high_is_good': True
     },
     100004: {
-        'types': [49730, 49722, 49726, 47844, 49734],
+        'types': [49730, 49722, 49726, 49734],
         'name': 'DPS Bonus',
         'icon_id': 68,
         'unit_str': '%',
