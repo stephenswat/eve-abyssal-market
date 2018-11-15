@@ -62,11 +62,6 @@ class Command(BaseCommand):
             name="Capacitor Warfare Resistance"
         )
 
-        ModuleDogmaAttribute.objects.filter(id=64).update(
-            unit_str="%"
-        )
-
-
     def handle(self, *args, **options):
         print("Importing types and attributes...")
         self.import_types()
