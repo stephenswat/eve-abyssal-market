@@ -234,11 +234,14 @@ class Module(models.Model):
         if attr_id in DERIVED_ATTRIBUTES:
             return DERIVED_ATTRIBUTES[attr_id]['value'](self)
 
-        for x in self.moduleattribute_set.all():
-            if x.attribute.id == attr_id:
-                return x.real_value
-        else:
+        attrs = self.attribute_dict
+
+        if attr_id == 1255 and self.type.id == 49738 and attr_id not in attrs:
+            return 0.0
+        elif attr_id not in attrs:
             raise ValueError("Object does not have an attribute %d." % attr_id)
+        else:
+            return attrs[attr_id].real_value
 
 
 class ModuleAttributeManager(models.Manager):

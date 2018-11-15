@@ -8,11 +8,12 @@ from abyssal_modules.models import (
 from eve_esi import ESI
 
 
-def create_module_helper(type_id, item_id):
-    try:
-        return Module.objects.get(id=item_id)
-    except Module.DoesNotExist:
-        pass
+def create_module_helper(type_id, item_id, force=False):
+    if not force:
+        try:
+            return Module.objects.get(id=item_id)
+        except Module.DoesNotExist:
+            pass
 
     client = ESI.get_client()
 
@@ -28,15 +29,15 @@ def create_module_helper(type_id, item_id):
             module_data['created_by']
         )
 
-        res = Module(
+        res, _ = Module.objects.get_or_create(
             id=item_id,
-            type_id=type_id,
-            mutator_id=module_data['mutator_type_id'],
-            source_id=module_data['source_type_id'],
-            creator=character
+            defaults={
+                'type_id': type_id,
+                'mutator_id': module_data['mutator_type_id'],
+                'source_id': module_data['source_type_id'],
+                'creator': character
+            }
         )
-
-        res.save()
 
         for a in module_data['dogma_attributes']:
             try:
@@ -54,5 +55,5 @@ def create_module_helper(type_id, item_id):
 
 
 @db_task(retries=1000, retry_delay=60)
-def create_module(type_id, item_id):
-    create_module_helper(type_id, item_id)
+def create_module(type_id, item_id, force=False):
+    create_module_helper(type_id, item_id, force)

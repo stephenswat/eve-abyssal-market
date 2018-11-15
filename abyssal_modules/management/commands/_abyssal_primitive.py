@@ -14,7 +14,7 @@ RELEVANT_ATTRIBUTES = {
     'warp_disruptor': [(50, False), (6, False), (54, True)],
     'stasis_webifier': [(50, False), (30, False), (6, False), (54, True), (20, False)],
     'damage_mod': [(50, False), (64, True), (204, True)],
-    'damage_mod_bcs': [(50, False), (213, True), (204, True)],
+    'damage_mod_bcs': [(50, False), (213, True), (204, True), (1255, True)],
 }
 
 ITEMS = [
@@ -260,7 +260,7 @@ ITEMS = [
     },
     {
         "abyssal_id": 49738,
-        "normal_id": 12274,
+        "normal_id": 47448,
         "name": "Abyssal Ballistic Control System",
         "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod_bcs'],
     },
