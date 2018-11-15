@@ -216,10 +216,18 @@
         }
     }
 
+    function get_precision(attr_id) {
+        if (attr_id == 64) {
+            return 3;
+        } else {
+            return 1;
+        }
+    }
+
     function update_labels() {
         {% for at in attributes %}
-        $("#attr-{{ at.id }}-min").text(attr_val[{{ at.id }}][0].toFixed(1));
-        $("#attr-{{ at.id }}-max").text(attr_val[{{ at.id }}][1].toFixed(1));
+        $("#attr-{{ at.id }}-min").text(attr_val[{{ at.id }}][0].toFixed(get_precision({{ at.id }})));
+        $("#attr-{{ at.id }}-max").text(attr_val[{{ at.id }}][1].toFixed(get_precision({{ at.id }})));
         {% endfor %}
 
         $("#attr-price-min").text(price_humanize(attr_val["price"][0]));
@@ -247,7 +255,7 @@
                 range: true,
                 min: attr_val[attr_id][0],
                 max: attr_val[attr_id][1],
-                step: 0.01,
+                step: Math.pow(10, -(get_precision(attr_id))),
                 values: attr_val[attr_id],
                 slide: function (event, ui) {
                     attr_val[attr_id] = ui.values;
