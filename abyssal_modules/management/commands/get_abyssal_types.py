@@ -14,7 +14,7 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
         self.client = ESI.get_client()
 
-    def handle(self, *args, **options):
+    def import_types(self):
         for i in tqdm(ITEMS):
             relevant = dict(i['relevant_attributes'])
 
@@ -52,3 +52,23 @@ class Command(BaseCommand):
                         'display': attr_data['attribute_id'] in relevant
                     }
                 )
+
+    def repair_attributes(self):
+        ModuleDogmaAttribute.objects.filter(id=204).update(
+            name="Rate of Fire Bonus"
+        )
+
+        ModuleDogmaAttribute.objects.filter(id=2267).update(
+            name="Capacitor Warfare Resistance"
+        )
+
+        ModuleDogmaAttribute.objects.filter(id=64).update(
+            unit_str="%"
+        )
+
+
+    def handle(self, *args, **options):
+        print("Importing types and attributes...")
+        self.import_types()
+        print("Repairing bad attributes...")
+        self.repair_attributes()
