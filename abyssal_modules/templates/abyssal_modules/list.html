@@ -94,7 +94,7 @@
             <tr>
                 <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
                 {% for a in attributes %}
-                <td class="attr-{{ a.id }}">{{ m|get_attribute_value:a.id|floatformat }}</td>
+                <td class="attr-{{ a.id }}">{{ m|format_attribute:a.id }}</td>
                 {% endfor %}
                 <td data-sort="{{ m.contract_price }}">
                     <span class="price-field">{{ m.contract_price|intword }}</span><!--

@@ -2,6 +2,7 @@
 {% load static %}
 {% load cache %}
 {% load abyssal_types %}
+{% load module_stats %}
 {% load humanize %}
 
 {% block title %}Homepage{% endblock %}
@@ -66,7 +67,7 @@
                         {% for a in m.attribute_list %}
                         <div class="col-12 col-md-4">
                             <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
-                            {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
+                            {{ m|format_attribute:a.attribute.id }} {{ a.attribute.unit_str }}
                         </div>
                         {% endfor %}
                     </div>
