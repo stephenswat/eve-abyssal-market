@@ -219,6 +219,8 @@
     function get_precision(attr_id) {
         if (attr_id == 64) {
             return 3;
+        } else if (attr_id == "price") {
+            return 0;
         } else {
             return 1;
         }
@@ -234,36 +236,43 @@
         $("#attr-price-max").text(price_humanize(attr_val["price"][1]));
     }
 
+    function attr_slider_fun(event, ui, attr_id) {
+        attr_val[attr_id] = ui.values;
+    }
+
+    function price_slider_fun(event, ui, attr_id) {
+        var min = ui.values[0] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
+        var max = ui.values[1] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
+        attr_val[attr_id] = [min, max];
+    }
+
     function initialize_slider(attr_id) {
+        var range;
+        var values;
+        var slide;
+
         if (attr_id == "price") {
-            $("#attr-price-range").slider({
-                range: true,
-                min: 0,
-                max: 1000,
-                step: 1,
-                values: [0, 1000],
-                slide: function (event, ui) {
-                    min = ui.values[0] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
-                    max = ui.values[1] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
-                    attr_val[attr_id] = [min, max];
-                    table.draw();
-                    update_labels();
-                }
-            });
+            range = [0, 1000];
+            values = [0, 1000];
+            slide = price_slider_fun;
         } else {
-            $("#attr-" + attr_id + "-range").slider({
-                range: true,
-                min: attr_val[attr_id][0],
-                max: attr_val[attr_id][1],
-                step: Math.pow(10, -(get_precision(attr_id))),
-                values: attr_val[attr_id],
-                slide: function (event, ui) {
-                    attr_val[attr_id] = ui.values;
-                    table.draw();
-                    update_labels();
-                }
-            });
+            range = attr_val[attr_id];
+            values = attr_val[attr_id];
+            slide = attr_slider_fun;
         }
+
+        $("#attr-" + attr_id + "-range").slider({
+            range: true,
+            min: range[0],
+            max: range[1],
+            step: Math.pow(10, -(get_precision(attr_id))),
+            values: values,
+            slide: function (event, ui) {
+                slide(event, ui, attr_id);
+                table.draw();
+                update_labels();
+            }
+        });
     }
 
 
