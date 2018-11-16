@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-9 col-12 row m-0 p-0">
             {% for n, i in l %}
-            <div class="col-{{ l|column_width }} p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
+            <div class="col p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
             {% endfor %}
         </div>
     </div>
