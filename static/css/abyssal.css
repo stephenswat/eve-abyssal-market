@@ -26,6 +26,10 @@
     padding: 8px;
 }
 
+.parner-logo {
+    border-radius: 0px !important;
+}
+
 .ui-slider {
     height: 4px !important;
     border: 0px !important;
