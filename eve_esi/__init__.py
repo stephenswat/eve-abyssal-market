@@ -34,5 +34,22 @@ class EsiManager:
     def __getitem__(self, key):
         return self.app.op[key]
 
+    def __request_helper(self, method, endpoint, client=None, **kwargs):
+        if client is None:
+            client = self.get_client()
+
+        op = self[endpoint](**kwargs)
+
+        if method == 'head':
+            return client.head(op)
+        elif method == 'request':
+            return client.request(op)
+
+    def head(self, endpoint, client=None, **kwargs):
+        return self.__request_helper('head', endpoint, client, **kwargs)
+
+    def request(self, endpoint, client=None, **kwargs):
+        return self.__request_helper('request', endpoint, client, **kwargs)
+
 
 ESI = EsiManager()

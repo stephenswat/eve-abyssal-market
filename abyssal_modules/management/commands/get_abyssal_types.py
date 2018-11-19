@@ -23,13 +23,17 @@ class Command(BaseCommand):
                 defaults={'name': i['name']}
             )
 
-            items = self.client.request(
-                ESI['get_universe_types_type_id'](type_id=i['normal_id'])
+            items = ESI.request(
+                'get_universe_types_type_id',
+                client=self.client,
+                type_id=i['normal_id']
             ).data['dogma_attributes']
 
             for a in items:
-                attr_data = self.client.request(
-                    ESI['get_dogma_attributes_attribute_id'](attribute_id=a['attribute_id'])
+                attr_data = ESI.request(
+                    'get_dogma_attributes_attribute_id',
+                    client=self.client,
+                    attribute_id=a['attribute_id']
                 ).data
 
                 if not attr_data.get('published', False):

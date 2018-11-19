@@ -15,13 +15,10 @@ def create_module_helper(type_id, item_id, force=False):
         except Module.DoesNotExist:
             pass
 
-    client = ESI.get_client()
-
-    module_data = client.request(
-        ESI['get_dogma_dynamic_items_type_id_item_id'](
-            type_id=type_id,
-            item_id=item_id
-        )
+    module_data = ESI.request(
+        'get_dogma_dynamic_items_type_id_item_id',
+        type_id=type_id,
+        item_id=item_id
     ).data
 
     with transaction.atomic():

@@ -21,8 +21,6 @@ logger = logging.getLogger(__name__)
 def scan_contract(contract_dict, region_id):
     abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
 
-    client = ESI.get_client()
-
     with transaction.atomic():
         contract, _ = Contract.objects.get_or_create(
             id=contract_dict['contract_id'],
@@ -40,8 +38,9 @@ def scan_contract(contract_dict, region_id):
 
         contract.available = True
 
-        req = client.request(
-            ESI['get_contracts_public_items_contract_id'](contract_id=contract.id)
+        req = ESI.request(
+            'get_contracts_public_items_contract_id',
+            contract_id=contract.id
         )
 
         # This happens if a contract is deleted.
@@ -79,22 +78,23 @@ def scan_contract(contract_dict, region_id):
 
 @db_periodic_task(crontab(minute='0,30'))
 def scan_public_contracts(scan_all=False):
-    client = ESI.get_client()
-
-    all_regions = client.request(ESI['get_universe_regions']()).data
+    all_regions = ESI.request('get_universe_regions').data
     all_contract_ids = set()
 
     for region in all_regions:
-        head = client.head(
-            ESI['get_contracts_public_region_id'](region_id=region)
-        )
-
-        number_of_page = head.header['X-Pages'][0]
+        number_of_page = ESI.head(
+            'get_contracts_public_region_id',
+            region_id=region
+        ).header['X-Pages'][0]
 
         for page in range(1, number_of_page + 1):
-            contracts = list(client.request(
-                ESI['get_contracts_public_region_id'](region_id=region, page=page)
-            ).data)
+            req = ESI.request(
+                'get_contracts_public_region_id',
+                region_id=region,
+                page=page
+            )
+
+            contracts = list(req.data)
 
             for contract_dict in contracts:
                 all_contract_ids.add(contract_dict['contract_id'])

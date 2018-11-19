@@ -99,22 +99,22 @@ class EveUser(AbstractBaseUser):
         return ESI.get_client(self.get_security())
 
     def get_contracts(self):
-        op = ESI['get_characters_character_id_contracts'](
+        return ESI.request(
+            'get_characters_character_id_contracts',
+            client=self.get_client(),
             character_id=self.character_id
-        )
-
-        return self.get_client().request(op).data
+        ).data
 
     def get_assets(self):
         results = []
 
         for page in itertools.count(start=1):
-            op = ESI['get_characters_character_id_assets'](
+            req = ESI.request(
+                'get_characters_character_id_assets',
+                client=self.get_client(),
                 character_id=self.character_id,
                 page=page
             )
-
-            req = self.get_client().request(op)
 
             date = datetime.datetime.strptime(
                 req.header['Last-Modified'][0],

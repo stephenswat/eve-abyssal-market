@@ -11,20 +11,21 @@ class Command(SDECommand):
 
     @transaction.atomic()
     def create_invtypes(self):
-        esi_client = ESI.get_client()
-
         existing = set(InvType.objects.values_list('id', flat=True))
         available = set()
 
-        res = esi_client.head(ESI['get_universe_types']())
+        res = ESI.head('get_universe_types')
 
         for p in range(1, 1 + res.header['X-Pages'][0]):
-            available |= set(esi_client.request(ESI['get_universe_types'](page=p)).data)
+            available |= set(ESI.request('get_universe_types', page=p).data)
 
         to_fetch = available - existing
 
         for i in to_fetch:
-            data = esi_client.request(ESI['get_universe_types_type_id'](type_id=i)).data
+            data = ESI.request(
+                'get_universe_types_type_id',
+                type_id=i
+            ).data
 
             InvType.objects.update_or_create(
                 id=i,

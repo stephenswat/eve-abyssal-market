@@ -25,18 +25,18 @@ def send_enqueued_mails():
 
             mail = mails[0]
 
-            req = client.request(
-                ESI['post_characters_character_id_mail'](
-                    character_id=m.character.character_id,
-                    mail={
-                        "approved_cost": 0,
-                        "body": mail.body,
-                        "recipients": [
-                            r.as_recipient_dict() for r in mail.recipients.all()
-                        ],
-                        "subject": mail.subject
-                    }
-                )
+            req = ESI.request(
+                'post_characters_character_id_mail',
+                client=client,
+                character_id=m.character.character_id,
+                mail={
+                    "approved_cost": 0,
+                    "body": mail.body,
+                    "recipients": [
+                        r.as_recipient_dict() for r in mail.recipients.all()
+                    ],
+                    "subject": mail.subject
+                }
             )
 
             if req.status == 201:

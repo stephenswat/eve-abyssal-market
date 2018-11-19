@@ -105,8 +105,10 @@ class AppraisalView(FormView):
 
 class OpenContractView(LoginRequiredMixin, View):
     def post(self, request):
-        client = request.user.get_client().request(
-            ESI['post_ui_openwindow_contract'](contract_id=int(request.POST['contract_id']))
+        ESI.request(
+            'post_ui_openwindow_contract',
+            client=request.user.get_client(),
+            contract_id=int(request.POST['contract_id'])
         )
 
         return HttpResponse(status=204)
