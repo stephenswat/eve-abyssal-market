@@ -13,7 +13,6 @@ DERIVED_ATTRIBUTES = {
     100000: {
         'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840],
         'name': 'Shield boost per second',
-        'icon_id': 68,
         'unit_str': 'HP/s',
         'value': lambda x: x.get_value(68) / x.get_value(73),
         'high_is_good': True
@@ -21,7 +20,6 @@ DERIVED_ATTRIBUTES = {
     100001: {
         'types': [47769, 47773, 47777, 47842, 47844, 47846],
         'name': 'Armor repair per second',
-        'icon_id': 68,
         'unit_str': 'HP/s',
         'value': lambda x: x.get_value(84) / x.get_value(73),
         'high_is_good': True
@@ -29,7 +27,6 @@ DERIVED_ATTRIBUTES = {
     100002: {
         'types': [47781, 47785, 47789, 47793],
         'name': 'Shield boost per capacitor',
-        'icon_id': 68,
         'unit_str': 'HP/GJ',
         'value': lambda x: x.get_value(68) / x.get_value(6),
         'high_is_good': True
@@ -37,7 +34,6 @@ DERIVED_ATTRIBUTES = {
     100003: {
         'types': [47769, 47773, 47777, 47842, 47844, 47846],
         'name': 'Armor repair per capacitor',
-        'icon_id': 68,
         'unit_str': 'HP/GJ',
         'value': lambda x: x.get_value(84) / x.get_value(6),
         'high_is_good': True
@@ -45,7 +41,6 @@ DERIVED_ATTRIBUTES = {
     100004: {
         'types': [49730, 49722, 49726, 49734],
         'name': 'DPS Bonus',
-        'icon_id': 68,
         'unit_str': '%',
         'value': lambda x: ((x.get_value(64) * 1 / (1 - x.get_value(204) / 100)) - 1) * 100,
         'high_is_good': True
@@ -53,7 +48,6 @@ DERIVED_ATTRIBUTES = {
     100005: {
         'types': [49738],
         'name': 'DPS Bonus',
-        'icon_id': 68,
         'unit_str': '%',
         'value': lambda x: (( (x.get_value(213) / 100 + 1) / (1 - (x.get_value(204) / 100)) ) - 1) * 100,
         'high_is_good': True
@@ -96,7 +90,6 @@ class ModuleDogmaAttribute(models.Model):
     name = models.CharField(max_length=64)
     short_name = models.CharField(max_length=64)
 
-    icon_id = models.IntegerField()
     unit_str = models.CharField(max_length=16)
 
     @property
@@ -138,7 +131,6 @@ class ModuleType(models.Model):
             new_attr = ModuleDogmaAttribute(
                 id=attr_id,
                 name=data['name'],
-                icon_id=data['icon_id'],
                 unit_str=data['unit_str']
             )
 

@@ -44,7 +44,6 @@ class Command(BaseCommand):
                     defaults={
                         'name': attr_data['display_name'],
                         'short_name': attr_data['name'],
-                        'icon_id': attr_data.get('icon_id', 0),
                         'unit_str': UNIT_STR.get(attr_data.get('unit_id', -1), ''),
                     }
                 )
