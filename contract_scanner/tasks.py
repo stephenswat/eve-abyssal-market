@@ -4,12 +4,14 @@ import pprint
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
+
 from django.db import transaction
 from django.db.models import Q
 
 from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
+from contract_scanner.metrics import COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI
 from abyssal_modules.tasks import create_module_helper
 
@@ -20,6 +22,11 @@ logger = logging.getLogger(__name__)
 @db_task(retries=10, retry_delay=60)
 def scan_contract(contract_dict, region_id):
     abyssal_ids = list(ModuleType.objects.values_list('id', flat=True))
+
+    COUNTER_CONTRACTS_SCANNED.labels(
+        region=region_id,
+        type=contract_dict['type']
+    ).inc()
 
     with transaction.atomic():
         contract, _ = Contract.objects.get_or_create(
@@ -101,6 +108,11 @@ def scan_public_contracts(scan_all=False):
 
                 if contract_dict['type'] not in ['item_exchange', 'auction']:
                     continue
+
+                COUNTER_CONTRACTS_FOUND.labels(
+                    region=region,
+                    type=contract_dict['type']
+                ).inc()
 
                 try:
                     contract = Contract.objects.get(id=contract_dict['contract_id'])

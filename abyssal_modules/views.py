@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.urls import reverse
 
+from prometheus_client import Counter
+
 from abyssal_modules.models import (
     Module, ModuleType, ModuleAttribute, EveCharacter
 )
@@ -19,6 +21,7 @@ from eve_esi import ESI
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module_helper
+
 
 
 class ModuleList(View):

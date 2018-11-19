@@ -2,6 +2,8 @@ from django.db import transaction
 
 from huey.contrib.djhuey import db_task
 
+from abyssal_modules.metrics import COUNTER_MODULES_CREATED
+
 from abyssal_modules.models import (
     Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
 )
@@ -26,7 +28,7 @@ def create_module_helper(type_id, item_id, force=False):
             module_data['created_by']
         )
 
-        res, _ = Module.objects.get_or_create(
+        res, created = Module.objects.get_or_create(
             id=item_id,
             defaults={
                 'type_id': type_id,
@@ -35,6 +37,9 @@ def create_module_helper(type_id, item_id, force=False):
                 'creator': character
             }
         )
+
+        if created:
+            COUNTER_MODULES_CREATED.labels(type=type_id).inc()
 
         for a in module_data['dogma_attributes']:
             try:

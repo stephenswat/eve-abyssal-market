@@ -2,6 +2,8 @@ import esipy
 
 from django.conf import settings
 
+from eve_esi.metrics import COUNTER_ESI_REQUESTS
+
 
 class EsiManager:
     _ESI_APP = None
@@ -41,9 +43,16 @@ class EsiManager:
         op = self[endpoint](**kwargs)
 
         if method == 'head':
-            return client.head(op)
+            res = client.head(op)
         elif method == 'request':
-            return client.request(op)
+            res = client.request(op)
+
+        COUNTER_ESI_REQUESTS.labels(
+            endpoint=endpoint,
+            status=res.status
+        ).inc()
+
+        return res
 
     def head(self, endpoint, client=None, **kwargs):
         return self.__request_helper('head', endpoint, client, **kwargs)
