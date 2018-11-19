@@ -10,7 +10,7 @@ from django.db.models import Q
 from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
-from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND
+from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI
 from abyssal_modules.tasks import create_module_helper
 
