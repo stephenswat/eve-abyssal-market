@@ -4,14 +4,13 @@ import pprint
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
-
 from django.db import transaction
 from django.db.models import Q
 
 from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
 from contract_scanner.models import Contract
-from contract_scanner.metrics import COUNTER_CONTRACTS_SCANNED
+from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND
 from eve_esi import ESI
 from abyssal_modules.tasks import create_module_helper
 
