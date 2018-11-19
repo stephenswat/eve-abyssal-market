@@ -93,6 +93,7 @@ class EveCharacter(models.Model):
 class ModuleDogmaAttribute(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
+    short_name = models.CharField(max_length=64)
 
     icon_id = models.IntegerField()
     unit_str = models.CharField(max_length=16)
