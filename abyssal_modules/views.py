@@ -20,7 +20,7 @@ from abyssal_modules.models import (
 from eve_esi import ESI
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
-from abyssal_modules.tasks import create_module_helper
+from abyssal_modules.tasks import create_module
 
 
 
@@ -95,7 +95,7 @@ class AppraisalView(FormView):
 
         type_id, item_id = form.cleaned_data['text']
 
-        module = create_module_helper(type_id, item_id)
+        module = create_module.call_local(type_id, item_id)
 
         return HttpResponseRedirect(
             reverse(

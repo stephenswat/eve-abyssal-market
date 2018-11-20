@@ -12,7 +12,7 @@ from eve_auth.models import EveUser
 from contract_scanner.models import Contract
 from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI
-from abyssal_modules.tasks import create_module_helper
+from abyssal_modules.tasks import create_module
 
 
 logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ def scan_contract(contract_dict, region_id):
                     item['item_id'], contract_dict['contract_id']
                 )
 
-                module = create_module_helper(
+                module = create_module.call_local(
                     type_id=item['type_id'],
                     item_id=item['item_id']
                 )

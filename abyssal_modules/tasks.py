@@ -10,7 +10,8 @@ from abyssal_modules.models import (
 from eve_esi import ESI
 
 
-def create_module_helper(type_id, item_id, force=False):
+@db_task(retries=1000, retry_delay=60)
+def create_module(type_id, item_id, force=False):
     if not force:
         try:
             return Module.objects.get(id=item_id)
@@ -54,8 +55,3 @@ def create_module_helper(type_id, item_id, force=False):
                 pass
 
     return res
-
-
-@db_task(retries=1000, retry_delay=60)
-def create_module(type_id, item_id, force=False):
-    create_module_helper(type_id, item_id, force)
