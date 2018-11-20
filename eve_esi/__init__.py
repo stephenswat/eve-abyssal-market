@@ -3,6 +3,7 @@ import esipy
 from django.conf import settings
 
 from eve_esi.metrics import COUNTER_ESI_REQUESTS
+from eve_esi.exceptions import EsiException
 
 
 class EsiManager:
@@ -51,6 +52,9 @@ class EsiManager:
             endpoint=endpoint,
             status=res.status
         ).inc()
+
+        if 500 <= res.status <= 599:
+            raise EsiException(endpoint, res.status, kwargs)
 
         return res
 
