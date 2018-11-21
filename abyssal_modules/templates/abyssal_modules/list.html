@@ -23,6 +23,10 @@
         content: " ISK "
     }
 
+    .plex-field:after {
+        content: " PLEX "
+    }
+
     .annotation-multi-item:after {
         content: "M"
     }
@@ -96,8 +100,14 @@
                 {% for a in attributes %}
                 <td class="attr-{{ a.id }}">{{ m|format_attribute:a.id }}</td>
                 {% endfor %}
-                <td data-sort="{{ m.contract_price }}">
+                <td data-sort="{{ m.contract_price_inc_plex }}">
+                    {% if m.contract_price > 0 and m.contract_plex > 0 %}
+                    <span class="price-field">{{ m.contract_price|intword }}</span> + <span class="plex-field">{{ m.contract_plex }}</span><!--
+                    {% elif m.contract_plex > 0 %}
+                    <span class="plex-field">{{ m.contract_plex }}</span><!--
+                    {% else %}
                     <span class="price-field">{{ m.contract_price|intword }}</span><!--
+                    {% endif %}
                     -->{% if not m.contract_single %}<span class="annotation-multi-item text-muted" title="This contract includes other items."></span>{% endif %}<!--
                     -->{% if m.contract_auction %}<span class="annotation-auction text-muted" title="This is an auction. Price may be delayed by up to 30 minutes."></span>{% endif %}
                 </td>
@@ -117,7 +127,7 @@
                 </td>
                 <td class="d-none">{{ m.contract_auction|yesno:"1,0" }}</td>
                 <td class="d-none">{{ m.contract_single|yesno:"0,1" }}</td>
-                <td class="d-none">{{ m.contract_price }}</td>
+                <td class="d-none">{{ m.contract_price_inc_plex }}</td>
             </tr>
             {% endfor %}
         </tbody>

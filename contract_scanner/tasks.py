@@ -61,12 +61,18 @@ def scan_contract(contract_dict, region_id):
         if req.status == 204 and req.data is None:
             return
 
-        data = req.data
+        print(req.status)
 
-        contract.single_item = (len(data) == 1)
+        data = req.data
+        items = 0
+
+        contract.single_item = True
+        contract.plex = 0
 
         for item in data:
             if item['type_id'] in abyssal_ids:
+                items += 1
+
                 logger.info(
                     "Found abyssal module %d in contract %d.",
                     item['item_id'], contract_dict['contract_id']
@@ -78,6 +84,12 @@ def scan_contract(contract_dict, region_id):
                 )
 
                 contract.modules.add(module)
+            elif item['type_id'] == 44992 and not item['is_included']:
+                contract.plex += item['quantity']
+            else:
+                items += 1
+
+        contract.single_item = (items == 1)
 
         contract.save()
 

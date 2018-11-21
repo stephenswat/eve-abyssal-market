@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When
+from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When, ExpressionWrapper, BigIntegerField, DecimalField
+from django.db.models.functions import Cast
 from django.utils.functional import cached_property
 
 from eve_esi import ESI
@@ -166,6 +167,13 @@ class AvailableModuleManager(ModuleManager):
             )
             .annotate(
                 contract_price=F('contracts__price'),
+                contract_plex=F('contracts__plex'),
+                contract_price_inc_plex=ExpressionWrapper(
+                    Cast('contracts__plex', BigIntegerField()) *
+                    Value(3300000, output_field=BigIntegerField()) +
+                    F('contracts__price'),
+                    output_field=DecimalField()
+                ),
                 contract_id=F('contracts__id'),
                 contract_single=F('contracts__single_item'),
                 contract_auction=F('contracts__auction')

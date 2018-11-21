@@ -16,6 +16,8 @@ class Contract(models.Model):
         db_index=True
     )
 
+    plex = models.IntegerField(default=0)
+
     issued_at = models.DateTimeField()
     expires_at = models.DateTimeField()
 
