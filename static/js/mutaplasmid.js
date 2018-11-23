@@ -22,7 +22,7 @@ function open_contract(e) {
     });
 }
 
-clipboard = new ClipboardJS('.btn-copy-contract-link');
+clipboard = new ClipboardJS('.btn-copy');
 
 $('.btn-open-contract').tooltip({
     trigger: 'click',

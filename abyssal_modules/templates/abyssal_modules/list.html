@@ -119,10 +119,16 @@
                         ESI
                     </button>&nbsp;
                     <button
-                        class="btn btn-primary btn-copy-contract-link btn-open-contract"
+                        class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract"
                         data-clipboard-text="<url=contract:30000142//{{ m.contract_id }}>Contract {{ m.contract_id }}</url>"
                     >
                         Link
+                    </button>&nbsp;
+                    <button
+                        class="btn btn-primary btn-copy"
+                        data-clipboard-text="{{ m.get_pyfa_string }}"
+                    >
+                        Pyfa
                     </button>
                 </td>
                 <td class="d-none">{{ m.contract_auction|yesno:"1,0" }}</td>

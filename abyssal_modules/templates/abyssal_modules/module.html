@@ -27,10 +27,16 @@
             <dt>Open</dt>
             <dd>
                 <button
-                    class="btn btn-primary btn-mini btn-copy-contract-link btn-open-contract"
+                    class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract"
                     data-clipboard-text="<url=showinfo:{{ object.type_id }}//{{ object.id }}>Module {{ object.id }}</url>"
                 >
                     Link
+                </button>&nbsp;
+                <button
+                    class="btn btn-primary btn-copy"
+                    data-clipboard-text="{{ object.get_pyfa_string }}"
+                >
+                    Pyfa
                 </button>
             </dd>
         </dl>

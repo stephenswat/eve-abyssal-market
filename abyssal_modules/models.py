@@ -151,7 +151,10 @@ class ModuleManager(models.Manager):
         return (
             super().get_queryset()
             .prefetch_related(
+                'source',
+                'mutator',
                 'moduleattribute_set__attribute',
+                'moduleattribute_set',
                 'type',
             )
         )
@@ -244,6 +247,25 @@ class Module(models.Model):
             raise ValueError("Object does not have an attribute %d." % attr_id)
         else:
             return attrs[attr_id].real_value
+
+    def get_pyfa_string(self):
+        attr_list = ", ".join(
+            "{attr_name} {attr_value:0.3f}".format(
+                attr_name=a.attribute.short_name,
+                attr_value=a.value
+            )
+            for a in self.attribute_list
+        )
+
+        return (
+            "{module_type}\n" +
+            "  {mutator_name}\n" +
+            "  {attr_list}"
+        ).format(
+            module_type=self.source.name,
+            mutator_name=self.mutator.name,
+            attr_list=attr_list
+        )
 
 
 class ModuleAttributeManager(models.Manager):
