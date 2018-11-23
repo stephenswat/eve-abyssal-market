@@ -1,5 +1,6 @@
 import logging
 import pprint
+import requests
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
@@ -9,7 +10,7 @@ from django.db.models import Q
 
 from abyssal_modules.models import ModuleType
 from eve_auth.models import EveUser
-from contract_scanner.models import Contract
+from contract_scanner.models import Contract, PlexPriceRecord
 from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI
 from abyssal_modules.tasks import create_module
@@ -143,3 +144,11 @@ def scan_public_contracts(scan_all=False):
         available=False
     )
 
+
+@db_periodic_task(crontab(hour='*'))
+def update_plex_price():
+    req = requests.get('https://api.evemarketer.com/ec/marketstat/json?typeid=44992&regionlimit=10000002').json()
+
+    price = int(req[0]['buy']['fivePercent'])
+
+    PlexPriceRecord(price=price).save()

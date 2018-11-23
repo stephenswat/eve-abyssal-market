@@ -31,3 +31,12 @@ class Contract(models.Model):
 
     location_id = models.BigIntegerField(db_index=True)
     region_id = models.BigIntegerField(db_index=True)
+
+
+
+class PlexPriceRecord(models.Model):
+    time = models.DateTimeField(db_index=True, auto_now_add=True)
+    price = models.IntegerField()
+
+    class Meta:
+        get_latest_by = 'time'
