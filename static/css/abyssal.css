@@ -122,3 +122,11 @@ html {
 .stats-table>tbody>tr>td,.stats-table>tbody>tr>th {
     vertical-align: middle;
 }
+
+.jumbotron-tabs {
+    margin-top: 0px !important;
+}
+
+.nav-tabs>.nav-item>.active {
+    background-color: rgb(78, 93, 108) !important;
+}
