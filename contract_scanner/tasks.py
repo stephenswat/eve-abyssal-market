@@ -145,7 +145,7 @@ def scan_public_contracts(scan_all=False):
     )
 
 
-@db_periodic_task(crontab(hour='*'))
+@db_periodic_task(crontab(minute='0', hour='*'))
 def update_plex_price():
     req = requests.get('https://api.evemarketer.com/ec/marketstat/json?typeid=44992&regionlimit=10000002').json()
 
