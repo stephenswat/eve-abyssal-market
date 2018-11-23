@@ -79,11 +79,14 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-6">
+            <div class="col-3">
                 <input type="checkbox" name="filter-show-auctions" class="update-filter" checked> Show auctions
             </div>
-            <div class="col-6">
+            <div class="col-3">
                 <input type="checkbox" name="filter-show-multi-item" class="update-filter" checked> Show multi-item contracts
+            </div>
+            <div class="col-3">
+                <input type="checkbox" name="filter-show-plex" class="update-filter" checked> Show contracts for PLEX
             </div>
         </div>
     </form>
@@ -101,6 +104,7 @@
                 <th data-priority="9500" width="1px" data-orderable="false">Open</th>
                 <th data-visible="false" data-name="auction" class="d-none">Auction</th>
                 <th data-visible="false" data-name="multi-item" class="d-none">Multi-item</th>
+                <th data-visible="false" data-name="has-plex" class="d-none">Has-Plex</th>
                 <th data-visible="false" data-name="true-price" class="d-none">True Price</th>
             </tr>
         </thead>
@@ -145,6 +149,7 @@
                 </td>
                 <td class="d-none">{{ m.contract_auction|yesno:"1,0" }}</td>
                 <td class="d-none">{{ m.contract_single|yesno:"0,1" }}</td>
+                <td class="d-none">{% if m.contract_plex > 0 %}1{% else %}0{% endif %}</td>
                 <td class="d-none">{{ m.contract_price_inc_plex }}</td>
             </tr>
             {% endfor %}
@@ -198,6 +203,7 @@
 
         column_ids["auction"] = table.column("auction:name").index();
         column_ids["multi-item"] = table.column("multi-item:name").index();
+        column_ids["has-plex"] = table.column("has-plex:name").index();
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
@@ -220,6 +226,10 @@
                 }
 
                 if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == 1) {
+                    return false;
+                }
+
+                if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has-plex']] == 1) {
                     return false;
                 }
 
