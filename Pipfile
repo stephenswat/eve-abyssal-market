@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.6"
+
+[dev-packages]
+django-debug-toolbar = "*"
+django-debug-toolbar-template-timings = "*"
+
+[packages]
+django-bootstrap4 = "*"
+django-prometheus = "*"
+django-redis = "*"
+huey = "*"
+psycopg2-binary = "*"
+requests = "*"
+sklearn = "*"
+tqdm = "*"
+Django = "*"
+EsiPy = "==0.5.0"
+prometheus_client = "*"
