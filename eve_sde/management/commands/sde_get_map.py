@@ -47,7 +47,6 @@ class Command(SDECommand):
 
         self.last_system.gates.add(int(x['toSolarSystemID']))
 
-
     @transaction.atomic()
     def create_regions(self):
         self._create_helper(

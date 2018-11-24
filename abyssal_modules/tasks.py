@@ -3,10 +3,7 @@ from django.db import transaction
 from huey.contrib.djhuey import db_task
 
 from abyssal_modules.metrics import COUNTER_MODULES_CREATED
-
-from abyssal_modules.models import (
-    Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
-)
+from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
 from eve_esi import ESI
 
 

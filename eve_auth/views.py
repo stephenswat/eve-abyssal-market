@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login
 from django.views.generic.base import View
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 from eve_esi import ESI
+
 
 class LoginView(View):
     def get(self, request):

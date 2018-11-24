@@ -1,7 +1,5 @@
 from django.db import models
 
-from eve_auth.models import EveUser
-
 
 class Contract(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -31,7 +29,6 @@ class Contract(models.Model):
 
     location_id = models.BigIntegerField(db_index=True)
     region_id = models.BigIntegerField(db_index=True)
-
 
 
 class PlexPriceRecord(models.Model):

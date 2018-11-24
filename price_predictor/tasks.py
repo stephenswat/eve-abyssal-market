@@ -3,7 +3,7 @@ import pickle
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task
 
-from sklearn.svm import SVR, NuSVR
+from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score

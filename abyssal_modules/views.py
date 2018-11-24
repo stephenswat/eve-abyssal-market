@@ -1,27 +1,18 @@
-import datetime
-
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import DetailView
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.db.models import Min, Max, Count, F, Window
+from django.db.models import Count, F, Window
 from django.db.models.functions import Trunc
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils import timezone
 from django.urls import reverse
 
-from prometheus_client import Counter
-
-from abyssal_modules.models import (
-    Module, ModuleType, ModuleAttribute, EveCharacter
-)
+from abyssal_modules.models import Module, ModuleType, EveCharacter
 from eve_esi import ESI
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
-
 
 
 class ModuleList(View):
@@ -100,7 +91,6 @@ class AppraisalView(FormView):
         )
 
 
-
 class OpenContractView(LoginRequiredMixin, View):
     def post(self, request):
         ESI.request(
@@ -119,10 +109,23 @@ class StatisticsList(View):
         type_breakdown = [(x['type__name'], x['count']) for x in type_query[:20]]
         type_breakdown.append(('Other', sum(x['count'] for x in type_query[20:])))
 
-        module_count_query = Module.objects.annotate(hour=Trunc('first_seen', 'day')).annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc())).values('hour', 'cumsum').distinct('hour')
+        module_count_query = (
+            Module
+            .objects
+            .annotate(hour=Trunc('first_seen', 'day'))
+            .annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc()))
+            .values('hour', 'cumsum')
+            .distinct('hour')
+        )
+
         module_count_data = [(x['hour'].strftime(r"%Y%m%d"), x['cumsum']) for x in module_count_query]
 
-        prolific_creators = EveCharacter.objects.annotate(creation_count=Count('creations')).order_by('-creation_count')[:8]
+        prolific_creators = (
+            EveCharacter
+            .objects
+            .annotate(creation_count=Count('creations'))
+            .order_by('-creation_count')[:8]
+        )
 
         traded_modules = Module.objects.annotate(contract_count=Count('contracts')).order_by('-contract_count')[:8]
 

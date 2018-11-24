@@ -1,8 +1,7 @@
 from django.db import transaction
 
 from eve_sde.models import InvType
-from eve_sde.command import SDECommand, SDE_BASE
-
+from eve_sde.command import SDECommand
 from eve_esi import ESI
 
 

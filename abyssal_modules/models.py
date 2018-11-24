@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils import timezone
-from django.db import transaction
-from django.db.models import OuterRef, Subquery, F, Q, Value, Case, When, ExpressionWrapper, BigIntegerField, DecimalField
+from django.db.models import OuterRef, Subquery, F, Value, Case, When
+from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
 from django.db.models.functions import Cast
 from django.utils.functional import cached_property
 
 from eve_esi import ESI
 from eve_sde.models import InvType
-from contract_scanner.models import Contract
 
 
 DERIVED_ATTRIBUTES = {
@@ -50,7 +49,7 @@ DERIVED_ATTRIBUTES = {
         'types': [49738],
         'name': 'DPS Bonus',
         'unit_str': '%',
-        'value': lambda x: (( (x.get_value(213) / 100 + 1) / (1 - (x.get_value(204) / 100)) ) - 1) * 100,
+        'value': lambda x: (((x.get_value(213) / 100 + 1) / (1 - (x.get_value(204) / 100))) - 1) * 100,
         'high_is_good': True
     },
 }
