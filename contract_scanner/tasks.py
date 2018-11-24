@@ -63,8 +63,6 @@ def scan_contract(contract_dict, region_id):
         if req.status == 204 and req.data is None:
             return
 
-        print(req.status)
-
         data = req.data
         items = 0
 
