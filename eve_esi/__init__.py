@@ -53,7 +53,7 @@ class EsiManager:
             status=res.status
         ).inc()
 
-        if 500 <= res.status <= 599:
+        if 500 <= res.status <= 599 or res.status in [420, 429]:
             raise EsiException(endpoint, res.status, kwargs)
 
         return res
