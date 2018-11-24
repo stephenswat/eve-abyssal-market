@@ -88,3 +88,4 @@ local_settings.py
 .env
 db.sqlite3
 */settings/local.py
+Pipfile.lock
