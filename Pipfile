@@ -6,6 +6,13 @@ verify_ssl = true
 [dev-packages]
 django-debug-toolbar = "*"
 django-debug-toolbar-template-timings = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+flake8-import-order = "*"
+flake8-blind-except = "*"
+flake8-builtins = "*"
+flake8-logging-format = "*"
+flake8-comprehensions = "*"
 
 [packages]
 django-bootstrap4 = "*"
