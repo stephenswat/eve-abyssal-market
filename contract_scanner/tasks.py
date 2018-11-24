@@ -1,6 +1,7 @@
 import logging
 import pprint
 import requests
+import datetime
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
@@ -97,6 +98,13 @@ def scan_contract(contract_dict, region_id):
 
 @db_periodic_task(crontab(minute='0,30'))
 def scan_public_contracts(scan_all=False):
+    if (
+        datetime.time(hour=10, minute=55) <=
+        datetime.datetime.now(datetime.timezone.utc).time() <=
+        datetime.time(hour=11, minute=20)
+    ):
+        return
+
     all_regions = ESI.request('get_universe_regions').data
     all_contract_ids = set()
 
