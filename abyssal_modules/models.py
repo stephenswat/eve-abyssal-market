@@ -245,9 +245,7 @@ class Module(models.Model):
 
     @cached_property
     def attribute_list(self):
-        l = self.attribute_dict.values()
-
-        return sorted(l, key=lambda x: x.attribute.id)
+        return sorted(self.attribute_dict.values(), key=lambda x: x.attribute.id)
 
     @cached_property
     def attribute_dict(self):
