@@ -96,114 +96,187 @@
     <table class="table module-table dt-responsive" id="module-table">
         <thead>
             <tr>
-                <th width="1px" data-orderable="false">Icon</th>
+                <th width="1px">Icon</th>
                 {% for at in attributes %}
-                <th data-priority="10500" data-name="attr-{{ at.id }}" data-type="num"><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
-                <th width="120px" data-name="price">Price</th>
-                <th data-priority="9500" width="1px" data-orderable="false">Open</th>
-                <th data-visible="false" data-name="auction" class="d-none">Auction</th>
-                <th data-visible="false" data-name="multi-item" class="d-none">Multi-item</th>
-                <th data-visible="false" data-name="has-plex" class="d-none">Has-Plex</th>
-                <th data-visible="false" data-name="true-price" class="d-none">True Price</th>
+                <th>Price</th>
+                <th width="130px">Open</th>
+                <th width="1px">Pyfa</th>
+                <th>Auction</th>
+                <th>Multi-item</th>
             </tr>
         </thead>
-        {% cache 900 module_list module_type.id %}
-        <tbody>
-            {% for m in modules %}
-            <tr>
-                <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
-                {% for a in attributes %}
-                <td class="attr-{{ a.id }}">{{ m|format_attribute:a.id }}</td>
-                {% endfor %}
-                <td data-sort="{{ m.contract_price_inc_plex }}">
-                    {% if m.contract_price > 0 and m.contract_plex > 0 %}
-                    <span class="price-field">{{ m.contract_price|intword }}</span> + <span class="plex-field">{{ m.contract_plex }}</span><!--
-                    {% elif m.contract_plex > 0 %}
-                    <span class="plex-field">{{ m.contract_plex }}</span><!--
-                    {% else %}
-                    <span class="price-field">{{ m.contract_price|intword }}</span><!--
-                    {% endif %}
-                    -->{% if not m.contract_single %}<span class="annotation-multi-item text-muted" title="This contract includes other items."></span>{% endif %}<!--
-                    -->{% if m.contract_auction %}<span class="annotation-auction text-muted" title="This is an auction. Price may be delayed by up to 30 minutes."></span>{% endif %}
-                </td>
-                <td class="contract-button-container">
-                    <button
-                        class="btn btn-primary btn-open-contract-esi btn-open-contract"
-                        data-contract-id="{{ m.contract_id }}"
-                    >
-                        ESI
-                    </button>&nbsp;
-                    <button
-                        class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract"
-                        data-clipboard-text="<url=contract:30000142//{{ m.contract_id }}>Contract {{ m.contract_id }}</url>"
-                    >
-                        Link
-                    </button>&nbsp;
-                    <button
-                        class="btn btn-primary btn-copy"
-                        data-clipboard-text="{{ m.get_pyfa_string }}"
-                    >
-                        Pyfa
-                    </button>
-                </td>
-                <td class="d-none">{{ m.contract_auction|yesno:"1,0" }}</td>
-                <td class="d-none">{{ m.contract_single|yesno:"0,1" }}</td>
-                <td class="d-none">{% if m.contract_plex > 0 %}1{% else %}0{% endif %}</td>
-                <td class="d-none">{{ m.contract_price_inc_plex }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        {% endcache %}
     </table>
 </div>
 {% endblock %}
 
 {% block trailing_js %}
+{% cache 900 module_list module_type.id %}
+{{ module_data|json_script:"module_data" }}
+{% endcache %}
+
 <script>
     var table;
     var attr_val = {};
     var column_ids = {};
     var price_range;
+    var module_data = JSON.parse(document.getElementById('module_data').textContent);
+
+    function price_format(contract) {
+        base = ""
+
+        if (contract.price.isk > 0 && contract.price.plex > 0) {
+            base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span> + <span class="plex-field">${price.plex}</span>`;
+        } else if (contract.price.plex > 0) {
+            base += `<span class="plex-field">${contract.price.plex}</span>`;
+        } else {
+            base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span>`;
+        }
+
+        if (contract.multi_item) {
+            base += `<span class="annotation-multi-item text-muted" title="This contract includes other items."></span>`
+        }
+
+        if (contract.auction) {
+            base += `<span class="annotation-auction text-muted" title="This is an auction."></span>`
+        }
+
+        return base;
+    }
+
+    function icon_format(mid) {
+        return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png"></a>`
+    }
+
+    function attr_format(attr, value) {
+        return `<span class='attr-${attr}'>${value.toFixed(get_precision(attr))}</span>`;
+    }
+
+    function pyfa_format(pyfa) {
+        return `<button class="btn btn-primary btn-copy" data-clipboard-text="${pyfa}">Pyfa</button>`;
+    }
+
+    function open_format(contract) {
+        return `<button class="btn btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${contract.id}">ESI</button>&nbsp;` +
+               `<button class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${contract.id}>Contract ${contract.id}</url>">Link</button>`;
+    }
 
     $(".update-filter").change(function () {
         table.draw();
     });
 
     $(document).ready(function () {
+        table = $('#module-table').DataTable({
+            "data": module_data,
+            "columns": [
+                {
+                    'name': 'id',
+                    'orderable': false,
+                    'data': 'id',
+                    'render': function (data, type, row, meta) {
+                        return icon_format(data);
+                    }
+                },
+                {% for at in attributes %}
+                {
+                    'name': 'attr-{{ at.id }}',
+                    'data': 'attributes.{{ at.id }}',
+                    'type': 'num',
+                    'render': {
+                        'display': function (data, type, row, meta) {
+                            return attr_format({{ at.id }}, data.real_value);
+                        },
+                        '_': 'real_value'
+                    }
+                },
+                {% endfor %}
+                {
+                    'name': 'price',
+                    'data': 'contract',
+                    'type': 'num',
+                    'render': {
+                        'display': function (data, type, row, meta) {
+                            return price_format(data);
+                        },
+                        '_': 'price.total',
+                    }
+                },
+                {
+                    'name': 'open',
+                    'data': 'contract',
+                    'orderable': false,
+                    'render': {
+                        '_': function (data, type, row, meta) {
+                            return open_format(data);
+                        }
+                    }
+                },
+                {
+                    'name': 'pyfa',
+                    'data': 'pyfa',
+                    'orderable': false,
+                    'render': {
+                        '_': function (data, type, row, meta) {
+                            return pyfa_format(data);
+                        }
+                    }
+                },
+                {
+                    'name': 'auction',
+                    'data': 'contract.auction',
+                    'visible': false
+                },
+                {
+                    'name': 'multi-item',
+                    'data': 'contract.multi_item',
+                    'visible': false
+                },
+                {
+                    'name': 'has_plex',
+                    'data': 'contract.price.plex',
+                    'visible': false,
+                    'render': function (data, type, row, meta) {
+                        return data > 0;
+                    }
+                },
+            ],
+            "order": [[1, "asc"]]
+        });
+
         {% if not request.user.is_authenticated %}
         $('.btn-open-contract-esi').prop('disabled', true);
         {% endif %}
 
-        table = $('#module-table').DataTable({
-            "order": [[1, "asc"]]
+        $(".btn-open-contract-esi").click(function() {
+            open_contract($(this));
         });
 
         {% for at in attributes %}
         data = table
             .column("attr-{{ at.id }}:name")
             .data()
-            .map(function (n) { return parseFloat(n); })
+            .map(function (n) { return n.real_value; })
             .sort(function (a, b) { return a - b; });
 
         attr_val[{{ at.id }}] = [data[0], data.reverse()[0]],
         column_ids[{{ at.id }}] = table.column("attr-{{ at.id }}:name").index();
+        {% comment %} table.column("attr-{{ at.id }}:name").renderer = attr_format; {% endcomment %}
         {% endfor %}
 
         data = table
-            .column("true-price:name")
+            .column("price:name")
             .data()
-            .map(function (n) { return parseFloat(n); })
+            .map(function (n) { return parseFloat(n.price.total); })
             .sort(function (a, b) { return a - b; });
 
         attr_val["price"] = [data[0], data.reverse()[0]];
         price_range = attr_val["price"];
-        column_ids["price"] = table.column("price:name").index();
-        column_ids["true-price"] = table.column("true-price:name").index();
 
+        column_ids["price"] = table.column("price:name").index();
         column_ids["auction"] = table.column("auction:name").index();
         column_ids["multi-item"] = table.column("multi-item:name").index();
-        column_ids["has-plex"] = table.column("has-plex:name").index();
+        column_ids["has_plex"] = table.column("has_plex:name").index();
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
@@ -215,21 +288,23 @@
                 }
                 {% endfor %}
 
-                var value = data[column_ids["true-price"]];
+                console.log(data.total)
+
+                var value = data[column_ids["price"]];
 
                 if (value < attr_val["price"][0] || value > attr_val["price"][1]) {
                     return false;
                 }
 
-                if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == 1) {
+                if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == "true") {
                     return false;
                 }
 
-                if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == 1) {
+                if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == "true") {
                     return false;
                 }
 
-                if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has-plex']] == 1) {
+                if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has_plex']] == "true") {
                     return false;
                 }
 
@@ -251,6 +326,14 @@
             return (price / 1000000000).toFixed(1) + "b"
         } else {
             return (price / 1000000).toFixed(0) + "m"
+        }
+    }
+
+    function price_humanize_verbose(price) {
+        if (price > 1000000000) {
+            return (price / 1000000000).toFixed(1) + " billion"
+        } else {
+            return (price / 1000000).toFixed(1) + " million"
         }
     }
 

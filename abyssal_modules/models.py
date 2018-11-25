@@ -220,12 +220,20 @@ class Module(models.Model):
 
     first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
 
+    def attribute_list_with_derived(self):
+        return [
+            {
+                'id': x.id,
+                'real_value': self.get_value(x.id)
+            }
+            for x in self.type.attribute_list
+        ]
+
     @cached_property
     def attribute_list(self):
-        return sorted(
-            self.attribute_dict.values(),
-            key=lambda x: x.attribute.id
-        )
+        l = self.attribute_dict.values()
+
+        return sorted(l, key=lambda x: x.attribute.id)
 
     @cached_property
     def attribute_dict(self):
