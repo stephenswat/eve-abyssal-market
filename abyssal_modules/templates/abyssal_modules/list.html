@@ -149,8 +149,20 @@
         return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png"></a>`
     }
 
-    function attr_format(attr, value) {
-        return `<span class='attr-${attr}'>${value.toFixed(get_precision(attr))}</span>`;
+    function attr_format(attr, data) {
+        base = `<span class='attr-${attr}'>${data.real_value.toFixed(get_precision(attr))}</span>`;
+
+        if (data.rating != null) {
+            if (data.rating > 0) {
+                base += ` <span class="module-rating text-success">+${data.rating}</span>`;
+            } else if (data.rating == 0) {
+                base += ` <span class="module-rating text-warning">±${data.rating}</span>`;
+            } else {
+                base += ` <span class="module-rating text-danger">${data.rating}</span>`;
+            }
+        }
+
+        return base;
     }
 
     function pyfa_format(pyfa) {
@@ -185,7 +197,7 @@
                     'type': 'num',
                     'render': {
                         'display': function (data, type, row, meta) {
-                            return attr_format({{ at.id }}, data.real_value);
+                            return attr_format({{ at.id }}, data);
                         },
                         '_': 'real_value'
                     }
