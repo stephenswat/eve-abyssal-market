@@ -221,7 +221,15 @@ class Module(models.Model):
     first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def attribute_dict_with_derived(self):
-        res = self.attribute_dict_dict()
+        res = {
+            x.attribute.id: {
+                'real_value': x.real_value
+            }
+            for x in self.moduleattribute_set.all() if x.display
+        }
+
+        if self.type_id == 49738 and 1255 not in res:
+            res[1255] = {'real_value': 0.0}
 
         for attr_id, data in DERIVED_ATTRIBUTES.items():
             if self.type_id not in data['types']:
@@ -245,19 +253,6 @@ class Module(models.Model):
             x.attribute.id: x
             for x in self.moduleattribute_set.all() if x.display
         }
-
-    def attribute_dict_dict(self):
-        res = {
-            x.attribute.id: {
-                'real_value': x.real_value
-            }
-            for x in self.moduleattribute_set.all() if x.display
-        }
-
-        if self.type_id == 49738 and 1255 not in res:
-            res[1255] = {'real_value': 0.0}
-
-        return res
 
     def get_value(self, attr_id):
         if attr_id in DERIVED_ATTRIBUTES:
