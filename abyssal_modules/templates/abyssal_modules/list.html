@@ -122,6 +122,16 @@
     var price_range;
     var module_data = JSON.parse(document.getElementById('module_data').textContent);
 
+    function display_rating(attr) {
+        if (attr == 1255) {
+            return false;
+        } else if (attr == 105) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function price_format(contract) {
         base = ""
 
@@ -151,7 +161,7 @@
     function attr_format(attr, data) {
         base = `<span class='attr-${attr}'>${data.real_value.toFixed(get_precision(attr))}</span>`;
 
-        if (data.rating != null) {
+        if (data.rating != null && display_rating(attr)) {
             if (data.rating > 0) {
                 base += ` <span class="module-rating text-success">+${data.rating}</span>`;
             } else if (data.rating == 0) {
