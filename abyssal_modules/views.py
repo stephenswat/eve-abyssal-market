@@ -39,12 +39,7 @@ class TypedModuleList(View):
         module_data = [
             {
                 'id': m.id,
-                'attributes': {
-                    x['id']: {
-                        'real_value': x['real_value']
-                    }
-                    for x in  m.attribute_list_with_derived()
-                },
+                'attributes': m.attribute_dict_with_derived(),
                 'contract': {
                     'id': m.contract_id,
                     'price': {
