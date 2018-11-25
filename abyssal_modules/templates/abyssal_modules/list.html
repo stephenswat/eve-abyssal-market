@@ -14,26 +14,6 @@
         content: " {{ at.unit_str }}";
     }
     {% endfor %}
-
-    .attr-price:after {
-        content: " ISK";
-    }
-
-    .price-field:after {
-        content: " ISK "
-    }
-
-    .plex-field:after {
-        content: " PLEX "
-    }
-
-    .annotation-multi-item:after {
-        content: "M"
-    }
-
-    .annotation-auction:after {
-        content: "A"
-    }
 </style>
 
 <ul class="nav nav-tabs">
@@ -122,6 +102,13 @@
     var price_range;
     var module_data = JSON.parse(document.getElementById('module_data').textContent);
 
+    var module_type = {{ module_type.id }};
+    var attr_list = [];
+
+    {% for at in attributes %}
+    attr_list.push({{ at.id }});
+    {% endfor %}
+
     function display_rating(attr) {
         if (attr == 1255) {
             return false;
@@ -155,7 +142,7 @@
     }
 
     function icon_format(mid) {
-        return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png"></a>`
+        return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/${module_type}_32.png"></a>`
     }
 
     function attr_format(attr, data) {
@@ -227,7 +214,6 @@
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            console.log(row)
                             return open_format(row);
                         }
                     }
@@ -262,17 +248,17 @@
             open_contract($(this));
         });
 
-        {% for at in attributes %}
-        data = table
-            .column("attr-{{ at.id }}:name")
-            .data()
-            .map(function (n) { return n.real_value; })
-            .sort(function (a, b) { return a - b; });
+        for (i = 0; i < attr_list.length; i++) {
+            at = attr_list[i];
+            data = table
+                .column(`attr-${at}:name`)
+                .data()
+                .map(function (n) { return n.real_value; })
+                .sort(function (a, b) { return a - b; });
 
-        attr_val[{{ at.id }}] = [data[0], data.reverse()[0]],
-        column_ids[{{ at.id }}] = table.column("attr-{{ at.id }}:name").index();
-        {% comment %} table.column("attr-{{ at.id }}:name").renderer = attr_format; {% endcomment %}
-        {% endfor %}
+            attr_val[at] = [data[0], data.reverse()[0]],
+            column_ids[at] = table.column(`attr-${at}:name`).index();
+        }
 
         data = table
             .column("price:name")
@@ -290,17 +276,19 @@
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                {% for at in attributes %}
-                var value = data[column_ids[{{ at.id }}]];
+                var value, at;
 
-                if (value < attr_val[{{ at.id }}][0] || value > attr_val[{{ at.id }}][1]) {
-                    return false;
+                for (i = 0; i < attr_list.length; i++) {
+                    at = attr_list[i];
+
+                    value = data[column_ids[at]];
+
+                    if (value < attr_val[at][0] || value > attr_val[at][1]) {
+                        return false;
+                    }
                 }
-                {% endfor %}
 
-                console.log(data.total)
-
-                var value = data[column_ids["price"]];
+                value = data[column_ids["price"]];
 
                 if (value < attr_val["price"][0] || value > attr_val["price"][1]) {
                     return false;
@@ -325,9 +313,9 @@
         table.draw();
         update_labels();
 
-        {% for at in attributes %}
-        initialize_slider({{ at.id }});
-        {% endfor %}
+        for (i = 0; i < attr_list.length; i++) {
+            initialize_slider(attr_list[i]);
+        }
         initialize_slider("price");
     });
 
@@ -360,10 +348,12 @@
     }
 
     function update_labels() {
-        {% for at in attributes %}
-        $("#attr-{{ at.id }}-min").text(attr_val[{{ at.id }}][0].toFixed(get_precision({{ at.id }})));
-        $("#attr-{{ at.id }}-max").text(attr_val[{{ at.id }}][1].toFixed(get_precision({{ at.id }})));
-        {% endfor %}
+        for (i = 0; i < attr_list.length; i++) {
+            at = attr_list[i];
+
+            $(`#attr-${at}-min`).text(attr_val[at][0].toFixed(get_precision(at)));
+            $(`#attr-${at}-max`).text(attr_val[at][1].toFixed(get_precision(at)));
+        }
 
         $("#attr-price-min").text(price_humanize(attr_val["price"][0]));
         $("#attr-price-max").text(price_humanize(attr_val["price"][1]));

@@ -130,3 +130,19 @@ html {
 #module-table {
     width: 100% !important;
 }
+
+.price-field:after {
+    content: " ISK "
+}
+
+.plex-field:after {
+    content: " PLEX "
+}
+
+.annotation-multi-item:after {
+    content: "M"
+}
+
+.annotation-auction:after {
+    content: "A"
+}
