@@ -33,7 +33,6 @@ class TypedModuleList(View):
         except ModuleType.DoesNotExist:
             raise Http404("Module type does not exist.")
 
-        modules = Module.available.filter(type=module_type)
         attributes = module_type.attribute_list
 
         module_data = [
@@ -52,14 +51,13 @@ class TypedModuleList(View):
                 },
                 'pyfa': m.get_pyfa_string()
             }
-            for m in modules
+            for m in Module.available.filter(type=module_type)
         ]
 
         return render(
             request,
             'abyssal_modules/list.html',
             {
-                'modules': modules,
                 'module_type': module_type,
                 'module_data': module_data,
                 'attributes': attributes
