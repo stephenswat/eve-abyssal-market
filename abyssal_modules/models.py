@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.db.models import OuterRef, Subquery, F, Value, Case, When, Window
 from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
-from django.db.models.functions import Cast, Ntile
+from django.db.models.functions import Cast, PercentRank
 from django.utils.functional import cached_property
 
 from eve_esi import ESI
@@ -224,7 +224,7 @@ class Module(models.Model):
         res = {
             x.attribute.id: {
                 'real_value': x.real_value,
-                'rating': x.rating
+                'rating': int(round(x.rating))
             }
             for x in self.moduleattribute_set.all() if x.display
         }
@@ -319,13 +319,16 @@ class ModuleAttributeManager(models.Manager):
                 )
             )
             .annotate(
-                rating=(Window(
-                    expression=Ntile(11),
-                    partition_by=[F('attribute_id'), F('module__type_id')],
-                    order_by=F('real_value').asc()
-                ) - Value(6)) * Case(
-                    When(high_is_good=True, then=Value(1)),
-                    default=Value(-1)
+                rating=(
+                    (Window(
+                        expression=PercentRank(),
+                        partition_by=[F('attribute_id'), F('module__type_id')],
+                        order_by=F('real_value').asc()
+                    ) * Value(10) - Value(5)) *
+                    Case(
+                        When(high_is_good=True, then=Value(1)),
+                        default=Value(-1)
+                    )
                 )
             )
         )
