@@ -101,8 +101,7 @@
                 <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
                 <th>Price</th>
-                <th width="130px">Open</th>
-                <th width="1px">Pyfa</th>
+                <th>Actions</th>
                 <th>Auction</th>
                 <th>Multi-item</th>
             </tr>
@@ -165,13 +164,12 @@
         return base;
     }
 
-    function pyfa_format(pyfa) {
-        return `<button class="btn btn-primary btn-copy" data-clipboard-text="${pyfa}">Pyfa</button>`;
-    }
-
-    function open_format(contract) {
-        return `<button class="btn btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${contract.id}">ESI</button>&nbsp;` +
-               `<button class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${contract.id}>Contract ${contract.id}</url>">Link</button>`;
+    function open_format(mod) {
+        return `<div class="btn-group" role="group" aria-label="Basic example">
+                    <button class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
+                    <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
+                    <button class="btn btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+                </div>`
     }
 
     $(".update-filter").change(function () {
@@ -216,21 +214,11 @@
                 },
                 {
                     'name': 'open',
-                    'data': 'contract',
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            return open_format(data);
-                        }
-                    }
-                },
-                {
-                    'name': 'pyfa',
-                    'data': 'pyfa',
-                    'orderable': false,
-                    'render': {
-                        '_': function (data, type, row, meta) {
-                            return pyfa_format(data);
+                            console.log(row)
+                            return open_format(row);
                         }
                     }
                 },

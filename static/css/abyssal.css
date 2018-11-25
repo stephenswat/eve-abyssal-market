@@ -122,3 +122,7 @@ html {
 .nav-tabs>.nav-item>.active {
     background-color: rgb(78, 93, 108) !important;
 }
+
+.btn-std-size {
+    width: 60px;
+}
