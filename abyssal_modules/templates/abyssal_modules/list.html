@@ -101,7 +101,7 @@
                 <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
                 {% endfor %}
                 <th>Price</th>
-                <th>Actions</th>
+                <th width="0px">Actions</th>
                 <th>Auction</th>
                 <th>Multi-item</th>
             </tr>
@@ -168,7 +168,7 @@
         return `<div class="btn-group" role="group" aria-label="Basic example">
                     <button class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
-                    <button class="btn btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+                    <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
                 </div>`
     }
 

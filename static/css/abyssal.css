@@ -126,3 +126,7 @@ html {
 .btn-std-size {
     width: 60px;
 }
+
+#module-table {
+    width: 100% !important;
+}
