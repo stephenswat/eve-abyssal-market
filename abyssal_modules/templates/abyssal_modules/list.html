@@ -258,7 +258,10 @@
                 .map(function (n) { return n.real_value; })
                 .sort(function (a, b) { return a - b; });
 
-            attr_val[at] = [data[0], data.reverse()[0]],
+            attr_val[at] = [data[0], data.reverse()[0]];
+            attr_val[at][0] -= (attr_val[at][0] < 0 ? -1 : 1) * attr_val[at][0] * 0.01;
+            attr_val[at][1] += (attr_val[at][1] < 0 ? -1 : 1) * attr_val[at][1] * 0.01;
+
             column_ids[at] = table.column(`attr-${at}:name`).index();
         }
 
@@ -268,7 +271,7 @@
             .map(function (n) { return parseFloat(n.price.total); })
             .sort(function (a, b) { return a - b; });
 
-        attr_val["price"] = [data[0], data.reverse()[0]];
+        attr_val["price"] = [0, data.reverse()[0] * 1.001];
         price_range = attr_val["price"];
 
         column_ids["price"] = table.column("price:name").index();
