@@ -146,3 +146,22 @@ html {
 .annotation-auction:after {
     content: "A"
 }
+
+input.module-attribute-filter {
+    background-color: #374554;
+}
+input.module-attribute-filter::after {
+    content: "m"
+}
+
+input.module-attribute-filter.positive {
+    color: #5cb85c !important;
+}
+
+input.module-attribute-filter.negative {
+    color: #d9534f !important;
+}
+
+.module-stat-unit {
+    width: 20px;
+}

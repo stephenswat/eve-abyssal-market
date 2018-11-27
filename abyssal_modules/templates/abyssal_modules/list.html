@@ -39,21 +39,45 @@
                     <span class="col-3 attr-price" id="attr-price-min"></span>
                     <span class="col-3 attr-price" id="attr-price-max"></span>
                 </div>
-                <div id="attr-price-range" class="slider-neutral"></div>
+                <div class="row mt-1 px-4">
+                    <div id="attr-price-range" class="slider-neutral col-12"></div>
+                </div>
             </div>
             {% for at in attributes %}
             <div class="form-group col-12 col-md-6">
                 <div class="row">
                     <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}{% if at.derived %}<span style="text-muted" title="This is a derived attribute.">*</span>{% endif %}</label>
                     {% if at.high_is_good %}
-                    <span class="col-3 attr-{{ at.id }} text-danger" id="attr-{{ at.id }}-min"></span>
-                    <span class="col-3 attr-{{ at.id }} text-success" id="attr-{{ at.id }}-max"></span>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">{{ at.unit_str }}</span>
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">{{ at.unit_str }}</span>
+                        </div>
+                    </div>
                     {% else %}
-                    <span class="col-3 attr-{{ at.id }} text-success" id="attr-{{ at.id }}-min"></span>
-                    <span class="col-3 attr-{{ at.id }} text-danger" id="attr-{{ at.id }}-max"></span>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">{{ at.unit_str }}</span>
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">{{ at.unit_str }}</span>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
-                <div id="attr-{{ at.id }}-range" class="slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
+                <div class="row mt-1 px-4">
+                    <div id="attr-{{ at.id }}-range" class="col-12 slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -175,6 +199,13 @@
 
     $(document).on("click", ".btn-open-contract-esi", function() {
         open_contract($(this));
+    });
+
+    $(document).on("change", ".module-attribute-filter", function() {
+        $(`#attr-${this.dataset.attrModified}-range`).slider('values', [
+            $(`#attr-${this.dataset.attrModified}-min`).val(),
+            $(`#attr-${this.dataset.attrModified}-max`).val(),
+        ]);
     });
 
     $(document).ready(function () {
@@ -348,6 +379,8 @@
             return 0;
         } else if (attr_id == 105) {
             return 0;
+        } else if (attr_id == 54) {
+            return 0;
         } else {
             return 1;
         }
@@ -357,8 +390,8 @@
         for (i = 0; i < attr_list.length; i++) {
             at = attr_list[i];
 
-            $(`#attr-${at}-min`).text(attr_val[at][0].toFixed(get_precision(at)));
-            $(`#attr-${at}-max`).text(attr_val[at][1].toFixed(get_precision(at)));
+            $(`#attr-${at}-min`).val(attr_val[at][0].toFixed(get_precision(at)));
+            $(`#attr-${at}-max`).val(attr_val[at][1].toFixed(get_precision(at)));
         }
 
         $("#attr-price-min").text(price_humanize(attr_val["price"][0]));
@@ -398,8 +431,12 @@
             values: values,
             slide: function (event, ui) {
                 slide(event, ui, attr_id);
-                table.draw();
                 update_labels();
+            },
+            change: function (event, ui) {
+                slide(event, ui, attr_id);
+                update_labels();
+                table.draw();
             }
         });
     }
