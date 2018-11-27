@@ -162,6 +162,10 @@ input.module-attribute-filter.negative {
     color: #d9534f !important;
 }
 
+input.module-attribute-filter.neutral {
+    color: rgb(235, 235, 235) !important;
+}
+
 .module-stat-unit {
     width: 20px;
 }

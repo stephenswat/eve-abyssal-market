@@ -36,8 +36,18 @@
             <div class="form-group col-12 col-md-6">
                 <div class="row">
                     <label class="col-6"><img src="{% static "img/attributes/price.png" %}" title="Price"> Price</label>
-                    <span class="col-3 attr-price" id="attr-price-min"></span>
-                    <span class="col-3 attr-price" id="attr-price-max"></span>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter neutral" id="attr-price-min" step="1" data-attr-modified="price">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">m</span>
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter neutral" id="attr-price-max" step="1" data-attr-modified="price">
+                        <div class="input-group-append module-stat-unit">
+                            <span class="input-group-text">m</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="row mt-1 px-4">
                     <div id="attr-price-range" class="slider-neutral col-12"></div>
@@ -202,10 +212,21 @@
     });
 
     $(document).on("change", ".module-attribute-filter", function() {
-        $(`#attr-${this.dataset.attrModified}-range`).slider('values', [
-            $(`#attr-${this.dataset.attrModified}-min`).val(),
-            $(`#attr-${this.dataset.attrModified}-max`).val(),
-        ]);
+        var new_values;
+
+        if (this.dataset.attrModified == 'price') {
+            new_values = price_to_range([
+                $(`#attr-price-min`).val() * 1000000,
+                $(`#attr-price-max`).val() * 1000000,
+            ], 100000);
+        } else {
+            new_values = [
+                $(`#attr-${this.dataset.attrModified}-min`).val(),
+                $(`#attr-${this.dataset.attrModified}-max`).val(),
+            ];
+        }
+
+        $(`#attr-${this.dataset.attrModified}-range`).slider('values', new_values);
     });
 
     $(document).ready(function () {
@@ -352,17 +373,7 @@
                 );
             }
         });
-
-
     });
-
-    function price_humanize(price) {
-        if (price > 1000000000) {
-            return (price / 1000000000).toFixed(1) + "b"
-        } else {
-            return (price / 1000000).toFixed(0) + "m"
-        }
-    }
 
     function price_humanize_verbose(price) {
         if (price > 1000000000) {
@@ -394,18 +405,31 @@
             $(`#attr-${at}-max`).val(attr_val[at][1].toFixed(get_precision(at)));
         }
 
-        $("#attr-price-min").text(price_humanize(attr_val["price"][0]));
-        $("#attr-price-max").text(price_humanize(attr_val["price"][1]));
+        $("#attr-price-min").val((attr_val["price"][0] / 1000000).toFixed(0));
+        $("#attr-price-max").val((attr_val["price"][1] / 1000000).toFixed(0));
     }
 
     function attr_slider_fun(event, ui, attr_id) {
         attr_val[attr_id] = ui.values;
     }
 
+    function range_to_price(range, max) {
+        var t = (price_range[1] / (max ** 3));
+
+        return [(range[0] ** 3) * t, (range[1] ** 3) * t];
+    }
+
+    function price_to_range(price, max) {
+        var t = (price_range[1] / (max ** 3));
+
+        return [
+            ((price[0] / t) ** (1.0 / 3.0)),
+            ((price[1] / t) ** (1.0 / 3.0))
+        ];
+    }
+
     function price_slider_fun(event, ui, attr_id) {
-        var min = ui.values[0] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
-        var max = ui.values[1] ** 3 * (price_range[1] / (1000 ** 3)) + price_range[0]
-        attr_val[attr_id] = [min, max];
+        attr_val[attr_id] = range_to_price(ui.values, 100000);
     }
 
     function initialize_slider(attr_id) {
@@ -414,8 +438,8 @@
         var slide;
 
         if (attr_id == "price") {
-            range = [0, 1000];
-            values = [0, 1000];
+            range = [0, 100000];
+            values = [0, 100000];
             slide = price_slider_fun;
         } else {
             range = attr_val[attr_id];
