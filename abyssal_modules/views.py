@@ -35,31 +35,11 @@ class TypedModuleList(View):
 
         attributes = module_type.attribute_list
 
-        module_data = [
-            {
-                'id': m.id,
-                'attributes': m.attribute_dict_with_derived(),
-                'contract': {
-                    'id': m.contract_id,
-                    'price': {
-                        'isk': m.contract_price,
-                        'plex': m.contract_plex,
-                        'total': m.contract_price_inc_plex
-                    },
-                    'auction': m.contract_auction,
-                    'multi_item': not m.contract_single
-                },
-                'pyfa': m.get_pyfa_string()
-            }
-            for m in Module.available.filter(type=module_type)
-        ]
-
         return render(
             request,
             'abyssal_modules/list.html',
             {
                 'module_type': module_type,
-                'module_data': module_data,
                 'attributes': attributes
             }
         )

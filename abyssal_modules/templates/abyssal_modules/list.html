@@ -91,17 +91,11 @@
 {% endblock %}
 
 {% block trailing_js %}
-{% cache 900 module_list module_type.id %}
-{{ module_data|json_script:"module_data" }}
-{% endcache %}
-
 <script>
     var table;
     var attr_val = {};
     var column_ids = {};
     var price_range;
-    var module_data = JSON.parse(document.getElementById('module_data').textContent);
-
     var module_type = {{ module_type.id }};
     var attr_list = [];
 
@@ -179,9 +173,17 @@
         table.draw();
     });
 
+    $(document).on("click", ".btn-open-contract-esi", function() {
+        open_contract($(this));
+    });
+
     $(document).ready(function () {
         table = $('#module-table').DataTable({
-            "data": module_data,
+            "processing": true,
+            "ajax": {
+                url: "{% url 'abyssal_api:module_list' module_type.id %}",
+                dataSrc: ''
+            },
             "columns": [
                 {
                     'name': 'id',
@@ -243,85 +245,84 @@
                     }
                 },
             ],
-            "order": [[1, "asc"]]
-        });
-
-        $(document).on("click", ".btn-open-contract-esi", function() {
-            open_contract($(this));
-        });
-
-        for (i = 0; i < attr_list.length; i++) {
-            at = attr_list[i];
-            data = table
-                .column(`attr-${at}:name`)
-                .data()
-                .map(function (n) { return n.real_value; })
-                .sort(function (a, b) { return a - b; });
-
-            attr_val[at] = [data[0], data.reverse()[0]];
-            attr_val[at][0] -= (attr_val[at][0] < 0 ? -1 : 1) * attr_val[at][0] * 0.01;
-            attr_val[at][1] += (attr_val[at][1] < 0 ? -1 : 1) * attr_val[at][1] * 0.01;
-
-            column_ids[at] = table.column(`attr-${at}:name`).index();
-        }
-
-        data = table
-            .column("price:name")
-            .data()
-            .map(function (n) { return parseFloat(n.price.total); })
-            .sort(function (a, b) { return a - b; });
-
-        attr_val["price"] = [0, data.reverse()[0] * 1.001];
-        price_range = attr_val["price"];
-
-        column_ids["price"] = table.column("price:name").index();
-        column_ids["auction"] = table.column("auction:name").index();
-        column_ids["multi-item"] = table.column("multi-item:name").index();
-        column_ids["has_plex"] = table.column("has_plex:name").index();
-
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
-                var value, at;
-
+            "order": [[1, "asc"]],
+            "initComplete": function(settings, json) {
                 for (i = 0; i < attr_list.length; i++) {
                     at = attr_list[i];
+                    data = table
+                        .column(`attr-${at}:name`)
+                        .data()
+                        .map(function (n) { return n.real_value; })
+                        .sort(function (a, b) { return a - b; });
 
-                    value = data[column_ids[at]];
+                    attr_val[at] = [data[0], data.reverse()[0]];
+                    attr_val[at][0] -= (attr_val[at][0] < 0 ? -1 : 1) * attr_val[at][0] * 0.01;
+                    attr_val[at][1] += (attr_val[at][1] < 0 ? -1 : 1) * attr_val[at][1] * 0.01;
 
-                    if (value < attr_val[at][0] || value > attr_val[at][1]) {
-                        return false;
+                    column_ids[at] = table.column(`attr-${at}:name`).index();
+                }
+
+                data = table
+                    .column("price:name")
+                    .data()
+                    .map(function (n) { return parseFloat(n.price.total); })
+                    .sort(function (a, b) { return a - b; });
+
+                attr_val["price"] = [0, data.reverse()[0] * 1.001];
+                price_range = attr_val["price"];
+
+                column_ids["price"] = table.column("price:name").index();
+                column_ids["auction"] = table.column("auction:name").index();
+                column_ids["multi-item"] = table.column("multi-item:name").index();
+                column_ids["has_plex"] = table.column("has_plex:name").index();
+
+                table.draw();
+                update_labels();
+
+                for (i = 0; i < attr_list.length; i++) {
+                    initialize_slider(attr_list[i]);
+                }
+                initialize_slider("price");
+
+                $.fn.dataTable.ext.search.push(
+                    function (settings, data, dataIndex) {
+                        var value, at;
+
+                        for (i = 0; i < attr_list.length; i++) {
+                            at = attr_list[i];
+
+                            value = data[column_ids[at]];
+
+                            if (value < attr_val[at][0] || value > attr_val[at][1]) {
+                                return false;
+                            }
+                        }
+
+                        value = data[column_ids["price"]];
+
+                        if (value < attr_val["price"][0] || value > attr_val["price"][1]) {
+                            return false;
+                        }
+
+                        if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == "true") {
+                            return false;
+                        }
+
+                        if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == "true") {
+                            return false;
+                        }
+
+                        if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has_plex']] == "true") {
+                            return false;
+                        }
+
+                        return true;
                     }
-                }
-
-                value = data[column_ids["price"]];
-
-                if (value < attr_val["price"][0] || value > attr_val["price"][1]) {
-                    return false;
-                }
-
-                if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == "true") {
-                    return false;
-                }
-
-                if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == "true") {
-                    return false;
-                }
-
-                if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has_plex']] == "true") {
-                    return false;
-                }
-
-                return true;
+                );
             }
-        );
+        });
 
-        table.draw();
-        update_labels();
 
-        for (i = 0; i < attr_list.length; i++) {
-            initialize_slider(attr_list[i]);
-        }
-        initialize_slider("price");
     });
 
     function price_humanize(price) {
