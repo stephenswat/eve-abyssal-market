@@ -105,6 +105,12 @@
     var module_type = {{ module_type.id }};
     var attr_list = [];
 
+    {% if not request.user.is_authenticated %}
+    var logged_in = false;
+    {% else %}
+    var logged_in = true;
+    {% endif %}
+
     {% for at in attributes %}
     attr_list.push({{ at.id }});
     {% endfor %}
@@ -161,9 +167,9 @@
         return base;
     }
 
-    function open_format(mod) {
+    function open_format(mod, logged_in) {
         return `<div class="btn-group" role="group" aria-label="Basic example">
-                    <button class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
+                    <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
                     <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
                 </div>`
@@ -214,7 +220,7 @@
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            return open_format(row);
+                            return open_format(row, logged_in);
                         }
                     }
                 },
@@ -240,11 +246,7 @@
             "order": [[1, "asc"]]
         });
 
-        {% if not request.user.is_authenticated %}
-        $('.btn-open-contract-esi').prop('disabled', true);
-        {% endif %}
-
-        $(".btn-open-contract-esi").click(function() {
+        $(document).on("click", ".btn-open-contract-esi", function() {
             open_contract($(this));
         });
 

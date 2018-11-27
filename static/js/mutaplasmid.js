@@ -43,6 +43,8 @@ clipboard.on('success', function (e) {
     setTooltip(e.trigger, 'Copied!');
 });
 
-$(".btn-open-contract-esi").click(function() {
-    open_contract($(this));
-});
+function initializeEsiButtons() {
+    $(".btn-open-contract-esi").click(function() {
+        open_contract($(this));
+    });
+}
