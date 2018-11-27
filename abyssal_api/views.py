@@ -1,9 +1,12 @@
 from django.http import JsonResponse, Http404
 from django.views import View
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from abyssal_modules.models import Module, ModuleType
 
 
+@method_decorator(cache_page(60 * 10), name='dispatch')
 class AvailableTypedModuleListAPI(View):
     def get(self, request, type_id):
         try:
