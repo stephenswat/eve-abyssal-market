@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'eve_esi',
     'eve_sde',
     'eve_mail_queue',
+    'abyssal_api',
     'abyssal_modules',
     'contract_scanner',
     'price_predictor',
