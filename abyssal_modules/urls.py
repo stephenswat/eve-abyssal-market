@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 import abyssal_modules.views
 
@@ -8,6 +9,10 @@ app_name = 'abyssal_modules'
 urlpatterns = [
     path(
         'type/<int:type_id>/',
+        RedirectView.as_view(pattern_name='abyssal_modules:type_module_list', permanent=True),
+    ),
+    path(
+        'type/<int:type_id>/contracts/',
         abyssal_modules.views.TypedModuleList.as_view(),
         name='type_module_list'
     ),
