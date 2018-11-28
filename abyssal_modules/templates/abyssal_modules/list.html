@@ -376,7 +376,7 @@
     });
 
     function price_humanize_verbose(price) {
-        if (price > 1000000000) {
+        if (price >= 1000000000) {
             return (price / 1000000000).toFixed(1) + " billion"
         } else {
             return (price / 1000000).toFixed(1) + " million"
