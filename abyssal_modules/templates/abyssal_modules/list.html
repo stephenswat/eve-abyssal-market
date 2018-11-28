@@ -16,17 +16,7 @@
     {% endfor %}
 </style>
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Sell Orders</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" title="Coming soon!">Buy Orders</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" title="Coming soon!">Your Modules</a>
-    </li>
-</ul>
+{% include "abyssal_modules/module_tabs.html" with active_page="contract_sell" %}
 
 <div class="jumbotron jumbotron-tabs">
     <h1>{{ module_type.name }}</h1>

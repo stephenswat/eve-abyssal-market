@@ -8,7 +8,7 @@ from django.db.models.functions import Trunc
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
-from abyssal_modules.models import Module, ModuleType, EveCharacter
+from abyssal_modules.models import Module, ModuleType, EveCharacter, Mutator, TypeAttribute
 from eve_esi import ESI
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
@@ -40,6 +40,27 @@ class TypedModuleList(View):
             'abyssal_modules/list.html',
             {
                 'module_type': module_type,
+                'attributes': attributes
+            }
+        )
+
+
+class RollCalculatorView(View):
+    def get(self, request, type_id):
+        try:
+            module_type = ModuleType.objects.get(id=type_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Module type does not exist.")
+
+        mutators = Mutator.objects.filter(result=module_type).order_by('item_type__name')
+        attributes = TypeAttribute.objects.filter(mutatorattribute__mutator__result=module_type).distinct('attribute')
+
+        return render(
+            request,
+            'abyssal_modules/roll_calculator.html',
+            {
+                'module_type': module_type,
+                'mutators': mutators,
                 'attributes': attributes
             }
         )

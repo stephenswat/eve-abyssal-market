@@ -12,6 +12,11 @@ urlpatterns = [
         name='type_module_list'
     ),
     path(
+        'type/<int:type_id>/roll/',
+        abyssal_modules.views.RollCalculatorView.as_view(),
+        name='roll_calculator'
+    ),
+    path(
         'module/<int:pk>/',
         abyssal_modules.views.ModuleView.as_view(),
         name='module_view'
