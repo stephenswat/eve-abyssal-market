@@ -25,3 +25,20 @@ class AvailableTypedModuleListAPI(View):
             cache.set(key, res, 60 * 15)
 
         return JsonResponse(res, safe=False)
+
+
+class AvailableLatestModuleListAPI(View):
+    def get(self, request):
+        key = "AvailableLatestModuleListAPI"
+
+        res = cache.get(key)
+
+        if res is None:
+            res = [
+                m.as_dict()
+                for m in Module.available.order_by('-first_seen')[:100]
+            ]
+
+            cache.set(key, res, 60 * 15)
+
+        return JsonResponse(res, safe=False)

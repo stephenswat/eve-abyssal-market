@@ -73,72 +73,115 @@
     <table class="table module-table dt-responsive" id="module-table" width="100%">
         <thead>
             <tr>
-                <th data-priority="1" width="1px" data-orderable="false">Icon</th>
-                <th data-priority="11000">Module</th>
-                <th data-priority="2" data-orderable="false">Attributes</th>
-                <th data-priority="10500" width="120px">Price</th>
-                <th data-priority="9500" width="1px" data-orderable="false">Open</th>
+                <th>Icon</th>
+                <th>Module</th>
+                <th>Attributes</th>
+                <th>Price</th>
+                <th width="1px">Open</th>
             </tr>
         </thead>
-        {% cache 900 homepage_module_list %}
-        <tbody>
-            {% for m in modules %}
-            <tr class="item">
-                <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
-                <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
-                <td>
-                    <div class="row">
-                        {% for a in m.attribute_list %}
-                        <div class="col-12 col-md-4">
-                            <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
-                            {{ m|format_attribute:a.attribute.id }} {{ a.attribute.unit_str }}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </td>
-                <td data-sort="{{ m.contract_price }}">
-                    {{ m.contract_price|intword }} ISK
-                    {% if not m.contract_single %}<span class="text-muted" title="This contract includes other items.">M</span>{% endif %}
-                    {% if m.contract_auction %}<span class="text-muted" title="This is an auction. Price may be delayed by up to 30 minutes.">A</span>{% endif %}
-                </td>
-                <td class="contract-button-container">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <button
-                            class="btn btn-primary btn-open-contract-esi btn-open-contract"
-                            data-contract-id="{{ m.contract_id }}"
-                        >
-                            ESI
-                        </button>
-                        <button
-                            class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract"
-                            data-clipboard-text="<url=contract:30000142//{{ m.contract_id }}>Contract {{ m.contract_id }}</url>"
-                        >
-                            Link
-                        </button>
-                        <button
-                            class="btn btn-primary btn-copy"
-                            data-clipboard-text="{{ m.get_pyfa_string }}"
-                        >
-                            Pyfa
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        {% endcache %}
     </table>
 </div>
 {% endblock %}
 
 {% block trailing_js %}
 <script>
+{% if not request.user.is_authenticated %}
+var logged_in = false;
+{% else %}
+var logged_in = true;
+{% endif %}
+
+function icon_format(mid, tid) {
+    return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/${tid}_32.png"></a>`
+}
+
+function link_format(type_id, type_name) {
+    return `<a href="/type/${type_id}/">${type_name}</a>`
+}
+
+function attribute_format(attrs) {
+    var list = "";
+    var rating = "";
+
+    console.log(attrs)
+
+    for (var a in attrs) {
+        if (attrs[a].rating != null && display_rating(a)) {
+            if (attrs[a].rating > 0) {
+                rating = ` <span class="module-rating text-success">+${attrs[a].rating}</span>`;
+            } else if (attrs[a].rating == 0) {
+                rating = ` <span class="module-rating text-warning">±${attrs[a].rating}</span>`;
+            } else {
+                rating = ` <span class="module-rating text-danger">${attrs[a].rating}</span>`;
+            }
+        }
+
+
+        list += `<div class="col-12 col-md-4">
+                    <img src="/static/img/attributes/${a}.png">
+                    ${attrs[a].real_value.toFixed(get_precision(a))} ${attrs[a].unit} ${rating}
+                 </div>`;
+    }
+
+    return `<div class="row">${list}</div>`
+}
+
 $(document).ready(function () {
     {% if not request.user.is_authenticated %}
     $('.btn-open-contract-esi').prop('disabled', true);
     {% endif %}
 
     $('#module-table').DataTable({
+        "processing": true,
+        "ajax": {
+            url: "{% url 'abyssal_api:lastest_modules' %}",
+            dataSrc: ''
+        },
+        "columns": [
+                {
+                    'name': 'id',
+                    'orderable': false,
+                    'data': null,
+                    'render': function (data, type, row, meta) {
+                        return icon_format(data.id, data.type_id);
+                    }
+                },
+                {
+                    'name': 'module',
+                    'data': null,
+                    'render': function (data, type, row, meta) {
+                        return link_format(data.type_id, data.type_name);
+                    }
+                },
+                {
+                    'name': 'attributes',
+                    'data': 'attributes',
+                    'render': function (data, type, row, meta) {
+                        return attribute_format(data);
+                    }
+                },
+                {
+                    'name': 'price',
+                    'data': 'contract',
+                    'type': 'num',
+                    'render': {
+                        'display': function (data, type, row, meta) {
+                            return price_format(data);
+                        },
+                        '_': 'price.total',
+                    }
+                },
+                {
+                    'name': 'open',
+                    'orderable': false,
+                    'render': {
+                        '_': function (data, type, row, meta) {
+                            return open_format(row, logged_in);
+                        }
+                    }
+                },
+            ],
         "order": []
     });
 });

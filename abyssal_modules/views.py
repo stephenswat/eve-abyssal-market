@@ -17,12 +17,9 @@ from abyssal_modules.tasks import create_module
 
 class ModuleList(View):
     def get(self, request):
-        modules = Module.available.order_by('-first_seen')[:50]
-
         return render(
             request,
             'abyssal_modules/home.html',
-            {'modules': modules}
         )
 
 

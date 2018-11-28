@@ -224,13 +224,18 @@ class Module(models.Model):
         res = {
             x.attribute.id: {
                 'real_value': x.real_value,
-                'rating': int(round(x.rating))
+                'rating': int(round(x.rating)),
+                'unit': x.attribute.unit_str
             }
             for x in self.moduleattribute_set.all() if x.display
         }
 
         if self.type_id == 49738 and 1255 not in res:
-            res[1255] = {'real_value': 0.0}
+            res[1255] = {
+                'real_value': 0.0,
+                'rating': None,
+                'unit': '%'
+            }
 
         for attr_id, data in DERIVED_ATTRIBUTES.items():
             if self.type_id not in data['types']:
@@ -238,7 +243,8 @@ class Module(models.Model):
 
             res[attr_id] = {
                 'real_value': data['value'](self),
-                'rating': None
+                'rating': None,
+                'unit': data['unit_str']
             }
 
         return res
@@ -289,6 +295,8 @@ class Module(models.Model):
     def as_dict(self):
         return {
             'id': self.id,
+            'type_id': self.type.id,
+            'type_name': self.type.name,
             'attributes': self.attribute_dict_with_derived(),
             'contract': {
                 'id': self.contract_id,
