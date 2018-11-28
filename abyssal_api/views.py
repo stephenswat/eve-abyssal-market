@@ -18,21 +18,7 @@ class AvailableTypedModuleListAPI(View):
 
         if res is None:
             res = [
-                {
-                    'id': m.id,
-                    'attributes': m.attribute_dict_with_derived(),
-                    'contract': {
-                        'id': m.contract_id,
-                        'price': {
-                            'isk': m.contract_price,
-                            'plex': m.contract_plex,
-                            'total': m.contract_price_inc_plex
-                        },
-                        'auction': m.contract_auction,
-                        'multi_item': not m.contract_single
-                    },
-                    'pyfa': m.get_pyfa_string()
-                }
+                m.as_dict()
                 for m in Module.available.filter(type=module_type)
             ]
 

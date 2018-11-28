@@ -286,6 +286,23 @@ class Module(models.Model):
             attr_list=attr_list
         )
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'attributes': self.attribute_dict_with_derived(),
+            'contract': {
+                'id': self.contract_id,
+                'price': {
+                    'isk': self.contract_price,
+                    'plex': self.contract_plex,
+                    'total': self.contract_price_inc_plex
+                },
+                'auction': self.contract_auction,
+                'multi_item': not self.contract_single
+            },
+            'pyfa': self.get_pyfa_string()
+        }
+
 
 class ModuleAttributeManager(models.Manager):
     def get_queryset(self):
