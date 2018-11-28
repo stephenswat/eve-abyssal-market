@@ -349,3 +349,19 @@ class TypeAttribute(models.Model):
 
     display = models.BooleanField(default=False)
     high_is_good = models.NullBooleanField()
+
+
+class Mutator(models.Model):
+    item_type = models.OneToOneField(InvType, models.CASCADE, related_name='+')
+    result = models.ForeignKey(ModuleType, models.CASCADE)
+
+    applicable_modules = models.ManyToManyField(InvType)
+    attributes = models.ManyToManyField(TypeAttribute, through='MutatorAttribute')
+
+
+class MutatorAttribute(models.Model):
+    mutator = models.ForeignKey(Mutator, models.CASCADE)
+    attribute = models.ForeignKey(TypeAttribute, models.CASCADE)
+
+    min_modifier = models.DecimalField(max_digits=10, decimal_places=5)
+    max_modifier = models.DecimalField(max_digits=10, decimal_places=5)
