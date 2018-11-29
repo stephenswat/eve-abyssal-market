@@ -3,7 +3,7 @@ from django.db import transaction
 from huey.contrib.djhuey import db_task
 
 from abyssal_modules.metrics import COUNTER_MODULES_CREATED
-from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter
+from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter, TypeAttribute
 from eve_esi import ESI
 
 
@@ -45,6 +45,10 @@ def create_module(type_id, item_id, force=False):
                     module=res,
                     attribute=ModuleDogmaAttribute.objects.get(
                         id=a['attribute_id']
+                    ),
+                    _new_attribute=TypeAttribute.objects.get(
+                        type_id=type_id,
+                        attribute_id=a['attribute_id']
                     ),
                     value=a['value']
                 ).save()
