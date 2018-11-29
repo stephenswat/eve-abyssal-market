@@ -360,6 +360,7 @@ class ModuleAttributeManager(models.Manager):
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
+    _new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
 
     value = models.FloatField(db_index=True)
 
