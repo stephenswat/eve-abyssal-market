@@ -363,6 +363,7 @@ class ModuleAttribute(models.Model):
     value = models.FloatField(db_index=True)
 
     objects = ModuleAttributeManager()
+    raw = models.Manager()
 
 
 class TypeAttribute(models.Model):

@@ -1,10 +1,14 @@
 from tqdm import tqdm
 import requests
+from collections import defaultdict
 
 from django.core.management.base import BaseCommand
 
 from eve_esi import ESI
-from abyssal_modules.models import ModuleType, ModuleDogmaAttribute, TypeAttribute, Mutator, MutatorAttribute
+from abyssal_modules.models import (
+    ModuleType, ModuleDogmaAttribute, TypeAttribute, Mutator, MutatorAttribute,
+    StaticModule, ModuleAttribute
+)
 from abyssal_modules.models import DERIVED_ATTRIBUTES
 from eve_sde.models import InvType
 from ._abyssal_primitive import ITEMS, UNIT_STR
@@ -125,6 +129,44 @@ class Command(BaseCommand):
                     }
                 )
 
+    def create_static_types(self):
+        mod_to_source = defaultdict(set)
+
+        for x in Mutator.objects.all():
+            for y in x.applicable_modules.all():
+                mod_to_source[x.result.id].add(y.id)
+
+        for abyssal_id, sources in tqdm(mod_to_source.items()):
+            for s in sources:
+                data = ESI.request(
+                    'get_universe_types_type_id',
+                    type_id=s
+                ).data
+
+                module, _ = StaticModule.objects.update_or_create(
+                    id=s,
+                    defaults={
+                        'source_id': s,
+                        'type_id': abyssal_id
+                    }
+                )
+
+                for attr in data['dogma_attributes']:
+                    try:
+                        ModuleAttribute.raw.update_or_create(
+                            static_module=module,
+                            attribute_id=attr['attribute_id'],
+                            _new_attribute=TypeAttribute.objects.get(
+                                type_id=abyssal_id,
+                                attribute_id=attr['attribute_id']
+                            ),
+                            defaults={
+                                'value': attr['value']
+                            }
+                        )
+                    except TypeAttribute.DoesNotExist:
+                        pass
+
     def handle(self, *args, **options):
         print("Importing types and attributes...")
         self.import_types()
@@ -134,3 +176,5 @@ class Command(BaseCommand):
         self.import_mutators()
         print("Creating derived attributes...")
         self.create_derived()
+        print("Importing static types...")
+        self.create_static_types()
