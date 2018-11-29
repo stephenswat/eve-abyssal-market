@@ -172,12 +172,6 @@ class AvailableModuleManager(ModuleManager):
 
 class ModuleBase(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    type = models.ForeignKey(
-        ModuleType,
-        models.CASCADE,
-        related_name='modules',
-        db_index=True
-    )
 
     attributes = models.ManyToManyField(
         ModuleDogmaAttribute,
@@ -248,9 +242,25 @@ class ModuleBase(models.Model):
             return attrs[attr_id].real_value
 
 
+class StaticModule(ModuleBase):
+    type = models.ForeignKey(
+        ModuleType,
+        models.CASCADE,
+        related_name='static_modules',
+        db_index=True
+    )
+
+
 class Module(ModuleBase):
     objects = ModuleManager()
     available = AvailableModuleManager()
+
+    type = models.ForeignKey(
+        ModuleType,
+        models.CASCADE,
+        related_name='modules',
+        db_index=True
+    )
 
     mutator = models.ForeignKey(
         InvType,
@@ -344,7 +354,8 @@ class ModuleAttributeManager(models.Manager):
 
 
 class ModuleAttribute(models.Model):
-    module = models.ForeignKey(Module, models.CASCADE)
+    module = models.ForeignKey(Module, models.CASCADE, null=True)
+    static_module = models.ForeignKey(StaticModule, models.CASCADE, null=True)
 
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
     _new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
