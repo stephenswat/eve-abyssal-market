@@ -92,6 +92,8 @@ class ModuleDogmaAttribute(models.Model):
 
     unit_str = models.CharField(max_length=16)
 
+    is_derived = models.BooleanField(default=False)
+
     @property
     def icon_path(self):
         return "/img/attributes/%d.png" % self.id

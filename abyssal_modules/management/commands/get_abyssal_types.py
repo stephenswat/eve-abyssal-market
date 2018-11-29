@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 
 from eve_esi import ESI
 from abyssal_modules.models import ModuleType, ModuleDogmaAttribute, TypeAttribute, Mutator, MutatorAttribute
+from abyssal_modules.models import DERIVED_ATTRIBUTES
 from eve_sde.models import InvType
 from ._abyssal_primitive import ITEMS, UNIT_STR
 
@@ -102,6 +103,28 @@ class Command(BaseCommand):
                     }
                 )
 
+    def create_derived(self):
+        for attr_id, data in DERIVED_ATTRIBUTES.items():
+            attr, _ = ModuleDogmaAttribute.objects.update_or_create(
+                id=attr_id,
+                defaults={
+                    'name': data['name'],
+                    'short_name': data['name'].lower().replace(' ', '_'),
+                    'unit_str': data['unit_str'],
+                    'is_derived': True
+                }
+            )
+
+            for type_id in data['types']:
+                TypeAttribute.objects.update_or_create(
+                    type_id=type_id,
+                    attribute=attr,
+                    defaults={
+                        'display': True,
+                        'high_is_good': data['high_is_good']
+                    }
+                )
+
     def handle(self, *args, **options):
         print("Importing types and attributes...")
         self.import_types()
@@ -109,3 +132,5 @@ class Command(BaseCommand):
         self.repair_attributes()
         print("Importing mutators...")
         self.import_mutators()
+        print("Creating derived attributes...")
+        self.create_derived()
