@@ -92,6 +92,9 @@
             <div class="col-3">
                 <input type="checkbox" name="filter-show-plex" class="update-filter" checked> Show contracts for PLEX
             </div>
+            <div class="col-3">
+                <input type="checkbox" name="filter-static-modules" class="update-filter" checked> Show static modules
+            </div>
         </div>
     </form>
 </div>
@@ -131,8 +134,12 @@
     attr_list.push({{ at.id }});
     {% endfor %}
 
-    function icon_format(mid) {
-        return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/${module_type}_32.png"></a>`
+    function icon_format(data) {
+        if (!data.static) {
+            return `<a href="/module/${data.id}/"><img src="https://image.eveonline.com/Type/${data.type_id}_32.png"></a>`
+        } else {
+            return `<img src="https://image.eveonline.com/Type/${data.id}_32.png" title="${data.module_name}">`
+        }
     }
 
     $(".update-filter").change(function () {
@@ -172,7 +179,7 @@
                 {
                     'name': 'id',
                     'orderable': false,
-                    'data': 'id',
+                    'data': null,
                     'render': function (data, type, row, meta) {
                         return icon_format(data);
                     }
@@ -198,7 +205,9 @@
                         'display': function (data, type, row, meta) {
                             return price_format(data);
                         },
-                        '_': 'price.total',
+                        '_': function (data, type, row, meta) {
+                            return data === null ? 0 : data.price.total;
+                        },
                     }
                 },
                 {
@@ -231,7 +240,7 @@
                 data = table
                     .column("price:name")
                     .data()
-                    .map(function (n) { return parseFloat(n.price.total); })
+                    .map(function (n) { return n === null ? 0 : parseFloat(n.price.total); })
                     .sort(function (a, b) { return a - b; });
 
                 attr_val["price"] = [0, data.reverse()[0] * 1.001];
@@ -276,6 +285,10 @@
                         }
 
                         if (!$("[name=filter-show-plex]").is(":checked") && original.contract.price.plex > 0) {
+                            return false;
+                        }
+
+                        if (!$("[name=filter-static-modules]").is(":checked") && original.static) {
                             return false;
                         }
 

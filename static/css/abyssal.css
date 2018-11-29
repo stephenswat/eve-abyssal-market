@@ -169,3 +169,7 @@ input.module-attribute-filter.neutral {
 .module-stat-unit {
     width: 20px;
 }
+
+#module-table>tbody>tr {
+    height: 64px;
+}

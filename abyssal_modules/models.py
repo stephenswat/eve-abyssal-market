@@ -192,7 +192,7 @@ class ModuleBase(models.Model):
         res = {
             x.attribute.id: {
                 'real_value': x.real_value,
-                'rating': int(round(x.rating)),
+                'rating': int(round(x.rating)) if not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
             for x in self.moduleattribute_set.all() if x.display
@@ -258,12 +258,17 @@ class StaticModule(ModuleBase):
         db_index=True
     )
 
+    @property
+    def _is_static(self):
+        return True
+
     def as_dict(self):
         return {
             **super().as_dict(),
             'contract': None,
             'pyfa': None,
-            'static': True
+            'static': True,
+            'module_name': self.source.name
         }
 
 
@@ -291,6 +296,10 @@ class Module(ModuleBase):
     )
 
     first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    @property
+    def _is_static(self):
+        return False
 
     def get_pyfa_string(self):
         attr_list = ", ".join(
@@ -325,7 +334,7 @@ class Module(ModuleBase):
                 'multi_item': not self.contract_single
             },
             'pyfa': self.get_pyfa_string(),
-            'static': True
+            'static': False
         }
 
 

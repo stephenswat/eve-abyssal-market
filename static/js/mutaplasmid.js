@@ -62,6 +62,10 @@ function initializeEsiButtons() {
 function price_format(contract) {
     base = ""
 
+    if (contract === null) {
+        return "-";
+    }
+
     if (contract.price.isk > 0 && contract.price.plex > 0) {
         base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span> + <span class="plex-field">${price.plex}</span>`;
     } else if (contract.price.plex > 0) {
@@ -82,6 +86,10 @@ function price_format(contract) {
 }
 
 function open_format(mod, logged_in) {
+    if (mod.contract === null) {
+        return "-";
+    }
+
     return `<div class="btn-group" role="group" aria-label="Basic example">
                 <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                 <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>

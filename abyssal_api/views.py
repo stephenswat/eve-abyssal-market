@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.http import JsonResponse, Http404
 from django.views import View
 
-from abyssal_modules.models import Module, ModuleType
+from abyssal_modules.models import Module, ModuleType, StaticModule
 
 
 class AvailableTypedModuleListAPI(View):
@@ -20,6 +20,11 @@ class AvailableTypedModuleListAPI(View):
             res = [
                 m.as_dict()
                 for m in Module.available.filter(type=module_type)
+            ]
+
+            res += [
+                m.as_dict()
+                for m in StaticModule.objects.filter(type=module_type)
             ]
 
             cache.set(key, res, 60 * 15)
