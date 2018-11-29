@@ -170,10 +170,7 @@ class AvailableModuleManager(ModuleManager):
         )
 
 
-class Module(models.Model):
-    objects = ModuleManager()
-    available = AvailableModuleManager()
-
+class ModuleBase(models.Model):
     id = models.BigIntegerField(primary_key=True)
     type = models.ForeignKey(
         ModuleType,
@@ -182,30 +179,20 @@ class Module(models.Model):
         db_index=True
     )
 
-    mutator = models.ForeignKey(
-        InvType,
-        models.CASCADE,
-        related_name='+',
-    )
-    source = models.ForeignKey(
-        InvType,
-        models.CASCADE,
-        related_name='+',
-    )
-
-    creator = models.ForeignKey(
-        EveCharacter,
-        models.CASCADE,
-        related_name='creations'
-    )
-
     attributes = models.ManyToManyField(
         ModuleDogmaAttribute,
         through='ModuleAttribute',
         related_name='+'
     )
 
-    first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
+    source = models.ForeignKey(
+        InvType,
+        models.CASCADE,
+        related_name='+',
+    )
+
+    class Meta:
+        abstract = True
 
     def attribute_dict_with_derived(self):
         res = {
@@ -259,6 +246,25 @@ class Module(models.Model):
             raise ValueError("Object does not have an attribute %d." % attr_id)
         else:
             return attrs[attr_id].real_value
+
+
+class Module(ModuleBase):
+    objects = ModuleManager()
+    available = AvailableModuleManager()
+
+    mutator = models.ForeignKey(
+        InvType,
+        models.CASCADE,
+        related_name='+',
+    )
+
+    creator = models.ForeignKey(
+        EveCharacter,
+        models.CASCADE,
+        related_name='creations'
+    )
+
+    first_seen = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def get_pyfa_string(self):
         attr_list = ", ".join(
@@ -339,6 +345,7 @@ class ModuleAttributeManager(models.Manager):
 
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
+
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
     _new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
 
