@@ -319,6 +319,13 @@ class ModuleAttributeManager(models.Manager):
         return (
             super().get_queryset()
             .annotate(
+                real_value=Case(
+                    When(attribute_id__in=[73, 1795], then=F('value') * Value(0.001)),
+                    When(attribute_id__in=[147], then=F('value') * Value(100)),
+                    When(attribute_id__in=[213], then=(F('value') - Value(1)) * Value(100)),
+                    When(attribute_id__in=[204], then=(Value(1) - F('value')) * Value(100)),
+                    default=F('value')
+                ),
                 display=Subquery(
                     TypeAttribute.objects
                     .filter(
@@ -327,15 +334,6 @@ class ModuleAttributeManager(models.Manager):
                     )
                     .values('display')[:1]
                 ),
-                real_value=Case(
-                    When(attribute_id__in=[73, 1795], then=F('value') * Value(0.001)),
-                    When(attribute_id__in=[147], then=F('value') * Value(100)),
-                    When(attribute_id__in=[213], then=(F('value') - Value(1)) * Value(100)),
-                    When(attribute_id__in=[204], then=(Value(1) - F('value')) * Value(100)),
-                    default=F('value')
-                )
-            )
-            .annotate(
                 high_is_good=Subquery(
                     TypeAttribute.objects
                     .filter(
@@ -343,9 +341,7 @@ class ModuleAttributeManager(models.Manager):
                         attribute=OuterRef('attribute')
                     )
                     .values('high_is_good')
-                )
-            )
-            .annotate(
+                ),
                 rating=(
                     (Window(
                         expression=PercentRank(),
