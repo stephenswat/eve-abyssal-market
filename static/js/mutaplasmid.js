@@ -86,15 +86,20 @@ function price_format(contract) {
 }
 
 function open_format(mod, logged_in) {
-    if (mod.contract === null) {
-        return "-";
+    if (mod.contract !== null) {
+        return `<div class="btn-group" role="group" aria-label="Basic example">
+                    <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
+                    <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
+                    <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+                </div>`
+    } else {
+        return `<div class="btn-group" role="group" aria-label="Basic example">
+                    <button disabled class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="">ESI</button>
+                    <button disabled class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="">Link</button>
+                    <button disabled class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="">Pyfa</button>
+                </div>`
     }
 
-    return `<div class="btn-group" role="group" aria-label="Basic example">
-                <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
-                <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
-                <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
-            </div>`
 }
 
 function attr_format(attr, data) {
