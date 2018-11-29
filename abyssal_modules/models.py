@@ -241,6 +241,14 @@ class ModuleBase(models.Model):
         else:
             return attrs[attr_id].real_value
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'type_id': self.type.id,
+            'type_name': self.type.name,
+            'attributes': self.attribute_dict_with_derived()
+        }
+
 
 class StaticModule(ModuleBase):
     type = models.ForeignKey(
@@ -249,6 +257,14 @@ class StaticModule(ModuleBase):
         related_name='static_modules',
         db_index=True
     )
+
+    def as_dict(self):
+        return {
+            **super().as_dict(),
+            'contract': None,
+            'pyfa': None,
+            'static': True
+        }
 
 
 class Module(ModuleBase):
@@ -297,10 +313,7 @@ class Module(ModuleBase):
 
     def as_dict(self):
         return {
-            'id': self.id,
-            'type_id': self.type.id,
-            'type_name': self.type.name,
-            'attributes': self.attribute_dict_with_derived(),
+            **super().as_dict(),
             'contract': {
                 'id': self.contract_id,
                 'price': {
@@ -311,7 +324,8 @@ class Module(ModuleBase):
                 'auction': self.contract_auction,
                 'multi_item': not self.contract_single
             },
-            'pyfa': self.get_pyfa_string()
+            'pyfa': self.get_pyfa_string(),
+            'static': True
         }
 
 
