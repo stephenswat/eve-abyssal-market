@@ -106,8 +106,6 @@
                 {% endfor %}
                 <th>Price</th>
                 <th width="0px">Actions</th>
-                <th>Auction</th>
-                <th>Multi-item</th>
             </tr>
         </thead>
     </table>
@@ -211,25 +209,7 @@
                             return open_format(row, logged_in);
                         }
                     }
-                },
-                {
-                    'name': 'auction',
-                    'data': 'contract.auction',
-                    'visible': false
-                },
-                {
-                    'name': 'multi-item',
-                    'data': 'contract.multi_item',
-                    'visible': false
-                },
-                {
-                    'name': 'has_plex',
-                    'data': 'contract.price.plex',
-                    'visible': false,
-                    'render': function (data, type, row, meta) {
-                        return data > 0;
-                    }
-                },
+                }
             ],
             "order": [[1, "asc"]],
             "initComplete": function(settings, json) {
@@ -258,9 +238,6 @@
                 price_range = attr_val["price"];
 
                 column_ids["price"] = table.column("price:name").index();
-                column_ids["auction"] = table.column("auction:name").index();
-                column_ids["multi-item"] = table.column("multi-item:name").index();
-                column_ids["has_plex"] = table.column("has_plex:name").index();
 
                 table.draw();
                 update_labels();
@@ -271,7 +248,7 @@
                 initialize_slider("price");
 
                 $.fn.dataTable.ext.search.push(
-                    function (settings, data, dataIndex) {
+                    function (settings, data, dataIndex, original) {
                         var value, at;
 
                         for (i = 0; i < attr_list.length; i++) {
@@ -290,15 +267,15 @@
                             return false;
                         }
 
-                        if (!$("[name=filter-show-auctions]").is(":checked") && data[column_ids['auction']] == "true") {
+                        if (!$("[name=filter-show-auctions]").is(":checked") && original.contract.auction) {
                             return false;
                         }
 
-                        if (!$("[name=filter-show-multi-item]").is(":checked") && data[column_ids['multi-item']] == "true") {
+                        if (!$("[name=filter-show-multi-item]").is(":checked") && original.contract.multi_item) {
                             return false;
                         }
 
-                        if (!$("[name=filter-show-plex]").is(":checked") && data[column_ids['has_plex']] == "true") {
+                        if (!$("[name=filter-show-plex]").is(":checked") && original.contract.price.plex > 0) {
                             return false;
                         }
 
