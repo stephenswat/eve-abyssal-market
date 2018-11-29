@@ -62,13 +62,13 @@
                     </div>
                     {% else %}
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
