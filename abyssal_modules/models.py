@@ -126,21 +126,6 @@ class ModuleType(models.Model):
             .all()
         )
 
-        for attr_id, data in DERIVED_ATTRIBUTES.items():
-            if self.id not in data['types']:
-                continue
-
-            new_attr = ModuleDogmaAttribute(
-                id=attr_id,
-                name=data['name'],
-                unit_str=data['unit_str']
-            )
-
-            new_attr._derived = True
-            new_attr.high_is_good = data['high_is_good']
-
-            attrs.append(new_attr)
-
         return attrs
 
     def __str__(self):
@@ -326,14 +311,7 @@ class ModuleAttributeManager(models.Manager):
                     When(attribute_id__in=[204], then=(Value(1) - F('value')) * Value(100)),
                     default=F('value')
                 ),
-                display=Subquery(
-                    TypeAttribute.objects
-                    .filter(
-                        type=OuterRef('module__type'),
-                        attribute=OuterRef('attribute')
-                    )
-                    .values('display')[:1]
-                ),
+                display=F('_new_attribute__display'),
                 high_is_good=Subquery(
                     TypeAttribute.objects
                     .filter(
