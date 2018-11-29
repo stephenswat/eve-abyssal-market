@@ -319,7 +319,9 @@ class ModuleAttributeManager(models.Manager):
                         attribute=OuterRef('attribute')
                     )
                     .values('high_is_good')
-                ),
+                )
+            )
+            .annotate(
                 rating=(
                     (Window(
                         expression=PercentRank(),
