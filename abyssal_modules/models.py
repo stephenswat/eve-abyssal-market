@@ -363,7 +363,7 @@ class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE)
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
 
-    value = models.FloatField()
+    value = models.FloatField(db_index=True)
 
     objects = ModuleAttributeManager()
 
