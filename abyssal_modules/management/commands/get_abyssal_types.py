@@ -156,7 +156,7 @@ class Command(BaseCommand):
                         ModuleAttribute.raw.update_or_create(
                             static_module=module,
                             attribute_id=attr['attribute_id'],
-                            _new_attribute=TypeAttribute.objects.get(
+                            new_attribute=TypeAttribute.objects.get(
                                 type_id=abyssal_id,
                                 attribute_id=attr['attribute_id']
                             ),

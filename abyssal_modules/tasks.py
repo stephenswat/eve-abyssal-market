@@ -46,7 +46,7 @@ def create_module(type_id, item_id, force=False):
                     attribute=ModuleDogmaAttribute.objects.get(
                         id=a['attribute_id']
                     ),
-                    _new_attribute=TypeAttribute.objects.get(
+                    new_attribute=TypeAttribute.objects.get(
                         type_id=type_id,
                         attribute_id=a['attribute_id']
                     ),

@@ -139,11 +139,11 @@ class ModuleManager(models.Manager):
             .prefetch_related(
                 'source',
                 'mutator',
-                'moduleattribute_set__attribute',
-                'moduleattribute_set___new_attribute',
-                'moduleattribute_set___new_attribute__type',
-                'moduleattribute_set___new_attribute__attribute',
                 'moduleattribute_set',
+                'moduleattribute_set__attribute',
+                'moduleattribute_set__new_attribute',
+                'moduleattribute_set__new_attribute__type',
+                'moduleattribute_set__new_attribute__attribute',
                 'type',
             )
         )
@@ -198,7 +198,7 @@ class ModuleBase(models.Model):
                 'rating': int(round(x.rating)) if not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
-            for x in self.moduleattribute_set.filter(_new_attribute__display=True)
+            for x in self.moduleattribute_set.all() if x.new_attribute.display
         }
 
         if self.type_id == 49738 and 1255 not in res:
@@ -228,7 +228,7 @@ class ModuleBase(models.Model):
     def attribute_dict(self):
         return {
             x.attribute.id: x
-            for x in self.moduleattribute_set.filter(_new_attribute__display=True)
+            for x in self.moduleattribute_set.all() if x.new_attribute.display
         }
 
     def get_value(self, attr_id):
@@ -325,7 +325,7 @@ class Module(ModuleBase):
                 attr_name=a.attribute.short_name,
                 attr_value=a.value
             )
-            for a in self.attribute_list
+            for a in self.moduleattribute_set.all() if a.new_attribute.display
         )
 
         return (
@@ -360,6 +360,14 @@ class UnratedModuleAttributeManager(models.Manager):
     def get_queryset(self):
         return (
             super().get_queryset()
+            .prefetch_related(
+                'new_attribute',
+                'new_attribute__type',
+                'new_attribute__attribute',
+                'attribute',
+                'module',
+                'static_module'
+            )
             .annotate(
                 real_value=Case(
                     When(attribute_id__in=[73, 1795], then=F('value') * Value(0.001)),
@@ -376,9 +384,6 @@ class ModuleAttributeManager(UnratedModuleAttributeManager):
     def get_queryset(self):
         return (
             super().get_queryset()
-            .prefetch_related(
-                '_new_attribute'
-            )
             .annotate(
                 rating=(
                     (Window(
@@ -387,7 +392,7 @@ class ModuleAttributeManager(UnratedModuleAttributeManager):
                         order_by=F('real_value').asc()
                     ) * Value(10) - Value(5)) *
                     Case(
-                        When(_new_attribute__high_is_good=True, then=Value(1)),
+                        When(new_attribute__high_is_good=True, then=Value(1)),
                         default=Value(-1)
                     )
                 )
@@ -400,7 +405,7 @@ class ModuleAttribute(models.Model):
     static_module = models.ForeignKey(StaticModule, models.CASCADE, null=True)
 
     attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
-    _new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
+    new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
 
     value = models.FloatField(db_index=True)
 
