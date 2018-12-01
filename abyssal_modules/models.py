@@ -140,6 +140,9 @@ class ModuleManager(models.Manager):
                 'source',
                 'mutator',
                 'moduleattribute_set__attribute',
+                'moduleattribute_set___new_attribute',
+                'moduleattribute_set___new_attribute__type',
+                'moduleattribute_set___new_attribute__attribute',
                 'moduleattribute_set',
                 'type',
             )
@@ -195,7 +198,7 @@ class ModuleBase(models.Model):
                 'rating': int(round(x.rating)) if not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
-            for x in self.moduleattribute_set.all() if x.display
+            for x in self.moduleattribute_set.filter(_new_attribute__display=True)
         }
 
         if self.type_id == 49738 and 1255 not in res:
@@ -225,7 +228,7 @@ class ModuleBase(models.Model):
     def attribute_dict(self):
         return {
             x.attribute.id: x
-            for x in self.moduleattribute_set.all() if x.display
+            for x in self.moduleattribute_set.filter(_new_attribute__display=True)
         }
 
     def get_value(self, attr_id):
@@ -353,7 +356,7 @@ class Module(ModuleBase):
         }
 
 
-class ModuleAttributeManager(models.Manager):
+class UnratedModuleAttributeManager(models.Manager):
     def get_queryset(self):
         return (
             super().get_queryset()
@@ -364,9 +367,17 @@ class ModuleAttributeManager(models.Manager):
                     When(attribute_id__in=[213], then=(F('value') - Value(1)) * Value(100)),
                     When(attribute_id__in=[204], then=(Value(1) - F('value')) * Value(100)),
                     default=F('value')
-                ),
-                display=F('_new_attribute__display'),
-                high_is_good=F('_new_attribute__high_is_good')
+                )
+            )
+        )
+
+
+class ModuleAttributeManager(UnratedModuleAttributeManager):
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .prefetch_related(
+                '_new_attribute'
             )
             .annotate(
                 rating=(
@@ -376,7 +387,7 @@ class ModuleAttributeManager(models.Manager):
                         order_by=F('real_value').asc()
                     ) * Value(10) - Value(5)) *
                     Case(
-                        When(high_is_good=True, then=Value(1)),
+                        When(_new_attribute__high_is_good=True, then=Value(1)),
                         default=Value(-1)
                     )
                 )
@@ -394,6 +405,7 @@ class ModuleAttribute(models.Model):
     value = models.FloatField(db_index=True)
 
     objects = ModuleAttributeManager()
+    unrated = UnratedModuleAttributeManager()
     raw = models.Manager()
 
 
