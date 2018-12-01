@@ -105,23 +105,9 @@
       {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
       {% endfor %}
-
-      <div class="alert alert-danger" role="alert">
-        Logging in and using ESI to display modules is currently disabled due
-        to past terrible database design decisions. We hope to restore login
-        functionality soon!
-      </div>
     </div>
 
     <main class="container">
-
-      {% comment %} <div class="alert alert-success" role="alert">Success! CCP is lifting the
-      sanity limit on the public contract ESI endpoint very soon, which means
-      you will finally be able to see all abyssal contracts on this site. For
-      more information see <a
-      href="https://github.com/esi/esi-issues/issues/1014#issuecomment-416639135">this
-      Github issue</a>.</div> {% endcomment %}
-
       {% block content %} {% endblock %}
     </main>
 
