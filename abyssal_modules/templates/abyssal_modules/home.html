@@ -104,8 +104,6 @@ function attribute_format(attrs) {
     var list = "";
     var rating = "";
 
-    console.log(attrs)
-
     for (var a in attrs) {
         {% comment %} if (attrs[a].rating != null && display_rating(a)) {
             if (attrs[a].rating > 0) {
@@ -183,6 +181,7 @@ $(document).ready(function () {
                 },
             ],
         "order": [],
+        "deferRender": true,
         "initComplete": function(settings, json) {
             initializeEsiButtons();
         }
