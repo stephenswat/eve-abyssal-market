@@ -17,7 +17,6 @@ INSTALLED_APPS = [
     'abyssal_modules',
     'contract_scanner',
     'price_predictor',
-    'availability_alerts',
     'huey.contrib.djhuey',
     'bootstrap4',
     'django_prometheus',
