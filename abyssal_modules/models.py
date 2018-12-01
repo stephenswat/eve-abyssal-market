@@ -339,9 +339,14 @@ class Module(ModuleBase):
         )
 
     def as_dict(self):
-        return {
+        res = {
             **super().as_dict(),
-            'contract': {
+            'pyfa': self.get_pyfa_string(),
+            'static': False
+        }
+
+        if hasattr(self, 'contract_id'):
+            res['contract'] = {
                 'id': self.contract_id,
                 'price': {
                     'isk': self.contract_price,
@@ -350,10 +355,9 @@ class Module(ModuleBase):
                 },
                 'auction': self.contract_auction,
                 'multi_item': not self.contract_single
-            },
-            'pyfa': self.get_pyfa_string(),
-            'static': False
-        }
+            }
+
+        return res
 
 
 class UnratedModuleAttributeManager(models.Manager):

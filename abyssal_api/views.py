@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.http import JsonResponse, Http404
 from django.views import View
 
-from abyssal_modules.models import Module, ModuleType, StaticModule
+from abyssal_modules.models import Module, ModuleType, StaticModule, EveCharacter
 
 
 class AvailableTypedModuleListAPI(View):
@@ -47,3 +47,16 @@ class AvailableLatestModuleListAPI(View):
             cache.set(key, res, 60 * 15)
 
         return JsonResponse(res, safe=False)
+
+
+class CreatorModuleListAPI(View):
+    def get(self, request, creator_id):
+        try:
+            creator = EveCharacter.objects.get(id=creator_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Creator does not exist.")
+
+        return JsonResponse([
+            m.as_dict()
+            for m in creator.creations.all()
+        ], safe=False)

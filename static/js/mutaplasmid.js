@@ -139,3 +139,28 @@ function get_precision(attr_id) {
         return 1;
     }
 }
+
+function attribute_format(attrs) {
+    var list = "";
+    var rating = "";
+
+    for (var a in attrs) {
+        // if (attrs[a].rating != null && display_rating(a)) {
+        //     if (attrs[a].rating > 0) {
+        //         rating = ` <span class="module-rating text-success">+${attrs[a].rating}</span>`;
+        //     } else if (attrs[a].rating == 0) {
+        //         rating = ` <span class="module-rating text-warning">±${attrs[a].rating}</span>`;
+        //     } else {
+        //         rating = ` <span class="module-rating text-danger">${attrs[a].rating}</span>`;
+        //     }
+        // }
+
+
+        list += `<div class="col-12 col-md-4">
+                    <img src="/static/img/attributes/${a}.png">
+                    ${attrs[a].real_value.toFixed(get_precision(a))} ${attrs[a].unit} ${rating}
+                 </div>`;
+    }
+
+    return `<div class="row">${list}</div>`
+}

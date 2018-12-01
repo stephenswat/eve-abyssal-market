@@ -12,29 +12,11 @@
     <table class="table module-table dt-responsive" id="module-table" width="100%">
         <thead>
             <tr>
-                <th data-priority="1" width="1px" data-orderable="false">Icon</th>
-                <th data-priority="11000">Module</th>
-                <th data-priority="2" data-orderable="false">Attributes</th>
+                <th width="1px">Icon</th>
+                <th>Module</th>
+                <th>Attributes</th>
             </tr>
         </thead>
-        <tbody>
-            {% for m in modules %}
-            <tr class="item">
-                <td><a href="{% url 'abyssal_modules:module_view' m.id %}"><img src="https://image.eveonline.com/Type/{{ m.type.id }}_32.png"></a></td>
-                <td><a href="{% url 'abyssal_modules:type_module_list' m.type.id %}">{{ m.type.name }}</a></td>
-                <td>
-                    <div class="row">
-                        {% for a in m.attribute_list %}
-                        <div class="col-12 col-md-4">
-                            <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}">
-                            {{ a.real_value|floatformat }} {{ a.attribute.unit_str }}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
     </table>
 </div>
 
@@ -42,8 +24,45 @@
 
 {% block trailing_js %}
 <script>
+function icon_format(mid, tid) {
+    return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/${tid}_32.png"></a>`
+}
+
+function link_format(type_id, type_name) {
+    return `<a href="/type/${type_id}/">${type_name}</a>`
+}
+
 $(document).ready(function () {
     $('#module-table').DataTable({
+        "processing": true,
+        "ajax": {
+            url: "{% url 'abyssal_api:creator_list' creator_id=object.id %}",
+            dataSrc: ''
+        },
+        "columns": [
+            {
+                'name': 'id',
+                'orderable': false,
+                'data': null,
+                'render': function (data, type, row, meta) {
+                    return icon_format(data.id, data.type_id);
+                }
+            },
+            {
+                'name': 'module',
+                'data': null,
+                'render': function (data, type, row, meta) {
+                    return link_format(data.type_id, data.type_name);
+                }
+            },
+            {
+                'name': 'attributes',
+                'data': 'attributes',
+                'render': function (data, type, row, meta) {
+                    return attribute_format(data);
+                }
+            }
+        ],
         "order": []
     });
 });
