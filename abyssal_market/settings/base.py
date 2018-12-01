@@ -68,7 +68,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-AUTH_USER_MODEL = 'eve_auth.EveUser'
+AUTH_USER_MODEL = 'auth.User'
 
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
