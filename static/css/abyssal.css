@@ -173,3 +173,7 @@ input.module-attribute-filter.neutral {
 #module-table>tbody>tr {
     height: 64px;
 }
+
+.slider-container {
+    height: 5px;
+}
