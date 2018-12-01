@@ -182,8 +182,12 @@ $(document).ready(function () {
                     }
                 },
             ],
-        "order": []
+        "order": [],
+        "initComplete": function(settings, json) {
+            initializeEsiButtons();
+        }
     });
+
 });
 </script>
 {% endblock %}
