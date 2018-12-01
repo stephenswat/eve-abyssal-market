@@ -4,14 +4,39 @@ import pytz
 from esipy.exceptions import APIException
 
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from eve_esi import ESI
+
+
+class EVEData(models.Model):
+    user = models.OneToOneField(User, models.CASCADE, primary_key=True, related_name='eve')
+
+    @property
+    def character_id(self):
+        return self.primary_character.character_id
+
+    @property
+    def name(self):
+        return self.primary_character.name
+
+    @property
+    def primary_character(self):
+        return self.user.characters.all()[0]
+
+
+@receiver(post_save, sender=User)
+def create_eve_data(sender, instance, created, **kwargs):
+    if created:
+        EVEData.objects.create(user=instance)
 
 
 class EveUser(models.Model):
     character_id = models.BigIntegerField(db_index=True, unique=True)
     name = models.CharField(max_length=64, db_index=True, unique=True)
+    owner = models.ForeignKey(User, models.CASCADE, db_index=True, related_name='characters')
 
     scope_read_assets = models.BooleanField()
     scope_open_window = models.BooleanField()

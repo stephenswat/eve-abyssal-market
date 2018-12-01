@@ -111,7 +111,7 @@ class OpenContractView(LoginRequiredMixin, View):
     def post(self, request):
         ESI.request(
             'post_ui_openwindow_contract',
-            client=request.user.get_client(),
+            client=request.user.eve.primary_character.get_client(),
             contract_id=int(request.POST['contract_id'])
         )
 

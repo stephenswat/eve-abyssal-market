@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from eve_auth.models import EveUser
 
 
@@ -13,23 +15,25 @@ class EveAuthBackend:
         scopes = info['Scopes'].split(' ')
 
         try:
-            user = EveUser.objects.get(character_id=info['CharacterID'])
+            character = EveUser.objects.get(character_id=info['CharacterID'])
         except EveUser.DoesNotExist:
-            user = EveUser(character_id=info['CharacterID'])
+            character = EveUser(character_id=info['CharacterID'])
+            user = User.objects.create_user(info['CharacterName'])
+            character.owner = user
 
-        user.name = info['CharacterName']
-        user.scope_read_contracts = SCOPE_NAMES['read_contracts'] in scopes
-        user.scope_read_assets = SCOPE_NAMES['read_assets'] in scopes
-        user.scope_open_window = SCOPE_NAMES['open_window'] in scopes
+        character.name = info['CharacterName']
+        character.scope_read_contracts = SCOPE_NAMES['read_contracts'] in scopes
+        character.scope_read_assets = SCOPE_NAMES['read_assets'] in scopes
+        character.scope_open_window = SCOPE_NAMES['open_window'] in scopes
 
-        user.tokens = tokens
+        character.tokens = tokens
 
-        user.save()
+        character.save()
 
-        return user
+        return character.owner
 
     def get_user(self, user_id):
         try:
-            return EveUser.objects.get(pk=user_id)
+            return User.objects.get(pk=user_id)
         except EveUser.DoesNotExist:
             return None

@@ -80,11 +80,11 @@
             <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
           </li>
         </ul>
-        {% comment %} <ul class="navbar-nav navbar-right">
+        <ul class="navbar-nav navbar-right">
           {% if user.is_authenticated %}
             <li class="nav-item my-auto">
               <span class="nav-link p-0">
-                <img src="https://image.eveonline.com/Character/{{ user.character_id}}_32.jpg" class="avatar" />{{ user.name }}
+                <img src="https://image.eveonline.com/Character/{{ user.eve.character_id}}_32.jpg" class="avatar" />{{ user.eve.name }}
               </span>
             </li>
             <li class="nav-item">
@@ -97,7 +97,7 @@
               <a class="nav-link" href="{% url 'eve_auth:login' %}">Log in</a>
             </li>
           {% endif %}
-        </ul> {% endcomment %}
+        </ul>
       </div>
     </nav>
 
