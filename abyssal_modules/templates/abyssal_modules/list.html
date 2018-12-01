@@ -49,26 +49,26 @@
                     <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}{% if at.derived %}<span style="text-muted" title="This is a derived attribute.">*</span>{% endif %}</label>
                     {% if at.high_is_good %}
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" data-attr-modified="{{ at.id }}" step="0.0001">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" data-attr-modified="{{ at.id }}" step="0.0001">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
                     {% else %}
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-min" data-attr-modified="{{ at.id }}" step="0.0001">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-max" data-attr-modified="{{ at.id }}" step="0.0001">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
@@ -231,10 +231,16 @@
                         .sort(function (a, b) { return a - b; });
 
                     attr_val[at] = [data[0], data.reverse()[0]];
-                    attr_val[at][0] -= (attr_val[at][0] < 0 ? -1 : 1) * attr_val[at][0] * 0.01;
-                    attr_val[at][1] += (attr_val[at][1] < 0 ? -1 : 1) * attr_val[at][1] * 0.01;
+
+                    if (at != 105) {
+                        attr_val[at][0] -= (attr_val[at][0] < 0 ? -1 : 1) * attr_val[at][0] * 0.01;
+                        attr_val[at][1] += (attr_val[at][1] < 0 ? -1 : 1) * attr_val[at][1] * 0.01;
+                    }
 
                     column_ids[at] = table.column(`attr-${at}:name`).index();
+
+                    $(`#attr-${at}-min`).attr('step', Math.pow(10, -get_precision(at)));
+                    $(`#attr-${at}-max`).attr('step', Math.pow(10, -get_precision(at)));
                 }
 
                 data = table
