@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import OuterRef, Subquery, F, Value, Case, When, Window
+from django.db.models import F, Value, Case, When, Window
 from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
 from django.db.models.functions import Cast, PercentRank
 from django.utils.functional import cached_property
@@ -351,14 +351,7 @@ class ModuleAttributeManager(models.Manager):
                     default=F('value')
                 ),
                 display=F('_new_attribute__display'),
-                high_is_good=Subquery(
-                    TypeAttribute.objects
-                    .filter(
-                        type=OuterRef('module__type'),
-                        attribute=OuterRef('attribute')
-                    )
-                    .values('high_is_good')
-                )
+                high_is_good=F('_new_attribute__high_is_good')
             )
             .annotate(
                 rating=(
