@@ -250,6 +250,19 @@ class ModuleBase(models.Model):
         }
 
 
+class StaticModuleManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .prefetch_related(
+                'source',
+                'moduleattribute_set__attribute',
+                'moduleattribute_set',
+                'type',
+            )
+        )
+
+
 class StaticModule(ModuleBase):
     type = models.ForeignKey(
         ModuleType,
@@ -257,6 +270,8 @@ class StaticModule(ModuleBase):
         related_name='static_modules',
         db_index=True
     )
+
+    objects = StaticModuleManager()
 
     @property
     def _is_static(self):
