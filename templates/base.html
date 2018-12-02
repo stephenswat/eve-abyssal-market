@@ -83,9 +83,9 @@
         <ul class="navbar-nav navbar-right">
           {% if user.is_authenticated %}
             <li class="nav-item my-auto">
-              <span class="nav-link p-0">
+              <a class="nav-link p-0" href="{% url 'eve_auth:profile' %}">
                 <img src="https://image.eveonline.com/Character/{{ user.eve.character_id}}_32.jpg" class="avatar" />{{ user.eve.name }}
-              </span>
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'eve_auth:logout' %}">

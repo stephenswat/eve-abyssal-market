@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+<h1>{{ user.username }}</h1>
+
+<dl>
+{% for c in characters.all %}
+<dt>{{ c.name }}</dt>
+<dd>
+Permission to open windows: {{ c.scope_open_window|yesno:"Yes,No" }}
+<br>
+Permission to read assets: {{ c.scope_read_assets|yesno:"Yes,No" }}
+</dd>
+{% endfor %}
+</dl>
+
+{% endblock %}

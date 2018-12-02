@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from eve_esi import ESI
 
@@ -22,3 +23,15 @@ class CallbackView(View):
         login(request, authenticate(request, info=data, tokens=tokens))
 
         return redirect('/')
+
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(
+            request,
+            'eve_auth/profile.html',
+            {
+                'user': request.user,
+                'characters': request.user.characters
+            }
+        )
