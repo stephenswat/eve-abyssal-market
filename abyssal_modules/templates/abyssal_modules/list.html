@@ -282,15 +282,15 @@
                             return false;
                         }
 
-                        if (!$("[name=filter-show-auctions]").is(":checked") && original.contract.auction) {
+                        if (!$("[name=filter-show-auctions]").is(":checked") && !original.static && original.contract.auction) {
                             return false;
                         }
 
-                        if (!$("[name=filter-show-multi-item]").is(":checked") && original.contract.multi_item) {
+                        if (!$("[name=filter-show-multi-item]").is(":checked") && !original.static && original.contract.multi_item) {
                             return false;
                         }
 
-                        if (!$("[name=filter-show-plex]").is(":checked") && original.contract.price.plex > 0) {
+                        if (!$("[name=filter-show-plex]").is(":checked") && !original.static && original.contract.price.plex > 0) {
                             return false;
                         }
 
