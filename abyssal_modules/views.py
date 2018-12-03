@@ -42,6 +42,25 @@ class TypedModuleList(View):
         )
 
 
+class TypeAssetModuleList(LoginRequiredMixin, View):
+    def get(self, request, type_id):
+        try:
+            module_type = ModuleType.objects.get(id=type_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Module type does not exist.")
+
+        attributes = module_type.attribute_list
+
+        return render(
+            request,
+            'abyssal_modules/asset_list.html',
+            {
+                'module_type': module_type,
+                'attributes': attributes
+            }
+        )
+
+
 class RollCalculatorView(View):
     def get(self, request, type_id):
         try:

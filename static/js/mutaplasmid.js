@@ -102,6 +102,12 @@ function open_format(mod, logged_in) {
 
 }
 
+function open_format_non_contract(mod) {
+    return `<div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+            </div>`
+}
+
 function attr_format(attr, data) {
     base = `<span class='attr-${attr}'>${data.real_value.toFixed(get_precision(attr))}</span>`;
 
