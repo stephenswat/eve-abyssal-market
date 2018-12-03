@@ -195,7 +195,7 @@ class ModuleBase(models.Model):
         res = {
             x.attribute.id: {
                 'real_value': x.value,
-                'rating': int(round(x.rating)) if not self._is_static else None,
+                'rating': int(round(x.rating)) if x.rating is not None and not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
             for x in self.attribute_values.all() if x.new_attribute.display
