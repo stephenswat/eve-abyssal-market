@@ -151,16 +151,15 @@ function attribute_format(attrs) {
     var rating = "";
 
     for (var a in attrs) {
-        // if (attrs[a].rating != null && display_rating(a)) {
-        //     if (attrs[a].rating > 0) {
-        //         rating = ` <span class="module-rating text-success">+${attrs[a].rating}</span>`;
-        //     } else if (attrs[a].rating == 0) {
-        //         rating = ` <span class="module-rating text-warning">±${attrs[a].rating}</span>`;
-        //     } else {
-        //         rating = ` <span class="module-rating text-danger">${attrs[a].rating}</span>`;
-        //     }
-        // }
-
+        if (attrs[a].rating != null && display_rating(a)) {
+            if (attrs[a].rating > 0) {
+                rating = ` <span class="module-rating text-success">+${attrs[a].rating}</span>`;
+            } else if (attrs[a].rating == 0) {
+                rating = ` <span class="module-rating text-warning">±${attrs[a].rating}</span>`;
+            } else {
+                rating = ` <span class="module-rating text-danger">${attrs[a].rating}</span>`;
+            }
+        }
 
         list += `<div class="col-12 col-md-4">
                     <img src="/static/img/attributes/${a}.png">

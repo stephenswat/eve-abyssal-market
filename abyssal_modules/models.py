@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import F, Value, Case, When, Window
+from django.db.models import F, Value, Case, When, FloatField
 from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
-from django.db.models.functions import Cast, PercentRank
+from django.db.models.functions import Cast
 from django.utils.functional import cached_property
 
 from eve_esi import ESI
@@ -379,18 +379,31 @@ class ModuleAttributeManager(UnratedModuleAttributeManager):
             super().get_queryset()
             .annotate(
                 rating=(
-                    (Window(
-                        expression=PercentRank(),
-                        partition_by=[F('attribute_id'), F('module__type_id')],
-                        order_by=F('value').asc()
-                    ) * Value(10) - Value(5)) *
                     Case(
+                        When(new_attribute__aggregates__stddev=0, then=Value(0, output_field=FloatField())),
+                        default=(
+                            F('value') - F('new_attribute__aggregates__avg')
+                        ) / F('new_attribute__aggregates__stddev')
+                    ) * Value(4) * Case(
                         When(new_attribute__high_is_good=True, then=Value(1)),
                         default=Value(-1)
                     )
                 )
             )
         )
+
+
+class ModuleAttributeAggregate(models.Model):
+    new_attribute = models.OneToOneField(
+        'TypeAttribute', models.DO_NOTHING, primary_key=True, related_name='aggregates'
+    )
+
+    avg = models.FloatField()
+    stddev = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'abyssal_modules_attribute_stats__view'
 
 
 class ModuleAttributeView(models.Model):
