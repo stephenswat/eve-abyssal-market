@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 
 from eve_auth.models import EveUser
+from asset_scanner.tasks import read_assets_for_character
 
 
 SCOPE_NAMES = {
@@ -32,6 +33,9 @@ class EveAuthBackend:
         character.tokens = tokens
 
         character.save()
+
+        if character.scope_read_assets:
+            read_assets_for_character(character)
 
         return character.owner
 
