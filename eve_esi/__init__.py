@@ -61,8 +61,18 @@ class EsiManager:
     def head(self, endpoint, client=None, **kwargs):
         return self.__request_helper('head', endpoint, client, **kwargs)
 
-    def request(self, endpoint, client=None, **kwargs):
-        return self.__request_helper('request', endpoint, client, **kwargs)
+    def request(self, endpoint, client=None, multi_page=False, **kwargs):
+        if not multi_page:
+            return self.__request_helper('request', endpoint, client, **kwargs)
+
+        res = []
+
+        pages = self.head(endpoint, client, **kwargs).header['X-Pages'][0]
+
+        for page in range(1, pages + 1):
+            res += self.request(endpoint, client, page=page, **kwargs).data
+
+        return res
 
 
 ESI = EsiManager()
