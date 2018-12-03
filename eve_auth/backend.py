@@ -18,14 +18,17 @@ class EveAuthBackend:
             character = EveUser.objects.get(character_id=info['CharacterID'])
         except EveUser.DoesNotExist:
             character = EveUser(character_id=info['CharacterID'])
-            user = User.objects.create_user(info['CharacterName'])
-            character.owner = user
+
+        if request.user.is_authenticated:
+            character.owner = request.user
+        elif hasattr(character, 'owner'):
+            pass
+        else:
+            character.owner = User.objects.create_user(info['CharacterName'])
 
         character.name = info['CharacterName']
-        character.scope_read_contracts = SCOPE_NAMES['read_contracts'] in scopes
         character.scope_read_assets = SCOPE_NAMES['read_assets'] in scopes
         character.scope_open_window = SCOPE_NAMES['open_window'] in scopes
-
         character.tokens = tokens
 
         character.save()
