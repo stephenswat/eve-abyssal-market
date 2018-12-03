@@ -49,6 +49,25 @@ class AvailableLatestModuleListAPI(View):
         return JsonResponse(res, safe=False)
 
 
+class AssetOwnedListAPI(View):
+    def get(self, request, type_id):
+        try:
+            module_type = ModuleType.objects.get(id=type_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Module type does not exist.")
+
+        if not request.user.is_authenticated:
+            return JsonResponse([], safe=False)
+
+        return JsonResponse([
+            m.as_dict()
+            for m in Module.objects.filter(
+                type=module_type,
+                ownership_records__owner__character_id__in=request.user.eve.all_character_ids
+            )
+        ], safe=False)
+
+
 class CreatorModuleListAPI(View):
     def get(self, request, creator_id):
         try:

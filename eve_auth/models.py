@@ -26,6 +26,10 @@ class EVEData(models.Model):
     def primary_character(self):
         return self.user.characters.all()[0]
 
+    @property
+    def all_character_ids(self):
+        return self.user.characters.values_list('character_id', flat=True)
+
 
 @receiver(post_save, sender=User)
 def create_eve_data(sender, instance, created, **kwargs):
