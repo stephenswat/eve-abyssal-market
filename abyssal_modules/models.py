@@ -14,14 +14,14 @@ DERIVED_ATTRIBUTES = {
         'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840],
         'name': 'Shield boost per second',
         'unit_str': 'HP/s',
-        'value': lambda x: x.get_value(68) / x.get_value(73),
+        'value': lambda x: x.get_value(68) / x.get_value(10073),
         'high_is_good': True
     },
     100001: {
         'types': [47769, 47773, 47777, 47842, 47844, 47846],
         'name': 'Armor repair per second',
         'unit_str': 'HP/s',
-        'value': lambda x: x.get_value(84) / x.get_value(73),
+        'value': lambda x: x.get_value(84) / x.get_value(10073),
         'high_is_good': True
     },
     100002: {
@@ -42,14 +42,14 @@ DERIVED_ATTRIBUTES = {
         'types': [49730, 49722, 49726, 49734],
         'name': 'DPS Bonus',
         'unit_str': '%',
-        'value': lambda x: ((x.get_value(64) * 1 / (1 - x.get_value(204) / 100)) - 1) * 100,
+        'value': lambda x: ((x.get_value(64) * 1 / (1 - x.get_value(10204) / 100)) - 1) * 100,
         'high_is_good': True
     },
     100005: {
         'types': [49738],
         'name': 'DPS Bonus',
         'unit_str': '%',
-        'value': lambda x: (((x.get_value(213) / 100 + 1) / (1 - (x.get_value(204) / 100))) - 1) * 100,
+        'value': lambda x: (((x.get_value(10213) / 100 + 1) / (1 - (x.get_value(10204) / 100))) - 1) * 100,
         'high_is_good': True
     },
 }
@@ -139,11 +139,11 @@ class ModuleManager(models.Manager):
             .prefetch_related(
                 'source',
                 'mutator',
-                'moduleattribute_set',
-                'moduleattribute_set__attribute',
-                'moduleattribute_set__new_attribute',
-                'moduleattribute_set__new_attribute__type',
-                'moduleattribute_set__new_attribute__attribute',
+                'attribute_values',
+                'attribute_values__attribute',
+                'attribute_values__new_attribute',
+                'attribute_values__new_attribute__type',
+                'attribute_values__new_attribute__attribute',
                 'type',
             )
         )
@@ -194,11 +194,11 @@ class ModuleBase(models.Model):
     def attribute_dict_with_derived(self):
         res = {
             x.attribute.id: {
-                'real_value': x.real_value,
+                'real_value': x.value,
                 'rating': int(round(x.rating)) if not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
-            for x in self.moduleattribute_set.all() if x.new_attribute.display
+            for x in self.attribute_values.all() if x.new_attribute.display
         }
 
         if self.type_id == 49738 and 1255 not in res:
@@ -226,10 +226,7 @@ class ModuleBase(models.Model):
 
     @cached_property
     def attribute_dict(self):
-        return {
-            x.attribute.id: x
-            for x in self.moduleattribute_set.all() if x.new_attribute.display
-        }
+        return {x.attribute.id: x for x in self.attribute_values.all()}
 
     def get_value(self, attr_id):
         if attr_id in DERIVED_ATTRIBUTES:
@@ -242,7 +239,7 @@ class ModuleBase(models.Model):
         elif attr_id not in attrs:
             raise ValueError("Object does not have an attribute %d." % attr_id)
         else:
-            return attrs[attr_id].real_value
+            return attrs[attr_id].value
 
     def as_dict(self):
         return {
@@ -259,8 +256,8 @@ class StaticModuleManager(models.Manager):
             super().get_queryset()
             .prefetch_related(
                 'source',
-                'moduleattribute_set__attribute',
-                'moduleattribute_set',
+                'attribute_values__attribute',
+                'attribute_values',
                 'type',
             )
         )
@@ -325,7 +322,8 @@ class Module(ModuleBase):
                 attr_name=a.attribute.short_name,
                 attr_value=a.value
             )
-            for a in self.moduleattribute_set.all() if a.new_attribute.display
+            for a in self.attribute_values.all()
+            if a.new_attribute.pyfa_display
         )
 
         return (
@@ -372,15 +370,6 @@ class UnratedModuleAttributeManager(models.Manager):
                 'module',
                 'static_module'
             )
-            .annotate(
-                real_value=Case(
-                    When(attribute_id__in=[73, 1795], then=F('value') * Value(0.001)),
-                    When(attribute_id__in=[147], then=F('value') * Value(100)),
-                    When(attribute_id__in=[213], then=(F('value') - Value(1)) * Value(100)),
-                    When(attribute_id__in=[204], then=(Value(1) - F('value')) * Value(100)),
-                    default=F('value')
-                )
-            )
         )
 
 
@@ -393,7 +382,7 @@ class ModuleAttributeManager(UnratedModuleAttributeManager):
                     (Window(
                         expression=PercentRank(),
                         partition_by=[F('attribute_id'), F('module__type_id')],
-                        order_by=F('real_value').asc()
+                        order_by=F('value').asc()
                     ) * Value(10) - Value(5)) *
                     Case(
                         When(new_attribute__high_is_good=True, then=Value(1)),
@@ -402,6 +391,23 @@ class ModuleAttributeManager(UnratedModuleAttributeManager):
                 )
             )
         )
+
+
+class ModuleAttributeView(models.Model):
+    module = models.ForeignKey(Module, models.CASCADE, null=True, related_name='attribute_values')
+    static_module = models.ForeignKey(StaticModule, models.CASCADE, null=True, related_name='attribute_values')
+
+    attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
+    new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
+
+    value = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'abyssal_modules_derived_attributes__view'
+
+    objects = ModuleAttributeManager()
+    unrated = UnratedModuleAttributeManager()
 
 
 class ModuleAttribute(models.Model):
@@ -413,10 +419,6 @@ class ModuleAttribute(models.Model):
 
     value = models.FloatField(db_index=True)
 
-    objects = ModuleAttributeManager()
-    unrated = UnratedModuleAttributeManager()
-    raw = models.Manager()
-
 
 class TypeAttribute(models.Model):
     type = models.ForeignKey(ModuleType, models.CASCADE)
@@ -424,6 +426,13 @@ class TypeAttribute(models.Model):
 
     display = models.BooleanField(default=False)
     high_is_good = models.NullBooleanField()
+
+    @property
+    def pyfa_display(self):
+        return self.attribute_id in {
+            1795, 6, 1159, 20, 796, 30, 554, 50, 54, 64, 67, 68, 72, 73, 204,
+            84, 213, 983, 90, 2267, 97
+        }
 
 
 class Mutator(models.Model):

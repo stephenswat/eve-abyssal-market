@@ -129,6 +129,32 @@ class Command(BaseCommand):
                     }
                 )
 
+        for attr_id in [73, 1795, 147, 213, 204]:
+            original = ModuleDogmaAttribute.objects.get(id=attr_id)
+
+            new, _ = ModuleDogmaAttribute.objects.update_or_create(
+                id=attr_id + 10000,
+                defaults={
+                    'name': original.name,
+                    'short_name': 'display_' + original.short_name,
+                    'unit_str': original.unit_str,
+                    'is_derived': True
+                }
+            )
+
+            for type_attr in original.typeattribute_set.all():
+                TypeAttribute.objects.update_or_create(
+                    attribute=new,
+                    type=type_attr.type,
+                    defaults={
+                        'display': type_attr.display,
+                        'high_is_good': type_attr.high_is_good
+                    }
+                )
+
+                type_attr.display = False
+                type_attr.save()
+
     def create_static_types(self):
         mod_to_source = defaultdict(set)
 
@@ -153,7 +179,7 @@ class Command(BaseCommand):
 
                 for attr in data['dogma_attributes']:
                     try:
-                        ModuleAttribute.raw.update_or_create(
+                        ModuleAttribute.objects.update_or_create(
                             static_module=module,
                             attribute_id=attr['attribute_id'],
                             new_attribute=TypeAttribute.objects.get(

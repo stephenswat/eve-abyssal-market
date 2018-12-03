@@ -46,11 +46,13 @@
 
     <div class="row">
         {% for a in object.attribute_list %}
+        {% if a.new_attribute.display %}
         <dl class="col-3">
             <dt>
                 <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}"> {{ a.attribute.name }}</dt>
-            <dd>{{ a.real_value|floatformat }} {{ a.attribute.unit_str }}</dd>
+            <dd>{{ a.value|floatformat }} {{ a.attribute.unit_str }}</dd>
         </dl>
+        {% endif %}
         {% endfor %}
     </div>
 
