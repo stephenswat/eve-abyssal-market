@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'eve_mail_queue',
     'abyssal_api',
     'abyssal_modules',
+    'asset_scanner',
     'contract_scanner',
     'price_predictor',
     'huey.contrib.djhuey',
