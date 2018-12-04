@@ -150,10 +150,15 @@ function get_precision(attr_id) {
 
 function attribute_format(attrs) {
     var list = "";
-    var rating = "";
 
     for (var a in attrs) {
-        if (attrs[a].rating != null && display_rating(a)) {
+        var rating = "";
+
+        if (!attrs[a].display) {
+            continue;
+        }
+
+        if (attrs[a].rating !== null && display_rating(a)) {
             if (attrs[a].rating > 0) {
                 rating = ` <span class="module-rating text-success">+${attrs[a].rating}</span>`;
             } else if (attrs[a].rating == 0) {

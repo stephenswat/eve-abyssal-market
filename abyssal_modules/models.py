@@ -191,21 +191,23 @@ class ModuleBase(models.Model):
     class Meta:
         abstract = True
 
-    def attribute_dict(self, show_all=False):
+    def attribute_dict(self):
         res = {
             x.attribute.id: {
                 'real_value': x.value,
                 'rating': int(round(x.rating)) if x.rating is not None and not self._is_static else None,
-                'unit': x.attribute.unit_str
+                'unit': x.attribute.unit_str,
+                'display': x.new_attribute.display
             }
-            for x in self.attribute_values.all() if show_all or x.new_attribute.display
+            for x in self.attribute_values.all()
         }
 
         if self.type_id == 49738 and 1255 not in res:
             res[1255] = {
                 'real_value': 0.0,
                 'rating': None,
-                'unit': '%'
+                'unit': '%',
+                'display': True
             }
 
         for attr_id, data in DERIVED_ATTRIBUTES.items():
@@ -215,7 +217,8 @@ class ModuleBase(models.Model):
             res[attr_id] = {
                 'real_value': data['value'](self),
                 'rating': None,
-                'unit': data['unit_str']
+                'unit': data['unit_str'],
+                'display': True
             }
 
         return res
@@ -242,7 +245,7 @@ class ModuleBase(models.Model):
             'id': self.id,
             'type_id': self.type.id,
             'type_name': self.type.name,
-            'attributes': self.attribute_dict(show_all=True)
+            'attributes': self.attribute_dict()
         }
 
 
