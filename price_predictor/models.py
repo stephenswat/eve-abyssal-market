@@ -22,7 +22,10 @@ class PricePredictor(models.Model):
 
         scaler, model = model_row.unpickle()
 
-        scaled_features = scaler.transform([[y.value for y in module.attribute_list]])
+        scaled_features = scaler.transform([[
+            y.value for y in module.attribute_list
+            if y.new_attribute.display
+        ]])
 
         return {
             'price': max(0, model.predict(scaled_features)[0] * 1000000),
