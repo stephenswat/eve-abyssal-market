@@ -47,12 +47,13 @@ def create_model_for_type(t):
 
     param_grid = [
         {
-            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000],
-            'gamma': [1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001, 1e-7, 1e-8, 1e-9, 1e-10],
-            'kernel': ['rbf']},
+            'C': [100, 1000, 10000, 100000, 1000000],
+            'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+            'kernel': ['rbf']
+        }
     ]
 
-    clf = GridSearchCV(reg, param_grid)
+    clf = GridSearchCV(reg, param_grid, cv=3, iid=False)
     clf.fit(features, samples)
     print(clf.best_params_)
 
