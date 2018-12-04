@@ -7,7 +7,7 @@ RELEVANT_ATTRIBUTES = {
     'armor_repairer': [(50, False), (30, False), (84, True), (6, False), (73, False)],
     'ancil_shield_booster': [(50, False), (30, False), (68, True), (6, False), (73, False), (1795, False)],
     'ancil_armor_repairer': [(50, False), (30, False), (84, True), (6, False), (73, False), (1795, False)],
-    'energy_neutralizer': [(50, False), (30, False), (6, True), (54, True), (2044, True), (97, True)],
+    'energy_neutralizer': [(50, False), (30, False), (6, False), (54, True), (2044, True), (97, True)],
     'energy_nosferatu': [(50, False), (30, False), (54, True), (2044, True), (90, True)],
     'cap_battery': [(50, False), (30, False), (2267, False), (67, True)],
     'warp_scrambler': [(50, False), (6, False), (54, True), (105, True)],
