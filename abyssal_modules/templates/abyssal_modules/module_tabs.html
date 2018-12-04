@@ -9,7 +9,6 @@
         <a class="nav-link {% if active_page == 'asset_list' %}active{% endif %}" href="{% url 'abyssal_modules:type_asset_module_list' type_id=module_type.id %}"">Your Modules</a>
     </li>
     <li class="nav-item">
-        {% comment %} <a class="nav-link disabled {% if active_page == 'roll_calculator' %}active{% endif %}" href="{% url 'abyssal_modules:roll_calculator' type_id=module_type.id %}">Roll Calculator</a> {% endcomment %}
-        <a class="nav-link disabled {% if active_page == 'roll_calculator' %}active{% endif %}" href="#">Roll Calculator</a>
+        <a class="nav-link {% if active_page == 'roll_calculator' %}active{% endif %}" href="{% url 'abyssal_modules:roll_calculator' type_id=module_type.id %}">Roll Calculator</a>
     </li>
 </ul>

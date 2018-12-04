@@ -191,14 +191,14 @@ class ModuleBase(models.Model):
     class Meta:
         abstract = True
 
-    def attribute_dict_with_derived(self):
+    def attribute_dict_with_derived(self, show_all=False):
         res = {
             x.attribute.id: {
                 'real_value': x.value,
                 'rating': int(round(x.rating)) if x.rating is not None and not self._is_static else None,
                 'unit': x.attribute.unit_str
             }
-            for x in self.attribute_values.all() if x.new_attribute.display
+            for x in self.attribute_values.all() if show_all or x.new_attribute.display
         }
 
         if self.type_id == 49738 and 1255 not in res:
@@ -246,7 +246,7 @@ class ModuleBase(models.Model):
             'id': self.id,
             'type_id': self.type.id,
             'type_name': self.type.name,
-            'attributes': self.attribute_dict_with_derived()
+            'attributes': self.attribute_dict_with_derived(show_all=True)
         }
 
 

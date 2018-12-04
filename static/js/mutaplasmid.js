@@ -141,6 +141,8 @@ function get_precision(attr_id) {
         return 0;
     } else if (attr_id == 54) {
         return 0;
+    } else if (attr_id == 204) {
+        return 4;
     } else {
         return 1;
     }

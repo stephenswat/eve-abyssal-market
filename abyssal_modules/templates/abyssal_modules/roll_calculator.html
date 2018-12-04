@@ -22,54 +22,197 @@
     <h1>{{ module_type.name }}</h1>
 
     <form>
-        <div class="form-group">
-            <label>Mutaplasmid</label>
-            <select class="form-control form-control-sm" id="exampleFormControlSelect1">
-            {% for m in mutators %}
-            <option value="{{ m.item_type.id }}">{{ m.item_type.name }}</option>
-            {% endfor %}
-            </select>
+        <div class="row">
+            <div class="form-group col-6">
+                <label>Module</label>
+                <select class="form-control form-control-sm" id="module_select">
+                <option value="-1" selected>Choose...</option>
+                {% for m in modules %}
+                <option value="{{ m.source.id }}">{{ m.source.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label>Mutaplasmid</label>
+                <select class="form-control form-control-sm" id="mutator_select">
+                <option value="-1" selected>Choose...</option>
+                {% for m in mutators %}
+                <option value="{{ m.item_type.id }}">{{ m.item_type.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
         </div>
         <div class="row">
-            {% for at in attributes %}
-            <div class="form-group col-12">
+            {% for tat in attributes %}
+            {% with tat.attribute as at %}
+            <div class="form-group col-6">
                 <div class="row">
-                    <label class="col-6"><img src="{% static at.attribute.icon_path %}" title="{{ at.attribute.name }}"> {{ at.attribute.name }}</label>
-                    {% if at.high_is_good %}
+                    <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}</label>
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter {{ tat.high_is_good|yesno:'negative,positive' }}" id="attr-{{ at.id }}-min" step="0.0001" data-attr-modified="{{ at.id }}">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
                     <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
+                        <input type="number" class="form-control form-control-sm module-attribute-filter {{ tat.high_is_good|yesno:'positive,negative' }}" id="attr-{{ at.id }}-max" step="0.0001" data-attr-modified="{{ at.id }}">
                         <div class="input-group-append module-stat-unit">
                             <span class="input-group-text">{{ at.unit_str }}</span>
                         </div>
                     </div>
-                    {% else %}
-                    <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter negative" id="attr-{{ at.id }}-min" step="0.1" data-attr-modified="{{ at.id }}">
-                        <div class="input-group-append module-stat-unit">
-                            <span class="input-group-text">{{ at.unit_str }}</span>
-                        </div>
-                    </div>
-                    <div class="input-group input-group-sm col-3">
-                        <input type="number" class="form-control form-control-sm module-attribute-filter positive" id="attr-{{ at.id }}-max" step="0.1" data-attr-modified="{{ at.id }}">
-                        <div class="input-group-append module-stat-unit">
-                            <span class="input-group-text">{{ at.unit_str }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
                 <div class="row mt-1 px-4">
-                    <div id="attr-{{ at.id }}-range" class="col-12 slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
+                    <div id="attr-{{ at.id }}-range" class="col-12 slider-{{ tat.high_is_good|yesno:'positive,negative' }}"></div>
                 </div>
             </div>
+            {% endwith %}
             {% endfor %}
         </div>
+        <p>The chache of rolling a module with these stats is <span id="result_percentage"></span>% (1 in <span id="result_rate"></span>)</p>
     </form>
 </div>
 
+{% endblock %}
+
+{% block trailing_js %}
+{{ module_stats|json_script:"module_stats" }}
+{{ mutator_stats|json_script:"mutator_stats" }}
+
+<script>
+var module_stats = JSON.parse(document.getElementById('module_stats').textContent);
+var mutator_stats = JSON.parse(document.getElementById('mutator_stats').textContent);
+
+var attr_list = [];
+
+var selected_module_stats = null;
+var selected_mutator_stats = null;
+
+{% for at in attributes %}
+attr_list.push({{ at.attribute.id }});
+{% endfor %}
+
+function update_selection() {
+    var module_id = $('#module_select').val();
+
+    if (module_id == -1) {
+        selected_module_stats = null;
+    } else {
+        selected_module_stats = module_stats[module_id];
+    }
+
+    var mutator_id = $('#mutator_select').val();
+
+    if (mutator_id == -1) {
+        selected_mutator_stats = null;
+    } else {
+        selected_mutator_stats = mutator_stats[mutator_id];
+    }
+}
+
+function update_sliders() {
+    for (var i in attr_list) {
+        var attr_id = attr_list[i];
+
+        if (selected_module_stats === null || selected_mutator_stats === null) {
+            $(`#attr-${attr_id}-range`).slider('disable');
+            continue;
+        }
+
+        $(`#attr-${attr_id}-range`).slider('enable');
+
+        var mutator = selected_mutator_stats[attr_id - (attr_id > 10000 ? 10000 : 0)]
+
+        var r1 = selected_module_stats.attributes[attr_id].real_value * mutator[0];
+        var r2 = selected_module_stats.attributes[attr_id].real_value * mutator[1];
+
+        console.log(r1)
+        console.log(r2)
+
+        $(`#attr-${attr_id}-range`).slider('option', 'min', Math.min(r1, r2));
+        $(`#attr-${attr_id}-range`).slider('option', 'max', Math.max(r1, r2));
+    }
+}
+
+function update_labels() {
+    for (i = 0; i < attr_list.length; i++) {
+        var attr_id = attr_list[i];
+        var values = $(`#attr-${attr_id}-range`).slider('values');
+
+        $(`#attr-${attr_id}-min`).val(values[0].toFixed(get_precision(attr_id)));
+        $(`#attr-${attr_id}-max`).val(values[1].toFixed(get_precision(attr_id)));
+    }
+}
+
+function update_output() {
+    var chance = 1.0;
+
+    for (var i in attr_list) {
+        var attr_id = attr_list[i];
+
+        if (selected_module_stats === null || selected_mutator_stats === null) {
+            $(`#attr-${attr_id}-range`).slider('disable');
+            continue;
+        }
+
+        var possible = [
+            $(`#attr-${attr_id}-range`).slider('option', 'min'),
+            $(`#attr-${attr_id}-range`).slider('option', 'max')
+        ]
+
+        var selected = $(`#attr-${attr_id}-range`).slider('values')
+
+        var possible_range = possible[1] - possible[0];
+        var selected_range = selected[1] - selected[0];
+
+        chance *= (selected_range / possible_range);
+    }
+
+    $('#result_percentage').text(Math.round(chance * 1000) / 10);
+    $('#result_rate').text(Math.round(1 / chance));
+}
+
+function update_everything() {
+    update_selection();
+    update_sliders();
+    update_labels();
+    update_output();
+}
+
+$(document).on("change", ".module-attribute-filter", function() {
+    var new_values;
+
+    new_values = [
+        $(`#attr-${this.dataset.attrModified}-min`).val(),
+        $(`#attr-${this.dataset.attrModified}-max`).val(),
+    ];
+
+    $(`#attr-${this.dataset.attrModified}-range`).slider('values', new_values);
+});
+
+$(document).ready(function() {
+    for (var i in attr_list) {
+        var attr_id = attr_list[i];
+        $(`#attr-${attr_id}-range`).slider({
+            range: true,
+            min: 0,
+            max: 0,
+            disabled: true,
+            step: 0.000001,
+            values: [-1000000000000, 1000000000000],
+            slide: function (event, ui) {
+                update_labels();
+            },
+            change: function (event, ui) {
+                update_labels();
+                update_output();
+            }
+        })
+    };
+
+    $('select').on('change', update_everything);
+
+    update_everything();
+
+});
+</script>
 {% endblock %}
