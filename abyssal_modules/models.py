@@ -191,7 +191,7 @@ class ModuleBase(models.Model):
     class Meta:
         abstract = True
 
-    def attribute_dict_with_derived(self, show_all=False):
+    def attribute_dict(self, show_all=False):
         res = {
             x.attribute.id: {
                 'real_value': x.value,
@@ -222,17 +222,13 @@ class ModuleBase(models.Model):
 
     @cached_property
     def attribute_list(self):
-        return sorted(self.attribute_dict.values(), key=lambda x: x.attribute.id)
-
-    @cached_property
-    def attribute_dict(self):
-        return {x.attribute.id: x for x in self.attribute_values.all()}
+        return sorted(self.attribute_values.all(), key=lambda x: x.attribute.id)
 
     def get_value(self, attr_id):
         if attr_id in DERIVED_ATTRIBUTES:
             return DERIVED_ATTRIBUTES[attr_id]['value'](self)
 
-        attrs = self.attribute_dict
+        attrs = {x.attribute.id: x for x in self.attribute_values.all()}
 
         if attr_id == 1255 and self.type.id == 49738 and attr_id not in attrs:
             return 0.0
@@ -246,7 +242,7 @@ class ModuleBase(models.Model):
             'id': self.id,
             'type_id': self.type.id,
             'type_name': self.type.name,
-            'attributes': self.attribute_dict_with_derived(show_all=True)
+            'attributes': self.attribute_dict(show_all=True)
         }
 
 
