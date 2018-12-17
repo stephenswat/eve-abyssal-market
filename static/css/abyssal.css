@@ -2,6 +2,10 @@
     vertical-align: middle
 }
 
+.contract-table td {
+    vertical-align: middle
+}
+
 .module-table tr.item {
     height: 75px;
 }

@@ -100,6 +100,7 @@
                 <th>Issued</th>
                 <th>Expires</th>
                 <th>Price</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -109,6 +110,14 @@
                 <td>{{ c.issued_at }}</td>
                 <td>{{ c.expires_at }}</td>
                 <td>{{ c.price|intword }} ISK</td>
+                <td>
+                    {% if c.available %}
+                    <button {% if not request.user.is_authenticated %}disabled{% endif %} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="{{ c.id }}">ESI</button>
+                    <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//{{ c.id }}>Contract {{ c.id }}</url>">Link</button>
+                    {% else %}
+                    &ndash;
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -124,6 +133,10 @@ $(document).ready(function () {
     $('#contract-table').DataTable({
         "order": []
     });
+});
+
+$(document).on("click", ".btn-open-contract-esi", function() {
+    open_contract($(this));
 });
 </script>
 {% endblock %}
