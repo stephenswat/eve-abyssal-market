@@ -1,6 +1,7 @@
-from django.db import transaction
+from django.db import transaction, connection
 
-from huey.contrib.djhuey import db_task
+from huey import crontab
+from huey.contrib.djhuey import db_task, db_periodic_task
 
 from abyssal_modules.metrics import COUNTER_MODULES_CREATED
 from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter, TypeAttribute
@@ -56,3 +57,9 @@ def create_module(type_id, item_id, force=False):
                 pass
 
     return res
+
+
+@db_periodic_task(crontab(minute='0', hour='0'))
+def materialize_ratings():
+    with connection.cursor() as cursor:
+        cursor.execute("REFRESH MATERIALIZED VIEW abyssal_modules_attribute_stats__view;")
