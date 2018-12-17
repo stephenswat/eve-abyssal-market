@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="form-group col-12 col-md-6">
+    <div class="row">
+        <label class="col-6"><img src="{% static at.icon_path %}" title="{{ at.name }}"> {{ at.name }}{% if at.derived %}<span style="text-muted" title="This is a derived attribute.">*</span>{% endif %}</label>
+        <div class="input-group input-group-sm col-3">
+            <input type="number" class="form-control form-control-sm module-attribute-filter {{ at.high_is_good|yesno:'negative,positive' }}" id="attr-{{ at.id }}-min" data-attr-modified="{{ at.id }}" step="0.0001">
+            <div class="input-group-append module-stat-unit">
+                <span class="input-group-text">{{ at.unit_str }}</span>
+            </div>
+        </div>
+        <div class="input-group input-group-sm col-3">
+            <input type="number" class="form-control form-control-sm module-attribute-filter {{ at.high_is_good|yesno:'positive,negative' }}" id="attr-{{ at.id }}-max" data-attr-modified="{{ at.id }}" step="0.0001">
+            <div class="input-group-append module-stat-unit">
+                <span class="input-group-text">{{ at.unit_str }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2 px-4 slider-container">
+        <div id="attr-{{ at.id }}-range" class="col-12 slider-{{ at.high_is_good|yesno:'positive,negative' }}"></div>
+    </div>
+</div>
