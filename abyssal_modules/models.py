@@ -421,6 +421,9 @@ class ModuleAttributeView(models.Model):
     objects = ModuleAttributeManager()
     unrated = UnratedModuleAttributeManager()
 
+    def rounded_rating(self):
+        return int(round(self.rating))
+
 
 class ModuleAttribute(models.Model):
     module = models.ForeignKey(Module, models.CASCADE, null=True)

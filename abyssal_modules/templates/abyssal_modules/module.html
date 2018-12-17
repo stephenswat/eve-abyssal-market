@@ -50,7 +50,16 @@
         <dl class="col-3">
             <dt>
                 <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}"> {{ a.attribute.name }}</dt>
-            <dd>{{ a.value|floatformat }} {{ a.attribute.unit_str }}</dd>
+            <dd>
+                {{ a.value|floatformat }} {{ a.attribute.unit_str }}
+                {% if a.rounded_rating == 0 %}
+                <span class="module-rating text-warning">±{{ a.rounded_rating }}</span>
+                {% elif a.rounded_rating > 0 %}
+                <span class="module-rating text-success">+{{ a.rounded_rating }}</span>
+                {% else %}
+                <span class="module-rating text-danger">{{ a.rounded_rating }}</span>
+                {% endif %}
+            </dd>
         </dl>
         {% endif %}
         {% endfor %}
