@@ -317,7 +317,7 @@ class Module(ModuleBase):
 
     def get_pyfa_string(self):
         attr_list = ", ".join(
-            "{attr_name} {attr_value:0.3f}".format(
+            "{attr_name} {attr_value:f}".format(
                 attr_name=a.attribute.short_name,
                 attr_value=a.value
             )
