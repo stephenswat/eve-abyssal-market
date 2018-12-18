@@ -21,8 +21,6 @@ class LoginView(View):
         if not form.is_valid():
             return redirect('/')
 
-        print(form.cleaned_data)
-
         scopes = []
 
         if form.cleaned_data['scope_open_window']:
