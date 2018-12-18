@@ -76,5 +76,5 @@ def create_models():
     for t in ModuleType.objects.all():
         try:
             create_model_for_type(t)
-        except:
+        except Exception:
             pass

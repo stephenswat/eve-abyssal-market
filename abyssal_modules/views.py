@@ -83,7 +83,13 @@ class RollCalculatorView(View):
                 'modules': modules,
                 'mutators': mutators,
                 'module_stats': {m.id: m.as_dict() for m in modules},
-                'mutator_stats': {m.item_type.id: {x.attribute.attribute.id: (x.min_modifier, x.max_modifier) for x in m.mutatorattribute_set.all()} for m in mutators},
+                'mutator_stats': {
+                    m.item_type.id: {
+                        x.attribute.attribute.id: (x.min_modifier, x.max_modifier)
+                        for x in m.mutatorattribute_set.all()
+                    }
+                    for m in mutators
+                },
                 'attributes': attributes
             }
         )
