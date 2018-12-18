@@ -2,7 +2,7 @@ import pickle
 
 from django.db import models
 
-from abyssal_modules.models import ModuleType
+from abyssal_modules.models.modules import ModuleType
 
 
 class PricePredictor(models.Model):

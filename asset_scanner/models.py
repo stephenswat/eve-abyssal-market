@@ -1,7 +1,7 @@
 from django.db import models
 
 from eve_auth.models import EveUser
-from abyssal_modules.models import Module
+from abyssal_modules.models.modules import Module
 
 
 class AssetRecord(models.Model):

@@ -5,11 +5,9 @@ from collections import defaultdict
 from django.core.management.base import BaseCommand
 
 from eve_esi import ESI
-from abyssal_modules.models import (
-    ModuleType, ModuleDogmaAttribute, TypeAttribute, Mutator, MutatorAttribute,
-    StaticModule, ModuleAttribute
-)
-from abyssal_modules.models import DERIVED_ATTRIBUTES
+from abyssal_modules.models.modules import ModuleType, StaticModule
+from abyssal_modules.models.attributes import ModuleDogmaAttribute, TypeAttribute, ModuleAttribute, DERIVED_ATTRIBUTES
+from abyssal_modules.models.mutators import Mutator, MutatorAttribute
 from eve_sde.models import InvType
 from ._abyssal_primitive import ITEMS, UNIT_STR
 

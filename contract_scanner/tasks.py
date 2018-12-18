@@ -8,7 +8,7 @@ from huey.contrib.djhuey import db_periodic_task, db_task
 from django.db import transaction
 from django.db.models import Q
 
-from abyssal_modules.models import ModuleType
+from abyssal_modules.models.modules import ModuleType
 from contract_scanner.models import Contract, PlexPriceRecord
 from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI

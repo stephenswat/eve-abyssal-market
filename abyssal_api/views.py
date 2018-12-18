@@ -2,7 +2,8 @@ from django.core.cache import cache
 from django.http import JsonResponse, Http404
 from django.views import View
 
-from abyssal_modules.models import Module, ModuleType, StaticModule, EveCharacter
+from abyssal_modules.models.modules import Module, ModuleType, StaticModule
+from abyssal_modules.models.characters import EveCharacter
 
 
 class AvailableTypedModuleListAPI(View):

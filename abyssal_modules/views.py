@@ -8,7 +8,10 @@ from django.db.models.functions import Trunc
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
-from abyssal_modules.models import Module, ModuleType, EveCharacter, Mutator, TypeAttribute, StaticModule
+from abyssal_modules.models.modules import Module, ModuleType, StaticModule
+from abyssal_modules.models.attributes import TypeAttribute
+from abyssal_modules.models.characters import EveCharacter
+from abyssal_modules.models.mutators import Mutator
 from eve_esi import ESI
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm

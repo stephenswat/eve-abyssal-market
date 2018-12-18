@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from abyssal_modules.models import ModuleType, ModuleDogmaAttribute, Module, EveCharacter, TypeAttribute
+from abyssal_modules.models.modules import ModuleType, Module
+from abyssal_modules.models.attributes import ModuleDogmaAttribute, TypeAttribute
+from abyssal_modules.models.characters import EveCharacter
 
 
 admin.site.register(ModuleType)

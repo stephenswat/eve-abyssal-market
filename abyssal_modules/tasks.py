@@ -4,7 +4,9 @@ from huey import crontab
 from huey.contrib.djhuey import db_task, db_periodic_task
 
 from abyssal_modules.metrics import COUNTER_MODULES_CREATED
-from abyssal_modules.models import Module, ModuleAttribute, ModuleDogmaAttribute, EveCharacter, TypeAttribute
+from abyssal_modules.models.modules import Module
+from abyssal_modules.models.attributes import ModuleAttribute, ModuleDogmaAttribute, TypeAttribute
+from abyssal_modules.models.characters import EveCharacter
 from eve_esi import ESI
 
 

@@ -10,7 +10,7 @@ from sklearn.model_selection import cross_val_score
 
 from django.db.models import F
 
-from abyssal_modules.models import ModuleType
+from abyssal_modules.models.modules import ModuleType
 from price_predictor.models import PricePredictor
 
 

@@ -1,12 +1,9 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import F, Value, Case, When, FloatField
+from django.db.models import F, Value
 from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
 from django.db.models.functions import Cast
 from django.utils.functional import cached_property
-
-from eve_esi import ESI
-from eve_sde.models import InvType
 
 
 DERIVED_ATTRIBUTES = {
@@ -55,63 +52,12 @@ DERIVED_ATTRIBUTES = {
 }
 
 
-class EveCharacterManager(models.Manager):
-    def get_or_create_by_id(self, character_id):
-        try:
-            return self.model.objects.get(id=character_id)
-        except self.model.DoesNotExist:
-            character_data = ESI.request(
-                'get_characters_character_id',
-                character_id=character_id
-            ).data
-
-            character, _ = EveCharacter.objects.update_or_create(
-                id=character_id,
-                defaults={
-                    'name': character_data['name']
-                }
-            )
-
-            return character
-
-
-class EveCharacter(models.Model):
-    objects = EveCharacterManager()
-
-    id = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return self.name
-
-
-class ModuleDogmaAttribute(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=64)
-    short_name = models.CharField(max_length=64)
-
-    unit_str = models.CharField(max_length=16)
-
-    is_derived = models.BooleanField(default=False)
-
-    @property
-    def icon_path(self):
-        return "/img/attributes/%d.png" % self.id
-
-    @property
-    def derived(self):
-        return getattr(self, '_derived', False)
-
-    def __str__(self):
-        return self.name
-
-
 class ModuleType(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128)
 
     attributes = models.ManyToManyField(
-        ModuleDogmaAttribute,
+        'ModuleDogmaAttribute',
         through='TypeAttribute',
         related_name='+'
     )
@@ -177,13 +123,13 @@ class ModuleBase(models.Model):
     id = models.BigIntegerField(primary_key=True)
 
     attributes = models.ManyToManyField(
-        ModuleDogmaAttribute,
+        'ModuleDogmaAttribute',
         through='ModuleAttribute',
         related_name='+'
     )
 
     source = models.ForeignKey(
-        InvType,
+        'eve_sde.InvType',
         models.CASCADE,
         related_name='+',
     )
@@ -264,7 +210,7 @@ class StaticModuleManager(models.Manager):
 
 class StaticModule(ModuleBase):
     type = models.ForeignKey(
-        ModuleType,
+        'ModuleType',
         models.CASCADE,
         related_name='static_modules',
         db_index=True
@@ -291,20 +237,20 @@ class Module(ModuleBase):
     available = AvailableModuleManager()
 
     type = models.ForeignKey(
-        ModuleType,
+        'ModuleType',
         models.CASCADE,
         related_name='modules',
         db_index=True
     )
 
     mutator = models.ForeignKey(
-        InvType,
+        'eve_sde.InvType',
         models.CASCADE,
         related_name='+',
     )
 
     creator = models.ForeignKey(
-        EveCharacter,
+        'EveCharacter',
         models.CASCADE,
         related_name='creations'
     )
@@ -355,112 +301,3 @@ class Module(ModuleBase):
             }
 
         return res
-
-
-class UnratedModuleAttributeManager(models.Manager):
-    def get_queryset(self):
-        return (
-            super().get_queryset()
-            .prefetch_related(
-                'new_attribute',
-                'new_attribute__type',
-                'new_attribute__attribute',
-                'attribute',
-                'module',
-                'static_module'
-            )
-        )
-
-
-class ModuleAttributeManager(UnratedModuleAttributeManager):
-    def get_queryset(self):
-        return (
-            super().get_queryset()
-            .annotate(
-                rating=(
-                    Case(
-                        When(new_attribute__aggregates__stddev=0, then=Value(0, output_field=FloatField())),
-                        default=(
-                            F('value') - F('new_attribute__aggregates__avg')
-                        ) / F('new_attribute__aggregates__stddev')
-                    ) * Value(4) * Case(
-                        When(new_attribute__high_is_good=True, then=Value(1)),
-                        default=Value(-1)
-                    )
-                )
-            )
-        )
-
-
-class ModuleAttributeAggregate(models.Model):
-    new_attribute = models.OneToOneField(
-        'TypeAttribute', models.DO_NOTHING, primary_key=True, related_name='aggregates'
-    )
-
-    avg = models.FloatField()
-    stddev = models.FloatField()
-
-    class Meta:
-        managed = False
-        db_table = 'abyssal_modules_attribute_stats__view'
-
-
-class ModuleAttributeView(models.Model):
-    module = models.ForeignKey(Module, models.CASCADE, null=True, related_name='attribute_values')
-    static_module = models.ForeignKey(StaticModule, models.CASCADE, null=True, related_name='attribute_values')
-
-    attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
-    new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
-
-    value = models.FloatField()
-
-    class Meta:
-        managed = False
-        db_table = 'abyssal_modules_derived_attributes__view'
-
-    objects = ModuleAttributeManager()
-    unrated = UnratedModuleAttributeManager()
-
-    def rounded_rating(self):
-        return int(round(self.rating))
-
-
-class ModuleAttribute(models.Model):
-    module = models.ForeignKey(Module, models.CASCADE, null=True)
-    static_module = models.ForeignKey(StaticModule, models.CASCADE, null=True)
-
-    attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
-    new_attribute = models.ForeignKey('TypeAttribute', models.CASCADE)
-
-    value = models.FloatField(db_index=True)
-
-
-class TypeAttribute(models.Model):
-    type = models.ForeignKey(ModuleType, models.CASCADE)
-    attribute = models.ForeignKey(ModuleDogmaAttribute, models.CASCADE)
-
-    display = models.BooleanField(default=False)
-    high_is_good = models.NullBooleanField()
-
-    @property
-    def pyfa_display(self):
-        return self.attribute_id in {
-            1795, 6, 1159, 20, 796, 30, 554, 50, 54, 64, 67, 68, 72, 73, 204,
-            84, 213, 983, 90, 2267, 97
-        }
-
-
-class Mutator(models.Model):
-    item_type = models.OneToOneField(InvType, models.CASCADE, related_name='+')
-    result = models.ForeignKey(ModuleType, models.CASCADE)
-
-    applicable_modules = models.ManyToManyField(InvType)
-    attributes = models.ManyToManyField(TypeAttribute, through='MutatorAttribute')
-
-
-class MutatorAttribute(models.Model):
-    mutator = models.ForeignKey(Mutator, models.CASCADE)
-    attribute = models.ForeignKey(TypeAttribute, models.CASCADE)
-
-    min_modifier = models.DecimalField(max_digits=10, decimal_places=5)
-    max_modifier = models.DecimalField(max_digits=10, decimal_places=5)
