@@ -167,7 +167,7 @@ def update_contract_sale_status():
     ):
         return
 
-    targets = Contract.objects.filter(sold=None, available=False)
+    targets = Contract.objects.filter(sold=None, available=False)[:5000]
 
     for t in targets:
         req = ESI.request(
