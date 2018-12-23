@@ -143,7 +143,8 @@ class ModuleBase(models.Model):
                 'real_value': x.value,
                 'rating': int(round(x.rating)) if x.rating is not None and not self._is_static else None,
                 'unit': x.attribute.unit_str,
-                'display': x.new_attribute.display
+                'display': x.new_attribute.display,
+                'name': x.attribute.name
             }
             for x in self.attribute_values.all()
         }
@@ -153,7 +154,8 @@ class ModuleBase(models.Model):
                 'real_value': 0.0,
                 'rating': None,
                 'unit': '%',
-                'display': True
+                'display': True,
+                'name': 'Drone Damage Bonus'
             }
 
         for attr_id, data in DERIVED_ATTRIBUTES.items():
@@ -164,7 +166,8 @@ class ModuleBase(models.Model):
                 'real_value': data['value'](self),
                 'rating': None,
                 'unit': data['unit_str'],
-                'display': True
+                'display': True,
+                'name': data['name']
             }
 
         return res

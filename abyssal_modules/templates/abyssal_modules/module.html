@@ -45,19 +45,19 @@
     <h4>Attributes</h4>
 
     <div class="row">
-        {% for a in object.attribute_list %}
-        {% if a.new_attribute.display %}
+        {% for i, a in object.attribute_dict.items %}
+        {% if a.display %}
         <dl class="col-3">
             <dt>
-                <img src="{% static a.attribute.icon_path %}" title="{{ a.attribute.name }}"> {{ a.attribute.name }}</dt>
+                <img src="/static/img/attributes/{{ i }}.png" title="{{ a.name }}"> {{ a.name }}</dt>
             <dd>
-                {{ a.value|floatformat }} {{ a.attribute.unit_str }}
-                {% if a.rounded_rating == 0 %}
-                <span class="module-rating text-warning">±{{ a.rounded_rating }}</span>
-                {% elif a.rounded_rating > 0 %}
-                <span class="module-rating text-success">+{{ a.rounded_rating }}</span>
-                {% else %}
-                <span class="module-rating text-danger">{{ a.rounded_rating }}</span>
+                {{ a.real_value|floatformat }} {{ a.unit }}
+                {% if a.rating == 0 %}
+                <span class="module-rating text-warning">±{{ a.rating }}</span>
+                {% elif a.rating > 0 %}
+                <span class="module-rating text-success">+{{ a.rating }}</span>
+                {% elif a.rating < 0 %}
+                <span class="module-rating text-danger">{{ a.rating }}</span>
                 {% endif %}
             </dd>
         </dl>
