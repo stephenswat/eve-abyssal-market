@@ -156,3 +156,33 @@ def update_plex_price():
     price = int(req[0]['buy']['fivePercent'])
 
     PlexPriceRecord(price=price).save()
+
+
+@db_periodic_task(crontab(minute='*'))
+def update_contract_sale_status():
+    if (
+        datetime.time(hour=10, minute=55) <=
+        datetime.datetime.now(datetime.timezone.utc).time() <=
+        datetime.time(hour=11, minute=20)
+    ):
+        return
+
+    targets = Contract.objects.filter(sold=None, available=False)
+
+    for t in targets:
+        req = ESI.request(
+            'get_contracts_public_items_contract_id',
+            contract_id=t.id
+        )
+
+        if req.status == 403:
+            t.sold = True
+        elif req.status == 404:
+            t.sold = False
+        else:
+            t.sold = None
+
+        t.save()
+
+        if int(req.header['X-Esi-Error-Limit-Remain'][0]) < 10:
+            break

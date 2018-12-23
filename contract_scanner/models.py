@@ -30,6 +30,8 @@ class Contract(models.Model):
     location_id = models.BigIntegerField(db_index=True)
     region_id = models.BigIntegerField(db_index=True)
 
+    sold = models.BooleanField(null=True)
+
 
 class PlexPriceRecord(models.Model):
     time = models.DateTimeField(db_index=True, auto_now_add=True)
