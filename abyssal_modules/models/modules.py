@@ -176,6 +176,11 @@ class ModuleBase(models.Model):
     def attribute_list(self):
         return sorted(self.attribute_values.all(), key=lambda x: x.attribute.id)
 
+    def attribute_vector(self):
+        d = self.attribute_dict()
+
+        return [d[x]['real_value'] for x in sorted(d.keys()) if d[x]['display']]
+
     def get_value(self, attr_id):
         if attr_id in DERIVED_ATTRIBUTES:
             return DERIVED_ATTRIBUTES[attr_id]['value'](self)

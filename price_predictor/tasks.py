@@ -29,21 +29,22 @@ def create_model_for_type(t):
         contract_sold=True
     )
 
+    print("\n{:*^80}".format(t.name))
+
     if mods.count() < 50:
+        print("Skipping due to lack of samples...")
         return
 
     samples, features = [], []
 
     for x in mods:
         samples.append((x.contract_price + x.contract_plex * 3300000) / 1000000)
-        features.append([y.value for y in x.attribute_list if y.new_attribute.display])
+        features.append(x.attribute_vector())
 
     scaler = StandardScaler()
     scaler.fit(features)
 
     features = scaler.transform(features)
-
-    print("\n{:*^80}".format(t.name))
 
     reg = SVR()
 
