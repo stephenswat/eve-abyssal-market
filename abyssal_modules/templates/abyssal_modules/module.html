@@ -100,6 +100,7 @@
                 <th>Issued</th>
                 <th>Expires</th>
                 <th>Price</th>
+                <th>Sold</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -110,6 +111,7 @@
                 <td>{{ c.issued_at }}</td>
                 <td>{{ c.expires_at }}</td>
                 <td>{{ c.price|intword }} ISK</td>
+                <td>{{ c.sold|yesno:"Yes,No,Unknown" }}</td>
                 <td>
                     {% if c.available %}
                     <button {% if not request.user.is_authenticated %}disabled{% endif %} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="{{ c.id }}">ESI</button>
