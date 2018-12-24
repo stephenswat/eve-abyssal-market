@@ -1,9 +1,10 @@
 import logging
 import requests
 import datetime
+import time
 
 from huey import crontab
-from huey.contrib.djhuey import db_periodic_task, db_task, lock_task
+from huey.contrib.djhuey import periodic_task, db_periodic_task, db_task, lock_task
 
 from django.db import transaction
 from django.db.models import Q
@@ -158,7 +159,20 @@ def update_plex_price():
     PlexPriceRecord(price=price).save()
 
 
-@db_periodic_task(crontab(minute='*'))
+@periodic_task(crontab(minute='*'))
+def update_contract_sale_status_helper():
+    update_contract_sale_status()
+    time.sleep(10)
+    update_contract_sale_status()
+    time.sleep(10)
+    update_contract_sale_status()
+    time.sleep(10)
+    update_contract_sale_status()
+    time.sleep(10)
+    update_contract_sale_status()
+
+
+@db_task()
 @lock_task('db_periodic_task_lock')
 def update_contract_sale_status():
     if (
