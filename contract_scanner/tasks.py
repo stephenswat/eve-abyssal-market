@@ -1,13 +1,12 @@
 import logging
 import requests
 import datetime
-import time
 
 from huey import crontab
-from huey.contrib.djhuey import periodic_task, db_periodic_task, db_task, lock_task
+from huey.contrib.djhuey import db_periodic_task, db_task, lock_task
 
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from abyssal_modules.models.modules import ModuleType
 from contract_scanner.models import Contract, PlexPriceRecord
@@ -159,20 +158,7 @@ def update_plex_price():
     PlexPriceRecord(price=price).save()
 
 
-@periodic_task(crontab(minute='*'))
-def update_contract_sale_status_helper():
-    update_contract_sale_status()
-    time.sleep(10)
-    update_contract_sale_status()
-    time.sleep(10)
-    update_contract_sale_status()
-    time.sleep(10)
-    update_contract_sale_status()
-    time.sleep(10)
-    update_contract_sale_status()
-
-
-@db_task()
+@db_periodic_task(crontab(minute='*'))
 @lock_task('db_periodic_task_lock')
 def update_contract_sale_status():
     if (
@@ -182,7 +168,12 @@ def update_contract_sale_status():
     ):
         return
 
-    targets = Contract.objects.filter(sold=None, available=False)[:5000]
+    targets = (
+        Contract
+        .objects
+        .annotate(mods=Count('modules'))
+        .filter(mods__gte=1, sold=None, available=False)
+    )
 
     for t in targets:
         try:
