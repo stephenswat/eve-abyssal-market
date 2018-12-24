@@ -4,7 +4,6 @@ from huey import crontab
 from huey.contrib.djhuey import db_periodic_task
 
 from sklearn.svm import SVR
-from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
 
@@ -46,22 +45,8 @@ def create_model_for_type(t):
 
     features = scaler.transform(features)
 
-    reg = SVR()
-
-    param_grid = [
-        {
-            'C': [100, 1000, 10000, 100000, 1000000],
-            'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-            'kernel': ['rbf']
-        }
-    ]
-
-    clf = GridSearchCV(reg, param_grid, cv=3, iid=False)
-    clf.fit(features, samples)
-    print(clf.best_params_)
-
-    reg = SVR(**clf.best_params_)
-    scores = cross_val_score(reg, features, samples)
+    reg = SVR(gamma=0.01, kernel='rbf', C=100000)
+    scores = cross_val_score(reg, features, samples, cv=5)
     print("Accuracy: %0.2f (+/- %0.2f, %d samples)" % (scores.mean(), scores.std() * 2, len(samples)))
 
     reg.fit(features, samples)
