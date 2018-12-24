@@ -3,7 +3,7 @@ import requests
 import datetime
 
 from huey import crontab
-from huey.contrib.djhuey import db_periodic_task, db_task
+from huey.contrib.djhuey import db_periodic_task, db_task, lock_task
 
 from django.db import transaction
 from django.db.models import Q
@@ -11,7 +11,7 @@ from django.db.models import Q
 from abyssal_modules.models.modules import ModuleType
 from contract_scanner.models import Contract, PlexPriceRecord
 from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
-from eve_esi import ESI
+from eve_esi import ESI, EsiException
 from abyssal_modules.tasks import create_module
 
 
@@ -159,6 +159,7 @@ def update_plex_price():
 
 
 @db_periodic_task(crontab(minute='*'))
+@lock_task('db_periodic_task_lock')
 def update_contract_sale_status():
     if (
         datetime.time(hour=10, minute=55) <=
@@ -170,10 +171,13 @@ def update_contract_sale_status():
     targets = Contract.objects.filter(sold=None, available=False)[:5000]
 
     for t in targets:
-        req = ESI.request(
-            'get_contracts_public_items_contract_id',
-            contract_id=t.id
-        )
+        try:
+            req = ESI.head(
+                'get_contracts_public_items_contract_id',
+                contract_id=t.id
+            )
+        except EsiException:
+            continue
 
         if req.status == 403:
             t.sold = True
