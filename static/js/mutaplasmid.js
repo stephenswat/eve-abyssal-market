@@ -67,7 +67,7 @@ function price_format(contract) {
     }
 
     if (contract.price.isk > 0 && contract.price.plex > 0) {
-        base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span> + <span class="plex-field">${price.plex}</span>`;
+        base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span> + <span class="plex-field">${contract.price.plex}</span>`;
     } else if (contract.price.plex > 0) {
         base += `<span class="plex-field">${contract.price.plex}</span>`;
     } else {
