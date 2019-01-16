@@ -88,6 +88,10 @@ class EveUser(models.Model):
                 self.tokens = res.refresh()
             except APIException as e:
                 if e.status_code == 400:
+                    self.scope_open_window = False
+                    self.scope_read_assets = False
+                    self.save()
+
                     raise EveUser.KeyDeletedException(
                         "ESI refused to refresh our tokens."
                     )
