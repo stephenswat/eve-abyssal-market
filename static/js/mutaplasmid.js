@@ -109,7 +109,7 @@ function open_format_non_contract(mod) {
 }
 
 function attr_format(attr, data) {
-    base = `<span class='attr-${attr}'>${data.real_value.toFixed(get_precision(attr))}</span>`;
+    base = `<span class='attr-${attr} attr-cell'>${data.real_value.toFixed(get_precision(attr))}</span>`;
 
     if (data.rating != null && display_rating(attr)) {
         if (data.rating > 0) {

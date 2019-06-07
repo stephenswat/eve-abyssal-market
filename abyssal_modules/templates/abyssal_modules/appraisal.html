@@ -5,11 +5,22 @@
 {% block title %}Module Appraisal{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1>Module Appraisal</h1>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Module Appraisal</span>
+            </h1>
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            This page can be used to get a very rough estimate of the price of
+            abyssal modules. We'll use fancy machine learning algorithms in an
+            attempt to give you a fair appraisal of your module.</p>
+        </div>
+    </div>
+</div>
 
-    <p>This page can be used to get a very rough estimate of the price of
-    abyssal modules. The process is somewhat awkward since there is no "copy
+<div class="container my-5">
+    <p>The process is somewhat awkward since there is no "copy
     external URL" option for modules like there is for killmails. To get an
     appraisal, please follow these steps:</p>
 

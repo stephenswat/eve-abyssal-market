@@ -2,8 +2,8 @@
     <li class="nav-item">
         <a class="nav-link {% if active_page == 'contract_sell' %}active{% endif %}" href="{% url 'abyssal_modules:type_module_list' type_id=module_type.id %}">Sell Orders</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" title="Coming soon!">Buy Orders</a>
+    <li class="nav-item" title="Coming soon!">
+        <a class="nav-link disabled" href="#">Buy Orders</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if active_page == 'asset_list' %}active{% endif %}" href="{% url 'abyssal_modules:type_asset_module_list' type_id=module_type.id %}"">Your Modules</a>

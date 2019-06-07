@@ -8,10 +8,21 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-<h1>Module Types</h1>
 
-<div class="container">
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 col-lg-11 container-alt text-light toggles-ignore mx-auto py-5">
+            <div class="py-2 text-center text-lg-left">
+                <h1 class="display-3 mb-0">
+                    <span data-ng-bind="selected.palette.name" class="ng-binding">mutaplasmid.space</span>
+                </h1>
+                <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">A DIY starter theme.</span> <strong>Easily</strong> customize this, and other free Bootstrap 4 themes for your downloading pleasure.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container d-flex flex-column ng-scope pt-5">
     {% get_abyssal_type_list as type_list %}
     {% for r, l in type_list %}
     <div class="row">
@@ -27,141 +38,49 @@
     {% endfor %}
 </div>
 
-</div>
-
-<div class="row my-4">
-  <div class="col-sm-6">
-       <div class="card flex-row">
-        <div class="card-header border-0 parner-logo">
-            <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
-        </div>
-        <div class="card-block p-3">
-            <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
-            <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center check-contrast">
+        <div class="col-xl-9 col-lg-11 container-alt toggles-ignore mx-auto pt-5">
+            <div class="row py-2">
+                <div class="row my-4">
+                    <div class="col-sm-4">
+                        <div class="card flex-row">
+                            <div class="card-header border-0 parner-logo">
+                                <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
+                            </div>
+                            <div class="card-block p-3">
+                                <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
+                                <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card flex-row">
+                            <div class="card-header border-0 parner-logo">
+                                <img src="{% static 'img/partners/pyfa.png' %}" class="partner-logo">
+                            </div>
+                            <div class="card-block p-3">
+                                <h4 class="card-title"><a href="https://github.com/pyfa-org/Pyfa">Pyfa</a></h4>
+                                <p class="card-text">Pyfa is the best tool available for simulating fits and it can import abyssal modules directly from this website!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card flex-row">
+                            <div class="card-header border-0 parner-logo">
+                                <img src="{% static 'img/partners/discord.png' %}" class="partner-logo">
+                            </div>
+                            <div class="card-block p-3">
+                                <h4 class="card-title"><a href="http://discord.gg/sFrvsGg">Abyssal Trading Discord</a></h4>
+                                <p class="card-text">Chat about, appraise, buy and sell abyssal modules on Discord. Also has an in-game channel: <i>Abyssal Trading</i>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
-  <div class="col-sm-6">
-       <div class="card flex-row">
-        <div class="card-header border-0 parner-logo">
-            <img src="{% static 'img/partners/pyfa.png' %}" class="partner-logo">
-        </div>
-        <div class="card-block p-3">
-            <h4 class="card-title"><a href="https://github.com/pyfa-org/Pyfa">Pyfa</a></h4>
-            <p class="card-text">Pyfa is the best tool available for simulating fits and it can import abyssal modules directly from this website!</p>
-        </div>
-    </div>
-  </div>
-</div>
-<div class="row my-4">
-  <div class="col-sm-6">
-       <div class="card flex-row">
-        <div class="card-header border-0 parner-logo">
-            <img src="{% static 'img/partners/discord.png' %}" class="partner-logo">
-        </div>
-        <div class="card-block p-3">
-            <h4 class="card-title"><a href="http://discord.gg/sFrvsGg">Abyssal Trading Discord</a></h4>
-            <p class="card-text">Chat about, appraise, buy and sell abyssal modules on Discord. Also has an in-game channel: <i>Abyssal Trading</i>.</p>
-        </div>
-    </div>
-  </div>
 </div>
 
-<div class="jumbotron">
-    <h2>Latest Abyssal Modules</h2>
 
-    <table class="table module-table dt-responsive" id="module-table" width="100%">
-        <thead>
-            <tr>
-                <th>Icon</th>
-                <th>Module</th>
-                <th>Attributes</th>
-                <th>Price</th>
-                <th width="1px">Open</th>
-            </tr>
-        </thead>
-    </table>
-</div>
-{% endblock %}
-
-{% block trailing_js %}
-<script>
-{% if not request.user.is_authenticated %}
-var logged_in = false;
-{% else %}
-var logged_in = true;
-{% endif %}
-
-function icon_format(mid, tid) {
-    return `<a href="/module/${mid}/"><img src="https://image.eveonline.com/Type/${tid}_32.png"></a>`
-}
-
-function link_format(type_id, type_name) {
-    return `<a href="/type/${type_id}/">${type_name}</a>`
-}
-
-$(document).ready(function () {
-    {% if not request.user.is_authenticated %}
-    $('.btn-open-contract-esi').prop('disabled', true);
-    {% endif %}
-
-    $('#module-table').DataTable({
-        "processing": true,
-        "ajax": {
-            url: "{% url 'abyssal_api:lastest_modules' %}",
-            dataSrc: ''
-        },
-        "columns": [
-                {
-                    'name': 'id',
-                    'orderable': false,
-                    'data': null,
-                    'render': function (data, type, row, meta) {
-                        return icon_format(data.id, data.type_id);
-                    }
-                },
-                {
-                    'name': 'module',
-                    'data': null,
-                    'render': function (data, type, row, meta) {
-                        return link_format(data.type_id, data.type_name);
-                    }
-                },
-                {
-                    'name': 'attributes',
-                    'data': 'attributes',
-                    'render': function (data, type, row, meta) {
-                        return attribute_format(data);
-                    }
-                },
-                {
-                    'name': 'price',
-                    'data': 'contract',
-                    'type': 'num',
-                    'render': {
-                        'display': function (data, type, row, meta) {
-                            return price_format(data);
-                        },
-                        '_': 'price.total',
-                    }
-                },
-                {
-                    'name': 'open',
-                    'orderable': false,
-                    'render': {
-                        '_': function (data, type, row, meta) {
-                            return open_format(row, logged_in);
-                        }
-                    }
-                },
-            ],
-        "order": [],
-        "deferRender": true,
-        "initComplete": function(settings, json) {
-            initializeEsiButtons();
-        }
-    });
-
-});
-</script>
 {% endblock %}

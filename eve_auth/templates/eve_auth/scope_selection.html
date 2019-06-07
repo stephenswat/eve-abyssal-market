@@ -5,9 +5,21 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-<h1>Select Scopes</h1>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Login</span>
+            </h1>
 
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            Which information would you like to share with us?
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
 <form action="" method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
@@ -15,5 +27,6 @@
         <button type="submit" class="btn btn-primary">Continue to EVE SSO</button>
     {% endbuttons %}
 </form>
+</div>
 
 {% endblock %}

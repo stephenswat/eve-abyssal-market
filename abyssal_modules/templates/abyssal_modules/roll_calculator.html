@@ -16,11 +16,21 @@
     {% endfor %}
 </style>
 
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">{{ module_type.name }}</span>
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
 {% include "abyssal_modules/module_tabs.html" with active_page="roll_calculator" %}
+</div>
 
-<div class="jumbotron jumbotron-tabs">
-    <h1>{{ module_type.name }}</h1>
-
+<div class="container my-5">
     <form>
         <div class="row">
             <div class="form-group col-6">

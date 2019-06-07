@@ -5,18 +5,33 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-<h1>{{ user.username }}</h1>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">{{ user.username }}</span>
+            </h1>
 
-<dl>
-{% for c in characters.all %}
-<dt>{{ c.name }}</dt>
-<dd>
-Permission to open windows: {{ c.scope_open_window|yesno:"Yes,No" }}
-<br>
-Permission to read assets: {{ c.scope_read_assets|yesno:"Yes,No" }}
-</dd>
-{% endfor %}
-</dl>
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            Smile! That's you!
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <dl>
+    {% for c in characters.all %}
+    <dt>{{ c.name }}</dt>
+    <dd>
+    Permission to open windows: {{ c.scope_open_window|yesno:"Yes,No" }}
+    <br>
+    Permission to read assets: {{ c.scope_read_assets|yesno:"Yes,No" }}
+    </dd>
+    {% endfor %}
+    </dl>
+
+    <a class="btn btn-primary text-light" href="{% url 'eve_auth:login' %}">Add character</a>
+</div>
 
 {% endblock %}

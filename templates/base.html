@@ -27,14 +27,14 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="{% static 'css/superhero.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}" />
     <link rel="stylesheet" href="{% static 'css/abyssal.css' %}" />
   </head>
 
   <body>
     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
       <a class="navbar-brand" href="/">Abyssal Market</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggled">
@@ -75,22 +75,18 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'abyssal_modules:appraisal' %}">Appraisal</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'abyssal_modules:statistics' %}">Statistics</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
-          </li>
         </ul>
         <ul class="navbar-nav navbar-right">
           {% if user.is_authenticated %}
             <li class="nav-item my-auto">
-              <a class="nav-link p-0" href="{% url 'eve_auth:profile' %}">
-                <img src="https://image.eveonline.com/Character/{{ user.eve.character_id}}_32.jpg" class="avatar" />{{ user.eve.name }}
+              <a class="nav-link p-0" href="#">
+                <img src="https://image.eveonline.com/Character/{{ user.eve.character_id}}_32.jpg" class="avatar" />
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'eve_auth:login' %}">Add character</a>
+            <li class="nav-item my-auto">
+              <a class="nav-link p-0" href="{% url 'eve_auth:profile' %}">
+                {{ user.eve.name }}
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'eve_auth:logout' %}">
@@ -112,15 +108,16 @@
       {% endfor %}
     </div>
 
-    <main class="container">
-      {% block content %} {% endblock %}
-    </main>
+    {% block content %}{% endblock %}
 
-    <footer>
+    <footer class="footer mt-auto py-3 text-light">
       <div class="container">
 
-        <p>Made with &#x1F914;&#x1F52A; by <a
-        href="https://evewho.com/pilot/Sharad+Heft">Sharad Heft</a> &bull; <a href="{% url 'faq' %}">FAQ</a> &bull; <a href="{% url 'legal' %}">Legal</a> &bull; <a href="https://github.com/StephenSwat/eve-abyssal-market">GitHub</a></p>
+        Made with &#x1F914;&#x1F52A; by <a href="https://evewho.com/pilot/Sharad+Heft">Sharad Heft</a> &bull; Sharad#4720 &bull; 
+        <a href="{% url 'faq' %}">FAQ</a> &bull; 
+        <a href="{% url 'legal' %}">Legal</a> &bull; 
+        <a href="{% url 'abyssal_modules:statistics' %}">Statistics</a> &bull; 
+        <a href="https://github.com/StephenSwat/eve-abyssal-market">GitHub</a>
 
       </div>
     </footer>

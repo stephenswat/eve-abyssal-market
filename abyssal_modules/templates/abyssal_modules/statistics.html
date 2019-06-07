@@ -7,7 +7,20 @@
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 
-<div class="jumbotron">
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Statistics</span>
+            </h1>
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            A page for stat nerds. If you're a machine learning person and you want to help improve
+            the price predictor, contact me!</p>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
     <h1>Statistics</h1>
 
     <h4>Modules known</h4>
@@ -84,8 +97,6 @@
 
 {% block trailing_js %}
 <script>
-Chart.defaults.global.defaultFontColor = 'white';
-
 var colours = [
     'rgb(255, 0, 41)',
     'rgb(55, 126, 184)',
@@ -122,7 +133,7 @@ var config_module_count_history = {
                 },
                 {% endfor %}
             ],
-            backgroundColor: 'rgb(189, 189, 189)',
+            backgroundColor: 'rgb(134, 32, 32)',
             lineTension: 0
         }],
     },

@@ -3,10 +3,20 @@
 {% block title %}Legal Information{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1>Legal</h1>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Legal</span>
+            </h1>
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            I would prefer not to get sued.</p>
+        </div>
+    </div>
+</div>
 
-    <p>Mutaplasmid.space uses Google Analytics for site maintenance and
+<div class="container container-narrow my-5">
+    <p>mutaplasmid.space uses Google Analytics for site maintenance and
     tracking, which uses cookies. The website administrator has configured
     Google Analytics in accordance with the manual for GDPR compliance
     published by the Dutch Data Protection Authority (DDPA or Autoriteit

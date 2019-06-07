@@ -16,16 +16,27 @@
     {% endfor %}
 </style>
 
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">{{ module_type.name }}</span>
+            </h1>
+
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            This page displays abyssal modules in your hangar. To
+            have the service scrape your asset list, add characters using the "Add
+            character" button in the top right and make sure you check the asset
+            reading scope.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
 {% include "abyssal_modules/module_tabs.html" with active_page="asset_list" %}
+</div>
 
-<div class="jumbotron jumbotron-tabs">
-    <h1>{{ module_type.name }}</h1>
-
-    <p class="text-muted">This page displays abyssal modules in your hangar. To
-    have the service scrape your asset list, add characters using the "Add
-    character" button in the top right and make sure you check the asset
-    reading scope.</p>
-
+<div class="container my-5">
     <form>
         <div class="row">
             {% for at in attributes %}
@@ -35,7 +46,7 @@
     </form>
 </div>
 
-<div class="jumbotron">
+<div class="container my-5">
     <table class="table module-table dt-responsive" id="module-table">
         <thead>
             <tr>

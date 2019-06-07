@@ -3,13 +3,23 @@
 {% block title %}Frequently Asked Questions{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1>Frequently Asked Questions</h1>
 
-    <p>Please note that not all questions on this page are actually
-    <em>frequently asked</em>. Many of these questions may have been asked only
-    once. Others have never been asked at all and are just predictions, made by
-    me, of what people could ask me in the future.</p>
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">Frequently Asked Questions</span>
+            </h1>
+            <p class="lead mb-3"><span data-ng-bind="selected.palette.desc" class="ng-binding">
+            Please note that not all questions on this page are actually
+            <em>frequently asked</em>. Many of these questions may have been asked only
+            once. Others have never been asked at all and are just predictions, made by
+            me, of what people could ask me in the future.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container container-narrow my-5">
 
     <h5>What does this website do?</h5>
 
