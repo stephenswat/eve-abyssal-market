@@ -194,11 +194,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Importing types and attributes...")
         self.import_types()
-        print("Repairing bad attributes...")
-        self.repair_attributes()
         print("Importing mutators...")
         self.import_mutators()
         print("Creating derived attributes...")
         self.create_derived()
         print("Importing static types...")
         self.create_static_types()
+        print("Repairing bad attributes...")
+        self.repair_attributes()
