@@ -127,7 +127,7 @@ class Command(BaseCommand):
                     }
                 )
 
-        for attr_id in [73, 1795, 147, 213, 204]:
+        for attr_id in [73, 1795, 147, 213, 204, 974, 975, 976, 977]:
             original = ModuleDogmaAttribute.objects.get(id=attr_id)
 
             new, _ = ModuleDogmaAttribute.objects.update_or_create(

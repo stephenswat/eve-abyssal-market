@@ -15,6 +15,8 @@ RELEVANT_ATTRIBUTES = {
     'stasis_webifier': [(50, False), (30, False), (6, False), (54, True), (20, False)],
     'damage_mod': [(50, False), (64, True), (204, True)],
     'damage_mod_bcs': [(50, False), (213, True), (204, True), (1255, True)],
+    'damage_control': [(50, False), (974, False), (975, False), (976, False), (977, False)],
+    'assault_damage_control': [(50, False), (73, True), (974, False), (975, False), (976, False), (977, False)],
 }
 
 ITEMS = [
@@ -269,6 +271,18 @@ ITEMS = [
         "normal_id": 47908,
         "name": "Abyssal Entropic Radiation Sink",
         "relevant_attributes": RELEVANT_ATTRIBUTES['damage_mod'],
+    },
+    {
+        "abyssal_id": 52227,
+        "normal_id": 2048,
+        "name": "Abyssal Damage Control",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['damage_control'],
+    },
+    {
+        "abyssal_id": 52230,
+        "normal_id": 47257,
+        "name": "Abyssal Assault Damage Control",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['assault_damage_control'],
     },
 ]
 

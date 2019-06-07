@@ -79,4 +79,8 @@ def get_abyssal_type_list():
             ("Ballistic Control", 49738),
             ("Entropic Sink", 49734)
         ]),
+        ("Damage Control", [
+            ("Standard", 52227),
+            ("Assault", 52230)
+        ]),
     ]
