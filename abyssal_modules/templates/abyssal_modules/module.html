@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
+{% load module_stats %}
 {% load price_predictor %}
 
 {% block title %}{{ object.creator.name }}'s Modified {{ object.type.name }}{% endblock %}
@@ -8,7 +9,7 @@
 {% block metadata %}
 <meta property="og:title" content="{{ object.creator.name }}'s Modified {{ object.type.name }}" />
 <meta property="og:image" content="https://image.eveonline.com/Type/{{ object.type.id }}_64.png" />
-<meta property="og:description" content="{% for i, a in object.attribute_dict.items %}{% if a.display %}{{ a.name }}: {{ a.real_value|floatformat }} {{ a.unit }}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}" />
+<meta property="og:description" content="{% for i, a in object.attribute_dict.items %}{% if a.display %}{{ a.name }}: {{ object|format_attribute:i }} {{ a.unit }}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}" />
 {% endblock %}
 
 {% block content %}
@@ -57,7 +58,7 @@
             <dt>
                 <img src="/static/img/attributes/{{ i }}.png" title="{{ a.name }}"> {{ a.name }}</dt>
             <dd>
-                {{ a.real_value|floatformat }} {{ a.unit }}
+                {{ object|format_attribute:i }} {{ a.unit }}
                 {% if a.rating == 0 %}
                 <span class="module-rating text-warning">±{{ a.rating }}</span>
                 {% elif a.rating > 0 %}
