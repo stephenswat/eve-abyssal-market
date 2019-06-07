@@ -71,6 +71,22 @@ class Command(BaseCommand):
             name="Capacitor Warfare Resistance"
         )
 
+        ModuleDogmaAttribute.objects.filter(id=10974).update(
+            name="Hull EM Resistance"
+        )
+
+        ModuleDogmaAttribute.objects.filter(id=10975).update(
+            name="Hull Explosive Resistance"
+        )
+
+        ModuleDogmaAttribute.objects.filter(id=10976).update(
+            name="Hull Kinetic Resistance"
+        )
+
+        ModuleDogmaAttribute.objects.filter(id=10977).update(
+            name="Hull Thermal Resistance"
+        )
+
     def import_mutators(self):
         data = requests.get('http://sde.hoboleaks.space/tq/dynamicitemattributes.json').json()
 
