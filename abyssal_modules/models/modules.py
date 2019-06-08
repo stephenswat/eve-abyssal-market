@@ -108,7 +108,7 @@ class AvailableModuleManager(ModuleManager):
                 contract_plex=F('contracts__plex'),
                 contract_price_inc_plex=ExpressionWrapper(
                     Cast('contracts__plex', BigIntegerField()) *
-                    Value(3300000, output_field=BigIntegerField()) +
+                    Value(4100000, output_field=BigIntegerField()) +
                     F('contracts__price'),
                     output_field=DecimalField()
                 ),
