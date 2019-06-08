@@ -87,6 +87,8 @@ class Command(BaseCommand):
             name="Hull Thermal Resistance"
         )
 
+        TypeAttribute.objects.filter(attribute__id__in=[10974, 10975, 10976, 10977]).update(high_is_good=True)
+
     def import_mutators(self):
         data = requests.get('http://sde.hoboleaks.space/tq/dynamicitemattributes.json').json()
 
