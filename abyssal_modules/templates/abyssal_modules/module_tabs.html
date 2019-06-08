@@ -1,6 +1,9 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link {% if active_page == 'contract_sell' %}active{% endif %}" href="{% url 'abyssal_modules:type_module_list' type_id=module_type.id %}">Sell Orders</a>
+        <a class="nav-link {% if active_page == 'contract_sell' %}active{% endif %}" href="{% url 'abyssal_modules:type_module_list' type_id=module_type.id %}">Contracts</a>
+    </li>
+    <li class="nav-item" title="Coming soon!">
+        <a class="nav-link disabled" href="#">Sell Orders</a>
     </li>
     <li class="nav-item" title="Coming soon!">
         <a class="nav-link disabled" href="#">Buy Orders</a>
