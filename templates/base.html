@@ -77,6 +77,9 @@
           </li>
         </ul>
         <ul class="navbar-nav navbar-right">
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:toggle_mode()"><i class="fa fa-moon-o" aria-hidden="true" id="mode-toggle"></i></a>
+            </li>
           {% if user.is_authenticated %}
             <li class="nav-item my-auto">
               <a class="nav-link p-0" href="#">
