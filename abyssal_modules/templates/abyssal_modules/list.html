@@ -72,20 +72,24 @@
             </div>
         </div>
     </form>
+</div>
 
-    <div class="mt-5">
-        <table class="table module-table dt-responsive" id="module-table">
-            <thead>
-                <tr>
-                    <th width="1px">Icon</th>
-                    {% for at in attributes %}
-                    <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
-                    {% endfor %}
-                    <th>Price</th>
-                    <th width="0px">Actions</th>
-                </tr>
-            </thead>
-        </table>
+<div class="container-fluid my-5">
+    <div class="row align-items-center">
+        <div class="col-xl-9 toggles-ignore mx-auto">
+            <table class="table module-table dt-responsive" id="module-table">
+                <thead>
+                    <tr>
+                        <th width="1px">Icon</th>
+                        {% for at in attributes %}
+                        <th><img src="{% static at.icon_path %}" title="{{ at.name }}"></th>
+                        {% endfor %}
+                        <th>Price</th>
+                        <th width="0px">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
