@@ -341,3 +341,6 @@ body.dark-mode .nav-tab.nav-link.disabled {
     border-color: #444444 !important;
 }
 
+body.dark-mode table th, body.dark-mode table td {
+    border-color: #444444;
+}
