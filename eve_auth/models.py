@@ -45,8 +45,8 @@ class EveUser(models.Model):
     scope_read_assets = models.BooleanField()
     scope_open_window = models.BooleanField()
 
-    access_token = models.CharField(max_length=128)
-    refresh_token = models.CharField(max_length=128)
+    access_token = models.CharField(max_length=8192)
+    refresh_token = models.CharField(max_length=8192)
     token_expiry = models.DateTimeField()
 
     def __str__(self):
