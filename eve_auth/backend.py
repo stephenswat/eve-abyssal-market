@@ -24,6 +24,8 @@ class EveAuthBackend:
             character.owner = request.user
         elif hasattr(character, 'owner'):
             pass
+        elif User.objects.filter(username=info['CharacterName']).exists():
+            character.owner = User.objects.get(username=info['CharacterName'])
         else:
             character.owner = User.objects.create_user(info['CharacterName'])
 
