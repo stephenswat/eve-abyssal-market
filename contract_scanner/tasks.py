@@ -68,7 +68,7 @@ def scan_contract(contract_dict, region_id):
         contract.plex = 0
 
         for item in data:
-            if item['type_id'] in abyssal_ids:
+            if item['type_id'] in abyssal_ids and item.get('is_included', True):
                 items += 1
 
                 logger.info(
