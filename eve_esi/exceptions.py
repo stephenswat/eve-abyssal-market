@@ -7,3 +7,6 @@ class EsiException(Exception):
         )
 
         super().__init__(message)
+
+        self.status = status
+        self.params = args
