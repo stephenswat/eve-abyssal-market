@@ -1,3 +1,5 @@
+import logging
+
 from django.db import transaction, connection
 
 from huey import crontab
@@ -7,7 +9,10 @@ from abyssal_modules.metrics import COUNTER_MODULES_CREATED
 from abyssal_modules.models.modules import Module
 from abyssal_modules.models.attributes import ModuleAttribute, ModuleDogmaAttribute, TypeAttribute
 from abyssal_modules.models.characters import EveCharacter
-from eve_esi import ESI
+from eve_esi import ESI, EsiException
+
+
+logger = logging.getLogger(__name__)
 
 
 @db_task(retries=1000, retry_delay=60)
@@ -18,11 +23,15 @@ def create_module(type_id, item_id, force=False):
         except Module.DoesNotExist:
             pass
 
-    module_data = ESI.request(
-        'get_dogma_dynamic_items_type_id_item_id',
-        type_id=type_id,
-        item_id=item_id
-    ).data
+    try:
+        module_data = ESI.request(
+            'get_dogma_dynamic_items_type_id_item_id',
+            type_id=type_id,
+            item_id=item_id
+        ).data
+    except EsiException as e:
+        logger.exception("Retrieval of stats for module %d failed (status %d)", item_id, e.status)
+        return
 
     with transaction.atomic():
         character = EveCharacter.objects.get_or_create_by_id(

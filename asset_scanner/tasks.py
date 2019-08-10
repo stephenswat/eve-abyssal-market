@@ -6,7 +6,7 @@ from huey.contrib.djhuey import db_periodic_task, db_task
 from django.db import transaction
 
 from abyssal_modules.models.modules import ModuleType
-from eve_esi import ESI
+from eve_esi import ESI, EsiException
 from abyssal_modules.tasks import create_module
 from eve_auth.models import EveUser
 from asset_scanner.models import AssetRecord
@@ -21,12 +21,16 @@ def read_assets_for_character(character):
         x for x in ModuleType.objects.values_list('id', flat=True)
     }
 
-    items = ESI.request(
-        'get_characters_character_id_assets',
-        client=character.get_client(),
-        multi_page=True,
-        character_id=character.character_id
-    )
+    try:
+        items = ESI.request(
+            'get_characters_character_id_assets',
+            client=character.get_client(),
+            multi_page=True,
+            character_id=character.character_id
+        )
+    except EsiException as e:
+        logger.exception("Retrieval of assets for character %d failed (status %d)", character.character_id, e.status)
+        return
 
     abyssal_modules = [
         x for x in items
