@@ -47,7 +47,7 @@ def read_assets_for_character(character):
             ).save()
 
 
-@db_periodic_task(crontab(minute='30', hour='*/2'))
+@db_periodic_task(crontab(minute='0', hour='*/12'))
 def read_all_assets():
     for x in EveUser.objects.filter(scope_read_assets=True):
         read_assets_for_character(x)
