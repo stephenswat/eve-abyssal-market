@@ -33,7 +33,7 @@ def read_assets_for_character(character):
         return
 
     abyssal_modules = [
-        x for x in items
+        create_module.call_local(x['type_id'], x['item_id']) for x in items
         if x['type_id'] in valid_module_types
     ]
 
@@ -43,7 +43,7 @@ def read_assets_for_character(character):
         for x in abyssal_modules:
             AssetRecord(
                 owner=character,
-                module=create_module.call_local(x['type_id'], x['item_id'])
+                module=x
             ).save()
 
 
