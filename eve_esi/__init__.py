@@ -1,3 +1,6 @@
+import threading
+import logging
+
 import esipy
 
 from django.conf import settings
@@ -6,16 +9,33 @@ from eve_esi.metrics import COUNTER_ESI_REQUESTS
 from eve_esi.exceptions import EsiException
 
 
+logger = logging.getLogger(__name__)
+
+
 class EsiManager:
     _ESI_APP = None
+    _LOCK = threading.Lock()
+
+    def _initialize_app(self):
+        logger.debug("Initializing ESI app, attempting to acquire mutex lock...")
+        self._LOCK.acquire()
+        logger.debug("Mutex lock acquired!")
+
+        if self._ESI_APP is None:
+            logger.debug("Application still uninitialized. Initializing...")
+            self._ESI_APP = esipy.EsiApp(
+                datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility')
+            ).get_latest_swagger
+            logger.debug("Application initialized!")
+        else:
+            logger.debug("Another thread got here before us, nothing to be done!")
+
+        self._LOCK.release()
 
     @property
     def app(self):
         if self._ESI_APP is None:
-            self._ESI_APP = esipy.EsiApp(
-                datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility')
-            ).get_latest_swagger
-
+            self._initialize_app()
         return self._ESI_APP
 
     def get_security(self):
