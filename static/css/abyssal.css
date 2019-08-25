@@ -344,3 +344,7 @@ body.dark-mode .nav-tab.nav-link.disabled {
 body.dark-mode table th, body.dark-mode table td {
     border-color: #444444;
 }
+
+body.dark-mode .dataTables_processing {
+    background-color: #444444 !important;
+}
