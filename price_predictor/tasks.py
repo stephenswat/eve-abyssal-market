@@ -20,12 +20,10 @@ def create_model_for_type(t):
         contract_single=F('contracts__single_item'),
         contract_auction=F('contracts__auction'),
         contract_available=F('contracts__available'),
-        contract_sold=F('contracts__sold')
     ).filter(
         contract_single=True,
         contract_auction=False,
         contract_available=False,
-        contract_sold=True
     )
 
     print("\n{:*^80}".format(t.name))
