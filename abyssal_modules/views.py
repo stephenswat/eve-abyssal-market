@@ -129,7 +129,7 @@ class AppraisalView(FormView):
     def form_valid(self, form):
         type_id, item_id = form.cleaned_data['text']
 
-        module = create_module.call_local(type_id, item_id)
+        module = create_module(type_id, item_id)(blocking=True)
 
         return HttpResponseRedirect(
             reverse(

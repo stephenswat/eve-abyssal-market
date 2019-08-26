@@ -151,10 +151,10 @@ class ModuleSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         assert(set(validated_data.keys()) == {'id', 'type_id'})
 
-        module = create_module.call_local(
+        module = create_module(
             validated_data['type_id'],
             validated_data['id']
-        )
+        )(blocking=True)
 
         if module is None:
             raise InvalidModuleCreationException
