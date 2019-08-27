@@ -112,5 +112,5 @@ class TypeAttribute(models.Model):
     def pyfa_display(self):
         return self.attribute_id in {
             1795, 6, 1159, 20, 796, 30, 554, 50, 54, 64, 67, 68, 72, 73, 204,
-            84, 213, 983, 90, 2267, 97
+            84, 213, 983, 90, 2267, 97, 974, 975, 976, 977
         }
