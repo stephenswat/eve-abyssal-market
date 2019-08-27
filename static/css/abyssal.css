@@ -352,3 +352,9 @@ body.dark-mode .dataTables_processing {
 .footer a {
     color: #d53f3f !important;
 }
+
+@media(max-width:767px) {
+    h1 {
+        font-size: 24pt !important;
+    }
+}

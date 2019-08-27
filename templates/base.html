@@ -82,28 +82,31 @@
           </li>
         </ul>
         <ul class="navbar-nav navbar-right">
-            <li class="nav-item mx-2">
-              <a class="nav-link" href="javascript:toggle_mode()"><i class="fa fa-moon-o" aria-hidden="true" id="mode-toggle"></i></a>
+            <li class="nav-item mr-3">
+              <a class="nav-link" href="javascript:toggle_mode()">
+                <i class="fa fa-moon-o" aria-hidden="true" id="mode-toggle"></i>
+                <span class="d-md-none">Dark/light mode</span>
+              </a>
             </li>
           {% if user.is_authenticated %}
-            <li class="nav-item dropdown my-auto mx-2">
-              <a class="nav-link dropdown-toggle py-0 mx-2" href="#" id="navbar_character_dropdown" role="button" data-toggle="dropdown">
-                <img src="https://image.eveonline.com/Character/{{ user.eve.character_id}}_32.jpg" class="avatar mr-0" />
+            <li class="nav-item dropdown my-auto mr-3">
+              <a class="nav-link dropdown-toggle py-0 mr-2" href="#" id="navbar_character_dropdown" role="button" data-toggle="dropdown">
+                <img src="https://image.eveonline.com/Character/1_32.jpg" height="32px" class="avatar mr-0" id="current_character_avatar"/>
                 <span class="align-middle">{{ user.eve.name }}</span>
               </a>
             </li>
-            <li class="nav-item my-auto mx-2">
+            <li class="nav-item my-auto mr-3">
               <a class="nav-link p-0" href="{% url 'eve_auth:profile' %}">
                 <i class="fas fa-user mr-1"></i> Account
               </a>
             </li>
-            <li class="nav-item my-auto mx-2">
+            <li class="nav-item my-auto mr-3">
               <a class="nav-link" href="{% url 'eve_auth:logout' %}">
                 <i class="fas fa-sign-out-alt mr-1"></i> Log out
               </a>
             </li>
           {% else %}
-            <li class="nav-item my-auto mx-2">
+            <li class="nav-item my-auto mr-3">
               <a class="nav-link" href="{% url 'eve_auth:login' %}">
                 <i class="fas fa-sign-in-alt mr-1"></i> Log in
               </a>
