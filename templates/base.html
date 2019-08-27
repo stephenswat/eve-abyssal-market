@@ -25,13 +25,18 @@
 
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{% static 'css/theme.css' %}" />
     <link rel="stylesheet" href="{% static 'css/abyssal.css' %}" />
   </head>
 
   <body>
+    <script>
+      if ((localStorage.getItem('lighting_display_mode') || 'light') == "dark") {
+        document.querySelector('body').classList.add('dark-mode');
+      }
+    </script>
+
     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
 
     <nav class="navbar navbar-expand-md navbar-dark bg-primary">
@@ -143,6 +148,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="{% static 'js/mutaplasmid.js' %}"></script>
+    <script src="{% static 'js/dark_mode.js' %}"></script>
 
     <script>
       $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
