@@ -153,7 +153,8 @@ class ModuleSerializer(serializers.HyperlinkedModelSerializer):
 
         module = create_module(
             validated_data['type_id'],
-            validated_data['id']
+            validated_data['id'],
+            priority=1000,
         )(blocking=True)
 
         if module is None:
