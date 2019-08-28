@@ -94,8 +94,10 @@
             <li class="nav-item dropdown my-auto mr-3">
               <a class="nav-link dropdown-toggle py-0 mr-2" href="#" id="navbar_character_dropdown" role="button" data-toggle="dropdown">
                 <img src="https://image.eveonline.com/Character/1_32.jpg" height="32px" class="avatar mr-0" id="current_character_avatar"/>
-                <span class="align-middle">{{ user.eve.name }}</span>
+                <span class="align-middle" id="current_character_name"></span>
               </a>
+              <div class="dropdown-menu" id="character_select_list">
+              </div>
             </li>
             <li class="nav-item my-auto mr-3">
               <a class="nav-link p-0" href="{% url 'eve_auth:profile' %}">
@@ -132,6 +134,10 @@
       </div>
     </footer>
 
+    <script>
+      var user_logged_in = {{ user.is_authenticated|yesno:"true,false" }};
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/dataTables.bootstrap4.min.css"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"/>
@@ -148,6 +154,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="{% static 'js/mutaplasmid.js' %}"></script>
     <script src="{% static 'js/dark_mode.js' %}"></script>
+    <script src="{% static 'js/character_switch.js' %}"></script>
 
     <script>
       $('.dropdown-accordion').on('show.bs.dropdown', function (event) {
