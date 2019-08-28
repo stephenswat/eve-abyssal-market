@@ -134,6 +134,8 @@
       </div>
     </footer>
 
+    {{ eve_characters|json_script:'eve_characters' }}
+
     <script>
       var user_logged_in = {{ user.is_authenticated|yesno:"true,false" }};
     </script>

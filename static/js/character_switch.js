@@ -1,13 +1,4 @@
-var logged_in = true;
-
-var toons = {
-    96516387: {
-        name: "Laya Heft"
-    },
-    92321562: {
-        name: "Sharad Heft"
-    }
-}
+var toons = JSON.parse(document.getElementById('eve_characters').textContent);
 
 function set_active_character(id) {
     localStorage.setItem('selected_character', id);
