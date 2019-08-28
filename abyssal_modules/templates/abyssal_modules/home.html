@@ -8,7 +8,7 @@
 {% block title %}Homepage{% endblock %}
 
 {% block header %}
-<div class="container-fluid d-flex flex-column ng-scope">
+<div class="container-fluid">
     <div class="row align-items-center bg-primary check-contrast py-5">
         <div class="col-xl-9 col-lg-11 container-alt text-light toggles-ignore mx-auto py-5">
             <div class="py-2 text-center text-lg-left">
@@ -23,11 +23,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="container d-flex flex-column ng-scope pt-5">
-    {% get_abyssal_type_list as type_list %}
-    {% for r, l in type_list %}
+<div class="container pt-5">
     <div class="row">
-        <div class="col-md-3 col-12" style="display:flex;align-items:center;">
+        {% get_abyssal_type_list as type_list %}
+        {% for r, l in type_list %}
+        <div class="col-md-3 col-12">
             <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png" style="padding-right: 7px;">{{ r }}
         </div>
         <div class="col-md-9 col-12 row m-0 p-0">
@@ -35,48 +35,43 @@
             <div class="col p-1"><a class="btn btn-sm btn-block btn-primary" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></div>
             {% endfor %}
         </div>
+        <div class="w-100"></div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
-<div class="container-fluid d-flex flex-column ng-scope">
-    <div class="row align-items-center check-contrast">
-        <div class="col-xl-9 col-lg-11 container-alt toggles-ignore mx-auto pt-5">
-            <div class="row py-2">
-                <div class="row my-4">
-                    <div class="col-sm-4">
-                        <div class="card flex-row bg-light">
-                            <div class="card-header border-0 parner-logo">
-                                <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
-                            </div>
-                            <div class="card-block p-3">
-                                <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
-                                <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card flex-row bg-light">
-                            <div class="card-header border-0 parner-logo">
-                                <img src="{% static 'img/partners/pyfa.png' %}" class="partner-logo">
-                            </div>
-                            <div class="card-block p-3">
-                                <h4 class="card-title"><a href="https://github.com/pyfa-org/Pyfa">Pyfa</a></h4>
-                                <p class="card-text">Pyfa is the best tool available for simulating fits and it can import abyssal modules directly from this website!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card flex-row bg-light">
-                            <div class="card-header border-0 parner-logo">
-                                <img src="{% static 'img/partners/discord.png' %}" class="partner-logo">
-                            </div>
-                            <div class="card-block p-3">
-                                <h4 class="card-title"><a href="http://discord.gg/sFrvsGg">Abyssal Trading Discord</a></h4>
-                                <p class="card-text">Chat about, appraise, buy and sell abyssal modules on Discord. Also has an in-game channel: <i>Abyssal Trading</i>.</p>
-                            </div>
-                        </div>
-                    </div>
+<div class="container-fluid">
+    <div class="row py-2 my-4 justify-content-center">
+        <div class="col-12 col-lg-3">
+            <div class="card flex-row bg-light">
+                <div class="card-header border-0 parner-logo">
+                    <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
+                </div>
+                <div class="card-block p-3">
+                    <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
+                    <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3">
+            <div class="card flex-row bg-light">
+                <div class="card-header border-0 parner-logo">
+                    <img src="{% static 'img/partners/pyfa.png' %}" class="partner-logo">
+                </div>
+                <div class="card-block p-3">
+                    <h4 class="card-title"><a href="https://github.com/pyfa-org/Pyfa">Pyfa</a></h4>
+                    <p class="card-text">Pyfa is the best tool available for simulating fits and it can import abyssal modules directly from this website!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3">
+            <div class="card flex-row bg-light">
+                <div class="card-header border-0 parner-logo">
+                    <img src="{% static 'img/partners/discord.png' %}" class="partner-logo">
+                </div>
+                <div class="card-block p-3">
+                    <h4 class="card-title"><a href="http://discord.gg/sFrvsGg">Abyssal Trading Discord</a></h4>
+                    <p class="card-text">Chat about, appraise, buy and sell abyssal modules on Discord. Also has an in-game channel: <i>Abyssal Trading</i>.</p>
                 </div>
             </div>
         </div>
