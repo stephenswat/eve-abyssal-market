@@ -15,10 +15,16 @@ function open_contract(e) {
     $.ajax({
         type: "POST",
         url: "/view_contract/",
-        data: { contract_id: e.data('contract-id') },
+        data: { 
+            contract_id: e.data('contract-id'),
+            character_id: localStorage.getItem('selected_character')
+        },
         success: function () {
             setTooltip(e, 'Opened!');
-        }
+        },
+        error: function () {
+            setTooltip(e, 'Error!');
+        },
     });
 }
 

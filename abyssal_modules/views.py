@@ -13,6 +13,7 @@ from abyssal_modules.models.attributes import TypeAttribute
 from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.models.mutators import Mutator
 from eve_esi import ESI
+from eve_auth.models import EveUser
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
@@ -141,9 +142,14 @@ class AppraisalView(FormView):
 
 class OpenContractView(LoginRequiredMixin, View):
     def post(self, request):
+        try:
+            character = request.user.characters.get(character_id=int(request.POST['character_id']))
+        except EveUser.DoesNotExist:
+            return HttpResponse(status=403)
+
         ESI.request(
             'post_ui_openwindow_contract',
-            client=request.user.eve.primary_character.get_client(),
+            client=character.get_client(),
             contract_id=int(request.POST['contract_id'])
         )
 
