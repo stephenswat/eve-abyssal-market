@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'content_page.html' %}
 {% load static %}
 {% load humanize %}
 {% load module_stats %}
@@ -12,7 +12,7 @@
 <meta property="og:description" content="{% for i, a in object.attribute_dict.items %}{% if a.display %}{{ a.name }}: {{ object|format_attribute:i }} {{ a.unit }}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}" />
 {% endblock %}
 
-{% block content %}
+{% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
         <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
@@ -22,7 +22,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container my-5">
     <h1></h1>
 
@@ -144,7 +146,6 @@
 </div>
 
 {% endblock %}
-1
 
 {% block trailing_js %}
 <script>

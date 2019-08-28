@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'content_page.html' %}
 {% load static %}
 {% load bootstrap4 %}
 
 {% block title %}Login{% endblock %}
 
-{% block content %}
+{% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
         <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
@@ -18,7 +18,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container my-5">
 <form action="" method="post">
     {% csrf_token %}

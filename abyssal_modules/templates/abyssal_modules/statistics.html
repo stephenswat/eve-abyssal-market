@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'content_page.html' %}
 {% load bootstrap4 %}
 {% load cache %}
 
 {% block title %}Statistics{% endblock %}
 
-{% block content %}
+{% block header %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 
 <div class="container-fluid d-flex flex-column ng-scope">
@@ -19,7 +19,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container my-5">
     <h1>Statistics</h1>
 

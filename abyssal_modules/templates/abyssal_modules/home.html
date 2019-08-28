@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'content_page.html' %}
 {% load static %}
 {% load cache %}
 {% load abyssal_types %}
@@ -7,8 +7,7 @@
 
 {% block title %}Homepage{% endblock %}
 
-{% block content %}
-
+{% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
         <div class="col-xl-9 col-lg-11 container-alt text-light toggles-ignore mx-auto py-5">
@@ -21,7 +20,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container d-flex flex-column ng-scope pt-5">
     {% get_abyssal_type_list as type_list %}
     {% for r, l in type_list %}

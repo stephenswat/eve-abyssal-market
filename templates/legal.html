@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'content_page.html' %}
 
 {% block title %}Legal Information{% endblock %}
 
-{% block content %}
+{% block header %}
 <div class="container-fluid d-flex flex-column ng-scope">
     <div class="row align-items-center bg-primary check-contrast py-5">
         <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
@@ -14,7 +14,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block content %}
 <div class="container container-narrow my-5">
     <p>mutaplasmid.space uses Google Analytics for site maintenance and
     tracking, which uses cookies. The website administrator has configured

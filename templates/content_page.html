@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content_container %}
+{% block header %}{% endblock header %}
+
+{% block content_tabs %}{% endblock content_tabs %}
+
+<div class="container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+
+{% block content %}{% endblock content %}
+{% endblock content_container %}
