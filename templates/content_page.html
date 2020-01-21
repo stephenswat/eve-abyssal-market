@@ -6,16 +6,6 @@
 {% block content_tabs %}{% endblock content_tabs %}
 
 <div class="container">
-    <div class="alert alert-warning mt-5">A few days ago, the ESI endpoint to 
-    retrieve module attributes was removed. To the best of my knowledge, 
-    this was done intentionally by CCP to address several issues with it. Due 
-    to the non-existance of this endpoint, significant parts of the functionality of mutaplasmid.space are 
-    currently disabled. Most notably the fetching of new modules and the 
-    automatic appraisal are currently unavailable. It is not known how long this outage will last, but 
-    there is nothing I can do about it. For more information see 
-    <a href="https://github.com/esi/esi-issues/issues/1169">this Github 
-    issue</a>, but please refrain from commenting on it (that only adds more
-    strain on the ESI developers).</div>
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
