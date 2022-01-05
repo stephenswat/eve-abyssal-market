@@ -10,14 +10,14 @@ own risk.
 
 ## Installation
 
-1. Install the requirements: `pipenv install`.
+1. Install the requirements: `poetry install`.
 2. Configure the settings by copying
    `abyssal_markets/settings/local.template.py` to
    `abyssal_markets/settings/local.py` and configure it as any other Django
    project.
-3. Run all migrations: `pipenv run python manage.py migrate`.
-4. Run a web server (`pipenv run python manage.py runserver`) and a Huey
-   consumer (`pipenv run python manage.py run_huey -w 4`) at the same time.
+3. Run all migrations: `poetry run python manage.py migrate`.
+4. Run a web server (`poetry run python manage.py runserver`) and a Huey
+   consumer (`poetry run python manage.py run_huey -w 4`) at the same time.
 
 ## Contributing
 
