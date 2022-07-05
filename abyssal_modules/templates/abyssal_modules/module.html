@@ -9,7 +9,7 @@
 {% block metadata %}
 <meta property="og:title" content="{{ object.creator.name }}'s Modified {{ object.type.name }}" />
 <meta property="og:image" content="https://image.eveonline.com/Type/{{ object.type.id }}_64.png" />
-<meta property="og:description" content="{% for i, a in object.attribute_dict.items %}{% if a.display %}{{ a.name }}: {{ object|format_attribute:i }} {{ a.unit }}{% if not forloop.last %}, {% endif %}{% endif %}{% endfor %}" />
+<meta property="og:description" content="{% for i, a in object.attribute_dict.items %}{% if a.display %}{{ a.name }}: {{ object|format_attribute:i }} {{ a.unit }}, {% endif %}{% endfor %}, Price estimate: {% if prediction %}{{ prediction.price|intword }} ISK{% else %}Unknown{% endif %}" />
 {% endblock %}
 
 {% block header %}
