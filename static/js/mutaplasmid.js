@@ -50,9 +50,7 @@ clipboard.on('success', function (e) {
 });
 
 function display_rating(attr) {
-    if (attr == 1255) {
-        return false;
-    } else if (attr == 105) {
+    if (attr == 105) {
         return false;
     } else {
         return true;
