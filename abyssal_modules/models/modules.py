@@ -8,28 +8,28 @@ from django.utils.functional import cached_property
 
 DERIVED_ATTRIBUTES = {
     100000: {
-        'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840],
+        'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840, 56309, 56310],
         'name': 'Shield boost per second',
         'unit_str': 'HP/s',
         'value': lambda x: x.get_value(68) / x.get_value(10073),
         'high_is_good': True
     },
     100001: {
-        'types': [47769, 47773, 47777, 47842, 47844, 47846],
+        'types': [47769, 47773, 47777, 47842, 47844, 47846, 56307, 56308],
         'name': 'Armor repair per second',
         'unit_str': 'HP/s',
         'value': lambda x: x.get_value(84) / x.get_value(10073),
         'high_is_good': True
     },
     100002: {
-        'types': [47781, 47785, 47789, 47793],
+        'types': [47781, 47785, 47789, 47793, 56309, 56310],
         'name': 'Shield boost per capacitor',
         'unit_str': 'HP/GJ',
         'value': lambda x: x.get_value(68) / x.get_value(6),
         'high_is_good': True
     },
     100003: {
-        'types': [47769, 47773, 47777, 47842, 47844, 47846],
+        'types': [47769, 47773, 47777, 47842, 47844, 47846, 56307, 56308],
         'name': 'Armor repair per capacitor',
         'unit_str': 'HP/GJ',
         'value': lambda x: x.get_value(84) / x.get_value(6),
