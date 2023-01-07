@@ -92,7 +92,7 @@ def scan_contract(contract_dict, region_id):
         contract.save()
 
 
-@db_periodic_task(crontab(minute='0,30'))
+@db_periodic_task(crontab(minute='0,30'), priority=800)
 def scan_public_contracts(scan_all=False):
     if (
         datetime.time(hour=10, minute=55) <=

@@ -10,4 +10,4 @@ class Command(BaseCommand):
         parser.add_argument('-f', '--force', action='store_true', help='Force a rescan of all contracts')
 
     def handle(self, *args, **options):
-        scan_public_contracts(scan_all=options['force'])
+        scan_public_contracts(scan_all=options['force'], priority=800)
