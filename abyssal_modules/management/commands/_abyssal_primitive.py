@@ -17,6 +17,13 @@ RELEVANT_ATTRIBUTES = {
     'damage_mod_bcs': [(50, False), (213, True), (204, True), (1255, True)],
     'damage_control': [(50, False), (974, False), (975, False), (976, False), (977, False)],
     'assault_damage_control': [(50, False), (73, True), (974, False), (975, False), (976, False), (977, False)],
+    'drone_damage_amplifier': [(50, False), (1255, True)],
+    'mutated_light_drone': [(64, True), (160, True), (37, True), (263, True), (9, True), (54, True), (265, True), (158, True)],
+    'mutated_heavy_drone': [(64, True), (160, True), (37, True), (263, True), (9, True), (54, True), (265, True), (158, True)],
+    'mutated_sentry_drone': [(64, True), (160, True), (263, True), (9, True), (54, True), (265, True), (158, True)],
+    'mutated_medium_drone': [(64, True), (160, True), (37, True), (263, True), (9, True), (54, True), (265, True), (158, True)],
+    'abyssal_fighter_support_unit': [(2336, True), (2337, True), (2338, True), (50, False), (30, False), (2335, True)],
+    'abyssal_siege_module': [(2307, True), (2306, True), (2347, True), (2346, False), (30, False)],
 }
 
 ITEMS = [
@@ -283,6 +290,108 @@ ITEMS = [
         "normal_id": 47257,
         "name": "Abyssal Assault Damage Control",
         "relevant_attributes": RELEVANT_ATTRIBUTES['assault_damage_control'],
+    },
+    {
+        "abyssal_id": 60482,
+        "normal_id": 4393,
+        "name": "Mutated Drone Damage Amplifier",
+        "relevant_attributes": RELEVANT_ATTRIBUTES['drone_damage_amplifier'],
+    },
+    {
+        "abyssal_id": 60478,
+        "normal_id": 2203,
+        "name": 'Mutated Light Drone',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['mutated_light_drone'],
+    },
+    {
+        "abyssal_id": 60480,
+        "normal_id": 2444,
+        "name": 'Mutated Heavy Drone',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['mutated_heavy_drone'],
+    },
+    {
+        "abyssal_id": 60481,
+        "normal_id": 23561,
+        "name": 'Mutated Sentry Drone',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['mutated_sentry_drone'],
+    },
+    {
+        "abyssal_id": 60479,
+        "normal_id": 2183,
+        "name": 'Mutated Medium Drone',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['mutated_medium_drone'],
+    },
+    {
+        "abyssal_id": 60483,
+        "normal_id": 24283,
+        "name": 'Abyssal Fighter Support Unit',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['abyssal_fighter_support_unit'],
+    },
+    {
+        "abyssal_id": 56303,
+        "normal_id": 40750,
+        "name": 'Heavy Abyssal Warp Scrambler',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['warp_scrambler'],
+    },
+    {
+        "abyssal_id": 56304,
+        "normal_id": 40730,
+        "name": 'Heavy Abyssal Warp Disrupter',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['warp_disruptor'],
+    },
+    {
+        "abyssal_id": 56305,
+        "normal_id": 41236,
+        "name": '10000MN Abyssal Afterburner',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['afterburner'],
+    },
+    {
+        "abyssal_id": 56306,
+        "normal_id": 41249,
+        "name": '50000MN Abyssal Microwarpdrive',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['microwarpdrive'],
+    },
+    {
+        "abyssal_id": 56307,
+        "normal_id": 20701,
+        "name": 'Capital Abyssal Armor Repairer',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['armor_repairer'],
+    },
+    {
+        "abyssal_id": 56308,
+        "normal_id": 41503,
+        "name": 'Capital Abyssal Ancillary Armor Repairer',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_armor_repairer'],
+    },
+    {
+        "abyssal_id": 56309,
+        "normal_id": 20703,
+        "name": 'Capital Abyssal Shield Booster',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['shield_booster'],
+    },
+    {
+        "abyssal_id": 56310,
+        "normal_id": 41504,
+        "name": 'Capital Abyssal Ancillary Shield Booster',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['ancil_shield_booster'],
+    },
+    {
+        "abyssal_id": 56311,
+        "normal_id": 40665,
+        "name": 'Capital Abyssal Energy Nosferatu',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_nosferatu'],
+    },
+    {
+        "abyssal_id": 56312,
+        "normal_id": 40659,
+        "name": 'Capital Abyssal Energy Neutralizer',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['energy_neutralizer'],
+    },
+    {
+        "abyssal_id": 56313,
+        "normal_id": 20280,
+        "name": 'Abyssal Siege Module',
+        "relevant_attributes": RELEVANT_ATTRIBUTES['abyssal_siege_module'],
     },
 ]
 
