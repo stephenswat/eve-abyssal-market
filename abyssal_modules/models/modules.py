@@ -11,14 +11,14 @@ DERIVED_ATTRIBUTES = {
         'types': [47781, 47785, 47789, 47793, 47836, 47838, 47840],
         'name': 'Shield boost per second',
         'unit_str': 'HP/s',
-        'value': lambda x: x.get_value(68) / x.get_value(73),
+        'value': lambda x: x.get_value(68) / x.get_value(10073),
         'high_is_good': True
     },
     100001: {
         'types': [47769, 47773, 47777, 47842, 47844, 47846],
         'name': 'Armor repair per second',
         'unit_str': 'HP/s',
-        'value': lambda x: x.get_value(84) / x.get_value(73),
+        'value': lambda x: x.get_value(84) / x.get_value(10073),
         'high_is_good': True
     },
     100002: {
@@ -39,14 +39,14 @@ DERIVED_ATTRIBUTES = {
         'types': [49730, 49722, 49726, 49734],
         'name': 'DPS Bonus',
         'unit_str': '%',
-        'value': lambda x: ((x.get_value(64) * 1 / (1 - x.get_value(204) / 100)) - 1) * 100,
+        'value': lambda x: ((x.get_value(64) * 1 / (1 - x.get_value(10204) / 100)) - 1) * 100,
         'high_is_good': True
     },
     100005: {
         'types': [49738],
         'name': 'DPS Bonus',
         'unit_str': '%',
-        'value': lambda x: (((x.get_value(213) / 100 + 1) / (1 - (x.get_value(204) / 100))) - 1) * 100,
+        'value': lambda x: (((x.get_value(10213) / 100 + 1) / (1 - (x.get_value(10204) / 100))) - 1) * 100,
         'high_is_good': True
     },
 }
