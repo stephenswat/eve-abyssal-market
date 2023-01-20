@@ -64,7 +64,7 @@ def create_module(type_id, item_id, force=False):
                     ),
                     value=a['value']
                 ).save()
-            except ModuleDogmaAttribute.DoesNotExist:
+            except (ModuleDogmaAttribute.DoesNotExist, TypeAttribute.DoesNotExist):
                 pass
 
     return res
