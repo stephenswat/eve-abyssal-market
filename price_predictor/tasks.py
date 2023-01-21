@@ -1,4 +1,6 @@
 import pickle
+from django.utils import timezone
+import datetime
 
 from huey import crontab
 from huey.contrib.djhuey import db_periodic_task
@@ -64,3 +66,7 @@ def create_models():
             create_model_for_type(t)
         except Exception:
             pass
+
+@db_periodic_task(crontab(minute='0', hour='2'))
+def clean_old_models():
+    PricePredictor.objects.filter(date__lt=timezone.now() - datetime.timedelta(days=3)).detele()
