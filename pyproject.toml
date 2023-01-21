@@ -6,15 +6,15 @@ authors = ["Stephen Nicholas Swatman"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "3.9"
-django = "2.2.3"
+python = "^3.9.0"
+django = "^2.2.3"
 django-bootstrap4 = "^1.1.1"
 django-prometheus = "1.1"
 django-redis = "^4.11.0"
 huey = "^2.2.0"
 psycopg2 = "~2.8.0"
 requests = "^2.23.0"
-sklearn = "^0.0"
+scikit-learn = "^1.2.0"
 scipy = "^1.7.0"
 tqdm = "^4.43.0"
 EsiPy = "0.5"
