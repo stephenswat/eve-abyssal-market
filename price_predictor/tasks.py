@@ -69,4 +69,4 @@ def create_models():
 
 @db_periodic_task(crontab(minute='0', hour='2'))
 def clean_old_models():
-    PricePredictor.objects.filter(date__lt=timezone.now() - datetime.timedelta(days=3)).detele()
+    PricePredictor.objects.filter(date__lt=timezone.now() - datetime.timedelta(days=3)).delete()
