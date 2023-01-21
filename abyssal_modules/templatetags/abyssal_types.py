@@ -94,10 +94,6 @@ def get_abyssal_type_list():
             ("Standard", 52227),
             ("Assault", 52230)
         ]),
-        # I'm not sure if this should be a seperate category.
-        # ("Drone Damage Amplifier", [
-        #     ("Radical", 60482)
-        # ]),
         ("Fighter Support Unit", [
             ("Fighter Support Unit", 60483)
         ]),

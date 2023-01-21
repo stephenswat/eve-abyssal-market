@@ -1,6 +1,6 @@
 from django.db import models
 
-from eve_esi import ESI
+from eve_esi import ESI, EsiException
 
 
 class EveCharacterManager(models.Manager):
@@ -8,18 +8,25 @@ class EveCharacterManager(models.Manager):
         try:
             return self.model.objects.get(id=character_id)
         except self.model.DoesNotExist:
-            character_data = ESI.request(
-                'get_characters_character_id',
-                character_id=character_id
-            ).data
-
-            character, _ = EveCharacter.objects.update_or_create(
-                id=character_id,
-                defaults={
-                    'name': character_data['name']
-                }
-            )
-
+            try:
+                character_data = ESI.request(
+                    'get_characters_character_id',
+                    character_id=character_id
+                ).data
+                character_name = character_data['name']
+            except EsiException as e:
+                # Handle deleted characters.
+                if e.status == 404:
+                    character_name = 'DELETED CHARACTER'
+                else:
+                    raise
+            finally:
+                character, _ = EveCharacter.objects.update_or_create(
+                    id=character_id,
+                    defaults={
+                        'name': character_name
+                    }
+                )
             return character
 
 
