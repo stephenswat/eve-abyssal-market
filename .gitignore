@@ -89,4 +89,3 @@ local_settings.py
 db.sqlite3
 */settings/local.py
 Pipfile.lock
-poetry.lock
