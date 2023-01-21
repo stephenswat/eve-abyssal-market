@@ -1,0 +1,11 @@
+name: mutaplasmid-dev
+
+secrets:
+  postgres_password:
+    file: ./secrets/pg_password.dev.txt
+  configuration:
+    file: ./secrets/configuration.dev.yaml
+
+services:
+  server:
+    entrypoint: /code/run/server.dev.sh

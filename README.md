@@ -8,16 +8,14 @@ There are no tests, there is no CI, there is no quality control, there is no
 documentation, there is only pain and suffering here. Run this software at your
 own risk.
 
-## Installation
+## Running a development instance
 
-1. Install the requirements: `poetry install`.
-2. Configure the settings by copying
-   `abyssal_markets/settings/local.template.py` to
-   `abyssal_markets/settings/local.py` and configure it as any other Django
-   project.
-3. Run all migrations: `poetry run python manage.py migrate`.
-4. Run a web server (`poetry run python manage.py runserver`) and a Huey
-   consumer (`poetry run python manage.py run_huey -w 4`) at the same time.
+1. Make sure that Docker is installed, as well as Docker Compose.
+1. Copy `secrets/configuration.template.yaml` to
+   `secrets/configuration.dev.yaml` and enter the required information.
+1. Run `docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up
+   --build`.
+1. Visit your instance at `localhost:33760`.
 
 ## Contributing
 

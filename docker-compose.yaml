@@ -1,0 +1,74 @@
+version: "3.6"
+
+volumes:
+  static_vol:
+  database_vol:
+  log_vol:
+
+services:
+  redis:
+    image: redis:7.0.8
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+
+  postgres:
+    image: postgres:15.1
+    restart: always
+    user: postgres
+    secrets:
+      - postgres_password
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: mutaplasmid
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    volumes:
+      - database_vol:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    secrets: &django-secrets
+      - postgres_password
+      - configuration
+    volumes: &django-volumes
+      - static_vol:/static
+      - log_vol:/logs
+    restart: "no"
+    entrypoint: /code/run/migrate.sh
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    secrets: *django-secrets
+    restart: always
+    volumes: *django-volumes
+    depends_on: &django-dependencies
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - 33760:8000
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    secrets: *django-secrets
+    restart: always
+    volumes: *django-volumes
+    entrypoint: /code/run/consumer.sh
+    depends_on: *django-dependencies

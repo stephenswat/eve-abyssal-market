@@ -1,0 +1,11 @@
+name: mutaplasmid-prod
+
+secrets:
+  postgres_password:
+    file: ./secrets/pg_password.prod.txt
+  configuration:
+    file: ./secrets/configuration.prod.yaml
+
+services:
+  server:
+    entrypoint: /code/run/server.prod.sh

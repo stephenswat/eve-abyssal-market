@@ -1,0 +1,13 @@
+name: mutaplasmid-stage
+
+secrets:
+  postgres_password:
+    file: ./secrets/pg_password.stage.txt
+  configuration:
+    file: ./secrets/configuration.stage.yaml
+
+services:
+  server:
+    entrypoint: /code/run/server.prod.sh
+    ports:
+      - 33761:8000
