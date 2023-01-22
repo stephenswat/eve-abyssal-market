@@ -17,10 +17,3 @@ urlpatterns = [
     path("", include("abyssal_modules.urls", namespace="abyssal_modules")),
     path("", include("django_prometheus.urls")),
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
