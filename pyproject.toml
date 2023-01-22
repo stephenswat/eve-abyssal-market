@@ -26,11 +26,6 @@ djangorestframework = "^3.11.0"
 drf-yasg = "^1.21.4"
 whitenoise = "^6.3.0"
 
-[tool.poetry.dev-dependencies]
-django-debug-toolbar = "^2.2"
-flake8 = "^3.7.9"
-django-debug-toolbar-template-timings = "^0.9"
-
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
 
