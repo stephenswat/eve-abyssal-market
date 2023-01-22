@@ -1,4 +1,5 @@
 import pickle
+import logging
 from django.utils import timezone
 import datetime
 
@@ -15,6 +16,9 @@ from abyssal_modules.models.modules import ModuleType
 from price_predictor.models import PricePredictor
 
 
+logger = logging.getLogger(__name__)
+
+
 def create_model_for_type(t):
     mods = t.modules.annotate(
         contract_price=F("contracts__price"),
@@ -28,10 +32,12 @@ def create_model_for_type(t):
         contract_available=False,
     )
 
-    print("\n{:*^80}".format(t.name))
+    logger.info(f"Creating price models for type {t.name}")
 
     if mods.count() < 50:
-        print("Skipping due to lack of samples...")
+        logger.info(
+            f"Abandoning model for {t.name} due to lack of modules ({mods.count()})"
+        )
         return
 
     samples, features = [], []
@@ -47,9 +53,10 @@ def create_model_for_type(t):
 
     reg = SVR(gamma=0.01, kernel="rbf", C=100000)
     scores = cross_val_score(reg, features, samples, cv=5)
-    print(
-        "Accuracy: %0.2f (+/- %0.2f, %d samples)"
-        % (scores.mean(), scores.std() * 2, len(samples))
+
+    logger.info(
+        "Created model for %s with accuracy %0.2f (+/- %0.2f, %d samples)"
+        % (t.name, scores.mean(), scores.std() * 2, len(samples))
     )
 
     reg.fit(features, samples)
