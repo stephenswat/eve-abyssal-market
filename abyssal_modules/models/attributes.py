@@ -116,7 +116,7 @@ class TypeAttribute(models.Model):
     attribute = models.ForeignKey("ModuleDogmaAttribute", models.CASCADE)
 
     display = models.BooleanField(default=False)
-    high_is_good = models.NullBooleanField()
+    high_is_good = models.BooleanField(null=True)
 
     @property
     def pyfa_display(self):

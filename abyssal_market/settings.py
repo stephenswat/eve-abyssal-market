@@ -138,6 +138,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 LOGGING = {
     "version": 1,
     "formatters": {
