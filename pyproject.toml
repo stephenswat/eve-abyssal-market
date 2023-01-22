@@ -31,6 +31,9 @@ django-debug-toolbar = "^2.2"
 flake8 = "^3.7.9"
 django-debug-toolbar-template-timings = "^0.9"
 
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
