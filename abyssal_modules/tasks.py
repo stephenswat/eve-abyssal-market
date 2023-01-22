@@ -63,15 +63,8 @@ def create_module(type_id, item_id, force=False):
                     ),
                     value=a["value"],
                 ).save()
-            except ModuleDogmaAttribute.DoesNotExist as e:
-                logger.warning(
-                    "Module dogma attribute with ID %d not found!" % (a["attribute_id"])
-                )
-            except TypeAttribute.DoesNotExist as e:
-                logger.warning(
-                    "Attribute with ID %d for type %d not found!"
-                    % (a["attribute_id"], type_id)
-                )
+            except (ModuleDogmaAttribute.DoesNotExist, TypeAttribute.DoesNotExist):
+                pass
 
     return res
 
