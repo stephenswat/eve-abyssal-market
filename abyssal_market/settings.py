@@ -222,6 +222,7 @@ if "SENTRY_DSN" in _CONFIG:
             DjangoIntegration(),
         ],
         environment=_CONFIG.get("ENVIRONMENT_NAME", "unknown"),
+        traces_sample_rate=0.2,
     )
 
     LOGGING["handlers"]["sentry"] = {
