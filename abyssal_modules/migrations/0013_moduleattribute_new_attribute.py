@@ -7,20 +7,21 @@ import django.db.models.deletion
 
 
 def set_attribute_fks(apps, schema_editor):
-    ModuleAttribute = apps.get_model('abyssal_modules', 'ModuleAttribute')
-    TypeAttribute = apps.get_model('abyssal_modules', 'TypeAttribute')
+    ModuleAttribute = apps.get_model("abyssal_modules", "ModuleAttribute")
+    TypeAttribute = apps.get_model("abyssal_modules", "TypeAttribute")
 
     row_dict = {
-        (x['type_id'], x['attribute_id']) : x['id']
-        for x in TypeAttribute.objects.values('type_id', 'attribute_id', 'id')
+        (x["type_id"], x["attribute_id"]): x["id"]
+        for x in TypeAttribute.objects.values("type_id", "attribute_id", "id")
     }
 
-    todo = ModuleAttribute.objects.annotate(type_id=F('module__type_id')).all()
+    todo = ModuleAttribute.objects.annotate(type_id=F("module__type_id")).all()
 
     with transaction.atomic():
         for a in tqdm(todo):
             a._new_attribute_id = row_dict[(a.type_id, a.attribute_id)]
             a.save()
+
 
 def reverse_func(apps, schema_editor):
     pass
@@ -29,20 +30,28 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0012_moduledogmaattribute_is_derived'),
+        ("abyssal_modules", "0012_moduledogmaattribute_is_derived"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='moduleattribute',
-            name='_new_attribute',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.TypeAttribute'),
+            model_name="moduleattribute",
+            name="_new_attribute",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="abyssal_modules.TypeAttribute",
+            ),
         ),
         migrations.RunPython(set_attribute_fks, reverse_func),
         migrations.AlterField(
-            model_name='moduleattribute',
-            name='_new_attribute',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.TypeAttribute'),
+            model_name="moduleattribute",
+            name="_new_attribute",
+            field=models.ForeignKey(
+                default=0,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="abyssal_modules.TypeAttribute",
+            ),
             preserve_default=False,
         ),
     ]

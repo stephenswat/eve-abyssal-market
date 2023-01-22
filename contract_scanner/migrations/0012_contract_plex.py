@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0011_contract_date_indices'),
+        ("contract_scanner", "0011_contract_date_indices"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contract',
-            name='plex',
+            model_name="contract",
+            name="plex",
             field=models.IntegerField(default=0),
         ),
     ]

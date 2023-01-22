@@ -7,19 +7,29 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_sde', '0001_initial'),
-        ('abyssal_modules', '0004_move_dogma_attributes'),
+        ("eve_sde", "0001_initial"),
+        ("abyssal_modules", "0004_move_dogma_attributes"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='module',
-            name='mutator',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='eve_sde.InvType'),
+            model_name="module",
+            name="mutator",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="eve_sde.InvType",
+            ),
         ),
         migrations.AddField(
-            model_name='module',
-            name='source',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='eve_sde.InvType'),
+            model_name="module",
+            name="source",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="eve_sde.InvType",
+            ),
         ),
     ]

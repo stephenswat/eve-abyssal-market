@@ -9,14 +9,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('eve_auth', '0007_change_character_pk'),
+        ("eve_auth", "0007_change_character_pk"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='eveuser',
-            name='owner',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, related_name='characters'),
+            model_name="eveuser",
+            name="owner",
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                related_name="characters",
+            ),
             preserve_default=False,
         ),
     ]

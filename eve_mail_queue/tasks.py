@@ -7,16 +7,14 @@ from eve_mail_queue.models import Mail, MailSender
 from eve_esi import ESI
 
 
-@db_periodic_task(crontab(minute='*'))
+@db_periodic_task(crontab(minute="*"))
 def send_enqueued_mails():
     for m in MailSender.objects.all():
         client = m.character.get_client()
 
         while True:
-            mails = (
-                Mail.objects
-                .filter(Q(sender__isnull=True) | Q(sender=m))
-                .order_by('-priority', 'created')
+            mails = Mail.objects.filter(Q(sender__isnull=True) | Q(sender=m)).order_by(
+                "-priority", "created"
             )
 
             if not mails.exists():
@@ -25,7 +23,7 @@ def send_enqueued_mails():
             mail = mails[0]
 
             req = ESI.request(
-                'post_characters_character_id_mail',
+                "post_characters_character_id_mail",
                 client=client,
                 character_id=m.character.character_id,
                 mail={
@@ -34,8 +32,8 @@ def send_enqueued_mails():
                     "recipients": [
                         r.as_recipient_dict() for r in mail.recipients.all()
                     ],
-                    "subject": mail.subject
-                }
+                    "subject": mail.subject,
+                },
             )
 
             if req.status == 201:

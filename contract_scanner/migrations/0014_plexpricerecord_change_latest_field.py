@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0013_plexpricerecord'),
+        ("contract_scanner", "0013_plexpricerecord"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='plexpricerecord',
-            options={'get_latest_by': 'time'},
+            name="plexpricerecord",
+            options={"get_latest_by": "time"},
         ),
     ]

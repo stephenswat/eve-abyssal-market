@@ -6,16 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0012_contract_plex'),
+        ("contract_scanner", "0012_contract_plex"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PlexPriceRecord',
+            name="PlexPriceRecord",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('time', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('price', models.IntegerField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("time", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("price", models.IntegerField()),
             ],
         ),
     ]

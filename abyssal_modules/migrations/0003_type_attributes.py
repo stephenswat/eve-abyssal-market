@@ -7,26 +7,50 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0002_remove_ownershiprecord'),
+        ("abyssal_modules", "0002_remove_ownershiprecord"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='moduletype',
-            name='attributes',
+            model_name="moduletype",
+            name="attributes",
         ),
         migrations.CreateModel(
-            name='TypeAttribute',
+            name="TypeAttribute",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('display', models.BooleanField(default=False)),
-                ('attribute', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.ModuleDogmaAttribute')),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.ModuleType')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("display", models.BooleanField(default=False)),
+                (
+                    "attribute",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="abyssal_modules.ModuleDogmaAttribute",
+                    ),
+                ),
+                (
+                    "type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="abyssal_modules.ModuleType",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='moduletype',
-            name='attributes',
-            field=models.ManyToManyField(related_name='_moduletype_attributes_+', through='abyssal_modules.TypeAttribute', to='abyssal_modules.ModuleDogmaAttribute'),
+            model_name="moduletype",
+            name="attributes",
+            field=models.ManyToManyField(
+                related_name="_moduletype_attributes_+",
+                through="abyssal_modules.TypeAttribute",
+                to="abyssal_modules.ModuleDogmaAttribute",
+            ),
         ),
     ]

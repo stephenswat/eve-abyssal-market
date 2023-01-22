@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0016_attribute_view'),
+        ("abyssal_modules", "0016_attribute_view"),
     ]
 
     operations = [
@@ -23,18 +23,26 @@ class Migration(migrations.Migration):
                 static_module_id IS NULL
             GROUP BY new_attribute_id;
             """,
-            reverse_sql="DROP MATERIALIZED VIEW IF EXISTS abyssal_modules_attribute_stats__view"
+            reverse_sql="DROP MATERIALIZED VIEW IF EXISTS abyssal_modules_attribute_stats__view",
         ),
         migrations.CreateModel(
-            name='ModuleAttributeAggregate',
+            name="ModuleAttributeAggregate",
             fields=[
-                ('new_attribute', models.OneToOneField(on_delete=models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='abyssal_modules.TypeAttribute')),
-                ('avg', models.FloatField()),
-                ('stddev', models.FloatField()),
+                (
+                    "new_attribute",
+                    models.OneToOneField(
+                        on_delete=models.deletion.DO_NOTHING,
+                        primary_key=True,
+                        serialize=False,
+                        to="abyssal_modules.TypeAttribute",
+                    ),
+                ),
+                ("avg", models.FloatField()),
+                ("stddev", models.FloatField()),
             ],
             options={
-                'db_table': 'abyssal_modules_attribute_stats__view',
-                'managed': False,
+                "db_table": "abyssal_modules_attribute_stats__view",
+                "managed": False,
             },
         ),
     ]

@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_mail_queue', '0001_initial'),
+        ("eve_mail_queue", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailsender',
-            name='character',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='eve_auth.EveUser'),
+            model_name="mailsender",
+            name="character",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="eve_auth.EveUser"
+            ),
         ),
     ]

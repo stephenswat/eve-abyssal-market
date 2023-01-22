@@ -15,34 +15,80 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Mail',
+            name="Mail",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('subject', models.CharField(max_length=80)),
-                ('body', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('priority', models.IntegerField(default=0)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("subject", models.CharField(max_length=80)),
+                ("body", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("priority", models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='MailRecipient',
+            name="MailRecipient",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipient_id', models.BigIntegerField()),
-                ('type', models.SmallIntegerField(choices=[(0, 'Character'), (1, 'Corporation'), (2, 'Alliance')])),
-                ('mail', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipients', to='eve_mail_queue.Mail')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("recipient_id", models.BigIntegerField()),
+                (
+                    "type",
+                    models.SmallIntegerField(
+                        choices=[(0, "Character"), (1, "Corporation"), (2, "Alliance")]
+                    ),
+                ),
+                (
+                    "mail",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="recipients",
+                        to="eve_mail_queue.Mail",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='MailSender',
+            name="MailSender",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('character', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "character",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='mail',
-            name='sender',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='eve_mail_queue.MailSender'),
+            model_name="mail",
+            name="sender",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="eve_mail_queue.MailSender",
+            ),
         ),
     ]

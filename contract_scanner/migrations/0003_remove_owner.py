@@ -6,17 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0002_contract_knowledge'),
+        ("contract_scanner", "0002_contract_knowledge"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='contract',
-            old_name='known',
-            new_name='scanned',
+            model_name="contract",
+            old_name="known",
+            new_name="scanned",
         ),
         migrations.RemoveField(
-            model_name='contract',
-            name='owner',
+            model_name="contract",
+            name="owner",
         ),
     ]

@@ -4,11 +4,12 @@ from django.db import migrations, models
 
 
 def delete_all_characters(apps, schema_editor):
-    EveUser = apps.get_model('eve_auth', 'EveUser')
+    EveUser = apps.get_model("eve_auth", "EveUser")
     EveUser.objects.all().delete()
 
-    LogEntry = apps.get_model('admin', 'LogEntry')
+    LogEntry = apps.get_model("admin", "LogEntry")
     LogEntry.objects.all().delete()
+
 
 def reverse_func(apps, schema_editor):
     pass
@@ -17,7 +18,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_auth', '0005_undo_custom_user_model'),
+        ("eve_auth", "0005_undo_custom_user_model"),
     ]
 
     operations = [

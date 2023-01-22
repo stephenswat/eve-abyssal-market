@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0011_value_index'),
+        ("abyssal_modules", "0011_value_index"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='moduledogmaattribute',
-            name='is_derived',
+            model_name="moduledogmaattribute",
+            name="is_derived",
             field=models.BooleanField(default=False),
         ),
     ]

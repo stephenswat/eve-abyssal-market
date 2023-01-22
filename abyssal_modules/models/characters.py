@@ -10,22 +10,18 @@ class EveCharacterManager(models.Manager):
         except self.model.DoesNotExist:
             try:
                 character_data = ESI.request(
-                    'get_characters_character_id',
-                    character_id=character_id
+                    "get_characters_character_id", character_id=character_id
                 ).data
-                character_name = character_data['name']
+                character_name = character_data["name"]
             except EsiException as e:
                 # Handle deleted characters.
                 if e.status == 404:
-                    character_name = 'DELETED CHARACTER'
+                    character_name = "DELETED CHARACTER"
                 else:
                     raise
             finally:
                 character, _ = EveCharacter.objects.update_or_create(
-                    id=character_id,
-                    defaults={
-                        'name': character_name
-                    }
+                    id=character_id, defaults={"name": character_name}
                 )
             return character
 

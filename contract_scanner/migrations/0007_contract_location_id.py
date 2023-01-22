@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0006_available_as_bool'),
+        ("contract_scanner", "0006_available_as_bool"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contract',
-            name='location_id',
+            model_name="contract",
+            name="location_id",
             field=models.BigIntegerField(db_index=True, default=60003760),
             preserve_default=False,
         ),

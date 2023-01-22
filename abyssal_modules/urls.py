@@ -4,55 +4,48 @@ from django.views.generic.base import RedirectView
 import abyssal_modules.views
 
 
-app_name = 'abyssal_modules'
+app_name = "abyssal_modules"
 
 urlpatterns = [
     path(
-        'type/<int:type_id>/',
-        RedirectView.as_view(pattern_name='abyssal_modules:type_module_list', permanent=True),
+        "type/<int:type_id>/",
+        RedirectView.as_view(
+            pattern_name="abyssal_modules:type_module_list", permanent=True
+        ),
     ),
     path(
-        'type/<int:type_id>/contracts/',
+        "type/<int:type_id>/contracts/",
         abyssal_modules.views.TypedModuleList.as_view(),
-        name='type_module_list'
+        name="type_module_list",
     ),
     path(
-        'type/<int:type_id>/assets/',
+        "type/<int:type_id>/assets/",
         abyssal_modules.views.TypeAssetModuleList.as_view(),
-        name='type_asset_module_list'
+        name="type_asset_module_list",
     ),
     path(
-        'type/<int:type_id>/roll/',
+        "type/<int:type_id>/roll/",
         abyssal_modules.views.RollCalculatorView.as_view(),
-        name='roll_calculator'
+        name="roll_calculator",
     ),
     path(
-        'module/<int:pk>/',
+        "module/<int:pk>/",
         abyssal_modules.views.ModuleView.as_view(),
-        name='module_view'
+        name="module_view",
     ),
     path(
-        'creator/<int:pk>/',
+        "creator/<int:pk>/",
         abyssal_modules.views.CreatorView.as_view(),
-        name='creator_view'
+        name="creator_view",
     ),
     path(
-        'view_contract/',
+        "view_contract/",
         abyssal_modules.views.OpenContractView.as_view(),
-        name='open_contract'
+        name="open_contract",
     ),
+    path("appraisal/", abyssal_modules.views.AppraisalView.as_view(), name="appraisal"),
     path(
-        'appraisal/',
-        abyssal_modules.views.AppraisalView.as_view(),
-        name='appraisal'
+        "statistics/", abyssal_modules.views.StatisticsList.as_view(), name="statistics"
     ),
-    path(
-        'statistics/',
-        abyssal_modules.views.StatisticsList.as_view(),
-        name='statistics'
-    ),
-    path(
-        '',
-        abyssal_modules.views.ModuleList.as_view()
-    ),
+    path("", abyssal_modules.views.ModuleList.as_view()),
 ]

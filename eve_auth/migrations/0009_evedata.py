@@ -8,15 +8,24 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0009_alter_user_last_name_max_length'),
-        ('eve_auth', '0008_eveuser_owner'),
+        ("auth", "0009_alter_user_last_name_max_length"),
+        ("eve_auth", "0008_eveuser_owner"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EVEData',
+            name="EVEData",
             fields=[
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='eve', serialize=False, to=settings.AUTH_USER_MODEL)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        related_name="eve",
+                        serialize=False,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

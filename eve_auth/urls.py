@@ -4,12 +4,12 @@ from django.contrib.auth import views as auth_views
 import eve_auth.views
 
 
-app_name = 'eve_auth'
+app_name = "eve_auth"
 
 
 urlpatterns = [
-    path('login/', eve_auth.views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('callback/', eve_auth.views.CallbackView.as_view(), name='callback'),
-    path('profile/', eve_auth.views.ProfileView.as_view(), name='profile'),
+    path("login/", eve_auth.views.LoginView.as_view(), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("callback/", eve_auth.views.CallbackView.as_view(), name="callback"),
+    path("profile/", eve_auth.views.ProfileView.as_view(), name="profile"),
 ]

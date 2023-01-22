@@ -6,26 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_auth', '0002_store_user_scopes'),
+        ("eve_auth", "0002_store_user_scopes"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='eveuser',
-            name='access_token',
-            field=models.CharField(default='', max_length=128),
+            model_name="eveuser",
+            name="access_token",
+            field=models.CharField(default="", max_length=128),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='eveuser',
-            name='refresh_token',
-            field=models.CharField(default='', max_length=128),
+            model_name="eveuser",
+            name="refresh_token",
+            field=models.CharField(default="", max_length=128),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='eveuser',
-            name='token_expiry',
-            field=models.DateTimeField(default='1970-01-01T00:00:00Z'),
+            model_name="eveuser",
+            name="token_expiry",
+            field=models.DateTimeField(default="1970-01-01T00:00:00Z"),
             preserve_default=False,
         ),
     ]

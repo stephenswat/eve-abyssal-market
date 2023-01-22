@@ -9,17 +9,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('abyssal_modules', '0015_rename_new_attribute'),
-        ('eve_auth', '0009_evedata'),
+        ("abyssal_modules", "0015_rename_new_attribute"),
+        ("eve_auth", "0009_evedata"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AssetRecord',
+            name="AssetRecord",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('module', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ownership_records', to='abyssal_modules.Module')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='asset_records', to='eve_auth.EveUser')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "module",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ownership_records",
+                        to="abyssal_modules.Module",
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="asset_records",
+                        to="eve_auth.EveUser",
+                    ),
+                ),
             ],
         ),
     ]

@@ -9,18 +9,32 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('abyssal_modules', '0004_move_dogma_attributes'),
+        ("abyssal_modules", "0004_move_dogma_attributes"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PricePredictor',
+            name="PricePredictor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('quality', models.FloatField()),
-                ('data', models.BinaryField()),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.ModuleType')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("quality", models.FloatField()),
+                ("data", models.BinaryField()),
+                (
+                    "type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="abyssal_modules.ModuleType",
+                    ),
+                ),
             ],
         ),
     ]

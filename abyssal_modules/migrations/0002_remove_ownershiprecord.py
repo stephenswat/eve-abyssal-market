@@ -6,23 +6,23 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0001_initial'),
+        ("abyssal_modules", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ownershiprecord',
-            name='asset_owner',
+            model_name="ownershiprecord",
+            name="asset_owner",
         ),
         migrations.RemoveField(
-            model_name='ownershiprecord',
-            name='contract_contract',
+            model_name="ownershiprecord",
+            name="contract_contract",
         ),
         migrations.RemoveField(
-            model_name='ownershiprecord',
-            name='module',
+            model_name="ownershiprecord",
+            name="module",
         ),
         migrations.DeleteModel(
-            name='OwnershipRecord',
+            name="OwnershipRecord",
         ),
     ]

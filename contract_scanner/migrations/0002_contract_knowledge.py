@@ -6,18 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0001_initial'),
+        ("contract_scanner", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contract',
-            name='known',
+            model_name="contract",
+            name="known",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='contract',
-            name='status',
-            field=models.SmallIntegerField(choices=[(0, 'Available'), (1, 'Expired'), (2, 'Sold'), (3, 'Disappeared'), (4, 'Canceled'), (5, 'Rejected'), (6, 'Deleted'), (9, 'Unknown')], db_index=True),
+            model_name="contract",
+            name="status",
+            field=models.SmallIntegerField(
+                choices=[
+                    (0, "Available"),
+                    (1, "Expired"),
+                    (2, "Sold"),
+                    (3, "Disappeared"),
+                    (4, "Canceled"),
+                    (5, "Rejected"),
+                    (6, "Deleted"),
+                    (9, "Unknown"),
+                ],
+                db_index=True,
+            ),
         ),
     ]

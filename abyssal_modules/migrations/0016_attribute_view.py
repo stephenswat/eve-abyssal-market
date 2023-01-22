@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0015_rename_new_attribute'),
+        ("abyssal_modules", "0015_rename_new_attribute"),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                     P0."new_attribute_id" = P1."id"
                 );
             """,
-            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_attributes__view;"
+            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_attributes__view;",
         ),
         migrations.RunSQL(
             """
@@ -144,17 +144,25 @@ class Migration(migrations.Migration):
             WHERE
                 _attribute_id = 204;
             """,
-            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_derived_attributes__view;"
+            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_derived_attributes__view;",
         ),
         migrations.CreateModel(
-            name='ModuleAttributeView',
+            name="ModuleAttributeView",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.FloatField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("value", models.FloatField()),
             ],
             options={
-                'db_table': 'abyssal_modules_derived_attributes__view',
-                'managed': False,
+                "db_table": "abyssal_modules_derived_attributes__view",
+                "managed": False,
             },
-        )
+        ),
     ]

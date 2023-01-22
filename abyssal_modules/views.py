@@ -23,7 +23,7 @@ class ModuleList(View):
     def get(self, request):
         return render(
             request,
-            'abyssal_modules/home.html',
+            "abyssal_modules/home.html",
         )
 
 
@@ -38,11 +38,8 @@ class TypedModuleList(View):
 
         return render(
             request,
-            'abyssal_modules/list.html',
-            {
-                'module_type': module_type,
-                'attributes': attributes
-            }
+            "abyssal_modules/list.html",
+            {"module_type": module_type, "attributes": attributes},
         )
 
 
@@ -57,11 +54,8 @@ class TypeAssetModuleList(LoginRequiredMixin, View):
 
         return render(
             request,
-            'abyssal_modules/asset_list.html',
-            {
-                'module_type': module_type,
-                'attributes': attributes
-            }
+            "abyssal_modules/asset_list.html",
+            {"module_type": module_type, "attributes": attributes},
         )
 
 
@@ -72,33 +66,37 @@ class RollCalculatorView(View):
         except ModuleType.DoesNotExist:
             raise Http404("Module type does not exist.")
 
-        mutators = Mutator.objects.filter(result=module_type).order_by('item_type__name')
+        mutators = Mutator.objects.filter(result=module_type).order_by(
+            "item_type__name"
+        )
         modules = StaticModule.objects.filter(type=module_type)
-        attributes = TypeAttribute.objects.filter(mutatorattribute__mutator__result=module_type).distinct('attribute')
+        attributes = TypeAttribute.objects.filter(
+            mutatorattribute__mutator__result=module_type
+        ).distinct("attribute")
 
         return render(
             request,
-            'abyssal_modules/roll_calculator.html',
+            "abyssal_modules/roll_calculator.html",
             {
-                'module_type': module_type,
-                'modules': modules,
-                'mutators': mutators,
-                'module_stats': {m.id: m.as_dict() for m in modules},
-                'mutator_stats': {
+                "module_type": module_type,
+                "modules": modules,
+                "mutators": mutators,
+                "module_stats": {m.id: m.as_dict() for m in modules},
+                "mutator_stats": {
                     m.item_type.id: {
                         x.attribute.attribute.id: (x.min_modifier, x.max_modifier)
                         for x in m.mutatorattribute_set.all()
                     }
                     for m in mutators
                 },
-                'attributes': attributes
-            }
+                "attributes": attributes,
+            },
         )
 
 
 class ModuleView(DetailView):
     model = Module
-    template_name = 'abyssal_modules/module.html'
+    template_name = "abyssal_modules/module.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,49 +106,48 @@ class ModuleView(DetailView):
         except Exception:
             price_prediction = None
 
-        context['prediction'] = price_prediction
-        context['contracts'] = self.object.contracts.all()
+        context["prediction"] = price_prediction
+        context["contracts"] = self.object.contracts.all()
         return context
 
 
 class CreatorView(DetailView):
     model = EveCharacter
-    template_name = 'abyssal_modules/creator.html'
+    template_name = "abyssal_modules/creator.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['modules'] = self.object.creations.all()
+        context["modules"] = self.object.creations.all()
         return context
 
 
 class AppraisalView(FormView):
     form_class = ModuleLinkForm
-    template_name = 'abyssal_modules/appraisal.html'
+    template_name = "abyssal_modules/appraisal.html"
 
     def form_valid(self, form):
-        type_id, item_id = form.cleaned_data['text']
+        type_id, item_id = form.cleaned_data["text"]
 
         module = create_module(type_id, item_id, priority=1000)(blocking=True)
 
         return HttpResponseRedirect(
-            reverse(
-                'abyssal_modules:module_view',
-                kwargs={'pk': module.id}
-            )
+            reverse("abyssal_modules:module_view", kwargs={"pk": module.id})
         )
 
 
 class OpenContractView(LoginRequiredMixin, View):
     def post(self, request):
         try:
-            character = request.user.characters.get(character_id=int(request.POST['character_id']))
+            character = request.user.characters.get(
+                character_id=int(request.POST["character_id"])
+            )
         except EveUser.DoesNotExist:
             return HttpResponse(status=403)
 
         ESI.request(
-            'post_ui_openwindow_contract',
+            "post_ui_openwindow_contract",
             client=character.get_client(),
-            contract_id=int(request.POST['contract_id'])
+            contract_id=int(request.POST["contract_id"]),
         )
 
         return HttpResponse(status=204)
@@ -158,38 +155,41 @@ class OpenContractView(LoginRequiredMixin, View):
 
 class StatisticsList(View):
     def get(self, request):
-        type_query = Module.objects.values('type__name').annotate(count=Count('id')).order_by('-count')
+        type_query = (
+            Module.objects.values("type__name")
+            .annotate(count=Count("id"))
+            .order_by("-count")
+        )
 
-        type_breakdown = [(x['type__name'], x['count']) for x in type_query[:20]]
-        type_breakdown.append(('Other', sum(x['count'] for x in type_query[20:])))
+        type_breakdown = [(x["type__name"], x["count"]) for x in type_query[:20]]
+        type_breakdown.append(("Other", sum(x["count"] for x in type_query[20:])))
 
         module_count_query = (
-            Module
-            .objects
-            .annotate(hour=Trunc('first_seen', 'day'))
-            .annotate(cumsum=Window(expression=Count('id'), order_by=F('hour').asc()))
-            .values('hour', 'cumsum')
-            .distinct('hour')
+            Module.objects.annotate(hour=Trunc("first_seen", "day"))
+            .annotate(cumsum=Window(expression=Count("id"), order_by=F("hour").asc()))
+            .values("hour", "cumsum")
+            .distinct("hour")
         )
 
-        module_count_data = [(x['hour'].strftime(r"%Y%m%d"), x['cumsum']) for x in module_count_query]
+        module_count_data = [
+            (x["hour"].strftime(r"%Y%m%d"), x["cumsum"]) for x in module_count_query
+        ]
 
-        prolific_creators = (
-            EveCharacter
-            .objects
-            .annotate(creation_count=Count('creations'))
-            .order_by('-creation_count')[:8]
-        )
+        prolific_creators = EveCharacter.objects.annotate(
+            creation_count=Count("creations")
+        ).order_by("-creation_count")[:8]
 
-        traded_modules = Module.objects.annotate(contract_count=Count('contracts')).order_by('-contract_count')[:8]
+        traded_modules = Module.objects.annotate(
+            contract_count=Count("contracts")
+        ).order_by("-contract_count")[:8]
 
         return render(
             request,
-            'abyssal_modules/statistics.html',
+            "abyssal_modules/statistics.html",
             {
-                'type_breakdown': type_breakdown,
-                'module_count_data': module_count_data,
-                'prolific_creators': prolific_creators,
-                'traded_modules': traded_modules,
-            }
+                "type_breakdown": type_breakdown,
+                "module_count_data": module_count_data,
+                "prolific_creators": prolific_creators,
+                "traded_modules": traded_modules,
+            },
         )

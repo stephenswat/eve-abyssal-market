@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0005_remove_contract_scanned'),
+        ("contract_scanner", "0005_remove_contract_scanned"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='contract',
-            name='status',
+            model_name="contract",
+            name="status",
         ),
         migrations.AddField(
-            model_name='contract',
-            name='available',
+            model_name="contract",
+            name="available",
             field=models.BooleanField(db_index=True, default=True),
         ),
     ]

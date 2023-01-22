@@ -23,20 +23,17 @@ class MailRecipient(models.Model):
     TYPE_ALLIANCE = 2
 
     TYPE_CHOICES = (
-        (TYPE_CHARACTER, 'Character'),
-        (TYPE_CORPORATION, 'Corporation'),
-        (TYPE_ALLIANCE, 'Alliance'),
+        (TYPE_CHARACTER, "Character"),
+        (TYPE_CORPORATION, "Corporation"),
+        (TYPE_ALLIANCE, "Alliance"),
     )
 
-    mail = models.ForeignKey(Mail, models.CASCADE, related_name='recipients')
+    mail = models.ForeignKey(Mail, models.CASCADE, related_name="recipients")
     recipient_id = models.BigIntegerField()
     type = models.SmallIntegerField(choices=TYPE_CHOICES)
 
     def as_recipient_dict(self):
-        return {
-            "recipient_id": self.recipient_id,
-            "recipient_type": self._type_str()
-        }
+        return {"recipient_id": self.recipient_id, "recipient_type": self._type_str()}
 
     def _type_str(self):
         if self.type == self.TYPE_CHARACTER:

@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('price_predictor', '0001_initial'),
+        ("price_predictor", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='pricepredictor',
-            old_name='data',
-            new_name='model',
+            model_name="pricepredictor",
+            old_name="data",
+            new_name="model",
         ),
         migrations.AddField(
-            model_name='pricepredictor',
-            name='scaler',
-            field=models.BinaryField(default=b''),
+            model_name="pricepredictor",
+            name="scaler",
+            field=models.BinaryField(default=b""),
             preserve_default=False,
         ),
     ]

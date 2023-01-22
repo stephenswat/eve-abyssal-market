@@ -7,43 +7,63 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_sde', '0001_initial'),
-        ('abyssal_modules', '0013_moduleattribute_new_attribute'),
+        ("eve_sde", "0001_initial"),
+        ("abyssal_modules", "0013_moduleattribute_new_attribute"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='StaticModule',
+            name="StaticModule",
             fields=[
-                ('id', models.BigIntegerField(primary_key=True, serialize=False)),
+                ("id", models.BigIntegerField(primary_key=True, serialize=False)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AlterField(
-            model_name='moduleattribute',
-            name='module',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.Module'),
+            model_name="moduleattribute",
+            name="module",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="abyssal_modules.Module",
+            ),
         ),
         migrations.AddField(
-            model_name='staticmodule',
-            name='attributes',
-            field=models.ManyToManyField(related_name='_staticmodule_attributes_+', through='abyssal_modules.ModuleAttribute', to='abyssal_modules.ModuleDogmaAttribute'),
+            model_name="staticmodule",
+            name="attributes",
+            field=models.ManyToManyField(
+                related_name="_staticmodule_attributes_+",
+                through="abyssal_modules.ModuleAttribute",
+                to="abyssal_modules.ModuleDogmaAttribute",
+            ),
         ),
         migrations.AddField(
-            model_name='staticmodule',
-            name='source',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='eve_sde.InvType'),
+            model_name="staticmodule",
+            name="source",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="eve_sde.InvType",
+            ),
         ),
         migrations.AddField(
-            model_name='staticmodule',
-            name='type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='static_modules', to='abyssal_modules.ModuleType'),
+            model_name="staticmodule",
+            name="type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="static_modules",
+                to="abyssal_modules.ModuleType",
+            ),
         ),
         migrations.AddField(
-            model_name='moduleattribute',
-            name='static_module',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='abyssal_modules.StaticModule'),
+            model_name="moduleattribute",
+            name="static_module",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="abyssal_modules.StaticModule",
+            ),
         ),
     ]

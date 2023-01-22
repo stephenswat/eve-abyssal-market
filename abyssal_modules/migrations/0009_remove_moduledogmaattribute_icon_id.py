@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0008_moduledogmaattribute_short_name'),
+        ("abyssal_modules", "0008_moduledogmaattribute_short_name"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='moduledogmaattribute',
-            name='icon_id',
+            model_name="moduledogmaattribute",
+            name="icon_id",
         ),
     ]

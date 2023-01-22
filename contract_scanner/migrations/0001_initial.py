@@ -15,17 +15,38 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Contract',
+            name="Contract",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('status', models.SmallIntegerField(choices=[(0, 'Available'), (1, 'Expired'), (2, 'Sold'), (3, 'Disappeared')], db_index=True)),
-                ('issuer_id', models.BigIntegerField(db_index=True)),
-                ('price', models.DecimalField(db_index=True, decimal_places=2, max_digits=32)),
-                ('issued_at', models.DateTimeField()),
-                ('expires_at', models.DateTimeField()),
-                ('seen_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('owner', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                (
+                    "status",
+                    models.SmallIntegerField(
+                        choices=[
+                            (0, "Available"),
+                            (1, "Expired"),
+                            (2, "Sold"),
+                            (3, "Disappeared"),
+                        ],
+                        db_index=True,
+                    ),
+                ),
+                ("issuer_id", models.BigIntegerField(db_index=True)),
+                (
+                    "price",
+                    models.DecimalField(db_index=True, decimal_places=2, max_digits=32),
+                ),
+                ("issued_at", models.DateTimeField()),
+                ("expires_at", models.DateTimeField()),
+                ("seen_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

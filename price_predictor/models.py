@@ -18,13 +18,13 @@ class PricePredictor(models.Model):
 
     @staticmethod
     def predict_price(module):
-        model_row = PricePredictor.objects.filter(type=module.type).latest('date')
+        model_row = PricePredictor.objects.filter(type=module.type).latest("date")
 
         scaler, model = model_row.unpickle()
 
         scaled_features = scaler.transform([module.attribute_vector()])
 
         return {
-            'price': max(0, model.predict(scaled_features)[0] * 1000000),
-            'confidence': model_row.quality
+            "price": max(0, model.predict(scaled_features)[0] * 1000000),
+            "confidence": model_row.quality,
         }

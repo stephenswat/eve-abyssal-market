@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0014_static_modules'),
+        ("abyssal_modules", "0014_static_modules"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='moduleattribute',
-            old_name='_new_attribute',
-            new_name='new_attribute',
+            model_name="moduleattribute",
+            old_name="_new_attribute",
+            new_name="new_attribute",
         ),
     ]

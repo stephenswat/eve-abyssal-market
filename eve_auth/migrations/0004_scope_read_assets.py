@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eve_auth', '0003_store_auth_tokens'),
+        ("eve_auth", "0003_store_auth_tokens"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='eveuser',
-            name='scope_read_assets',
+            model_name="eveuser",
+            name="scope_read_assets",
             field=models.BooleanField(default=False),
             preserve_default=False,
         ),

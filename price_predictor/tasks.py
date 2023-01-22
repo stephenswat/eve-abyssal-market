@@ -17,11 +17,11 @@ from price_predictor.models import PricePredictor
 
 def create_model_for_type(t):
     mods = t.modules.annotate(
-        contract_price=F('contracts__price'),
-        contract_plex=F('contracts__plex'),
-        contract_single=F('contracts__single_item'),
-        contract_auction=F('contracts__auction'),
-        contract_available=F('contracts__available'),
+        contract_price=F("contracts__price"),
+        contract_plex=F("contracts__plex"),
+        contract_single=F("contracts__single_item"),
+        contract_auction=F("contracts__auction"),
+        contract_available=F("contracts__available"),
     ).filter(
         contract_single=True,
         contract_auction=False,
@@ -45,9 +45,12 @@ def create_model_for_type(t):
 
     features = scaler.transform(features)
 
-    reg = SVR(gamma=0.01, kernel='rbf', C=100000)
+    reg = SVR(gamma=0.01, kernel="rbf", C=100000)
     scores = cross_val_score(reg, features, samples, cv=5)
-    print("Accuracy: %0.2f (+/- %0.2f, %d samples)" % (scores.mean(), scores.std() * 2, len(samples)))
+    print(
+        "Accuracy: %0.2f (+/- %0.2f, %d samples)"
+        % (scores.mean(), scores.std() * 2, len(samples))
+    )
 
     reg.fit(features, samples)
 
@@ -55,11 +58,11 @@ def create_model_for_type(t):
         type=t,
         model=pickle.dumps(reg),
         scaler=pickle.dumps(scaler),
-        quality=scores.mean()
+        quality=scores.mean(),
     ).save()
 
 
-@db_periodic_task(crontab(minute='0', hour='0'))
+@db_periodic_task(crontab(minute="0", hour="0"))
 def create_models():
     for t in ModuleType.objects.all():
         try:
@@ -67,6 +70,9 @@ def create_models():
         except Exception:
             pass
 
-@db_periodic_task(crontab(minute='0', hour='2'))
+
+@db_periodic_task(crontab(minute="0", hour="2"))
 def clean_old_models():
-    PricePredictor.objects.filter(date__lt=timezone.now() - datetime.timedelta(days=3)).delete()
+    PricePredictor.objects.filter(
+        date__lt=timezone.now() - datetime.timedelta(days=3)
+    ).delete()

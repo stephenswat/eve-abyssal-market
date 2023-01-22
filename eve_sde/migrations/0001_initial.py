@@ -8,44 +8,56 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Constellation',
+            name="Constellation",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
             ],
         ),
         migrations.CreateModel(
-            name='InvType',
+            name="InvType",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('group_id', models.IntegerField(db_index=True)),
-                ('name', models.CharField(max_length=128)),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                ("group_id", models.IntegerField(db_index=True)),
+                ("name", models.CharField(max_length=128)),
             ],
         ),
         migrations.CreateModel(
-            name='Region',
+            name="Region",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
             ],
         ),
         migrations.CreateModel(
-            name='SolarSystem',
+            name="SolarSystem",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
-                ('constellation', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='eve_sde.Constellation')),
-                ('gates', models.ManyToManyField(related_name='_solarsystem_gates_+', to='eve_sde.SolarSystem')),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=64)),
+                (
+                    "constellation",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to="eve_sde.Constellation",
+                    ),
+                ),
+                (
+                    "gates",
+                    models.ManyToManyField(
+                        related_name="_solarsystem_gates_+", to="eve_sde.SolarSystem"
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='constellation',
-            name='region',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='eve_sde.Region'),
+            model_name="constellation",
+            name="region",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING, to="eve_sde.Region"
+            ),
         ),
     ]

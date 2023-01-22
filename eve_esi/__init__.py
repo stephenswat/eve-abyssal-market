@@ -24,7 +24,7 @@ class EsiManager:
         if self._ESI_APP is None:
             logger.debug("Application still uninitialized. Initializing...")
             self._ESI_APP = esipy.EsiApp(
-                datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility')
+                datasource=getattr(settings, "ESI_DATASOURCE", "tranquility")
             ).get_latest_swagger
             logger.debug("Application initialized!")
         else:
@@ -44,14 +44,13 @@ class EsiManager:
             redirect_uri=settings.ESI_CALLBACK,
             client_id=settings.ESI_CLIENT_ID,
             secret_key=settings.ESI_SECRET_KEY,
-            esi_datasource=getattr(settings, 'ESI_DATASOURCE', 'tranquility'),
-            headers={'User-Agent': settings.ESI_USER_AGENT}
+            esi_datasource=getattr(settings, "ESI_DATASOURCE", "tranquility"),
+            headers={"User-Agent": settings.ESI_USER_AGENT},
         )
 
     def get_client(self, security=None):
         return esipy.EsiClient(
-            security=security,
-            headers={'User-Agent': settings.ESI_USER_AGENT}
+            security=security, headers={"User-Agent": settings.ESI_USER_AGENT}
         )
 
     def __getitem__(self, key):
@@ -63,15 +62,12 @@ class EsiManager:
 
         op = self[endpoint](**kwargs)
 
-        if method == 'head':
+        if method == "head":
             res = client.head(op)
-        elif method == 'request':
+        elif method == "request":
             res = client.request(op)
 
-        COUNTER_ESI_REQUESTS.labels(
-            endpoint=endpoint,
-            status=res.status
-        ).inc()
+        COUNTER_ESI_REQUESTS.labels(endpoint=endpoint, status=res.status).inc()
 
         if not 100 <= res.status <= 299:
             raise EsiException(endpoint, res.status, kwargs)
@@ -79,15 +75,15 @@ class EsiManager:
         return res
 
     def head(self, endpoint, client=None, **kwargs):
-        return self.__request_helper('head', endpoint, client, **kwargs)
+        return self.__request_helper("head", endpoint, client, **kwargs)
 
     def request(self, endpoint, client=None, multi_page=False, **kwargs):
         if not multi_page:
-            return self.__request_helper('request', endpoint, client, **kwargs)
+            return self.__request_helper("request", endpoint, client, **kwargs)
 
         res = []
 
-        pages = self.head(endpoint, client, **kwargs).header['X-Pages'][0]
+        pages = self.head(endpoint, client, **kwargs).header["X-Pages"][0]
 
         for page in range(1, pages + 1):
             res += self.request(endpoint, client, page=page, **kwargs).data

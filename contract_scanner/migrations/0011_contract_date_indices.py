@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contract_scanner', '0010_contract_modules_nonedit'),
+        ("contract_scanner", "0010_contract_modules_nonedit"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='seen_at',
+            model_name="contract",
+            name="seen_at",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='contract',
-            name='updated_at',
+            model_name="contract",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True, db_index=True),
         ),
     ]

@@ -6,19 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0001_initial'),
-        ('contract_scanner', '0003_remove_owner'),
+        ("abyssal_modules", "0001_initial"),
+        ("contract_scanner", "0003_remove_owner"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contract',
-            name='modules',
-            field=models.ManyToManyField(related_name='contracts', to='abyssal_modules.Module'),
+            model_name="contract",
+            name="modules",
+            field=models.ManyToManyField(
+                related_name="contracts", to="abyssal_modules.Module"
+            ),
         ),
         migrations.AddField(
-            model_name='contract',
-            name='single_item',
+            model_name="contract",
+            name="single_item",
             field=models.BooleanField(default=False),
             preserve_default=False,
         ),

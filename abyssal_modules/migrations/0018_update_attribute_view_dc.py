@@ -4,7 +4,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0017_attribute_stats'),
+        ("abyssal_modules", "0017_attribute_stats"),
     ]
 
     operations = [
@@ -201,6 +201,6 @@ class Migration(migrations.Migration):
             WHERE
                 _attribute_id = 977;
             """,
-            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_derived_attributes__view;"
+            reverse_sql="DROP VIEW IF EXISTS abyssal_modules_derived_attributes__view;",
         )
     ]

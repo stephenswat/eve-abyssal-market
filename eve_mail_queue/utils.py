@@ -23,13 +23,9 @@ def send_mail(subject, body, recipients, priority=None, sender=None):
         elif type(r) == tuple:
             rec_id, rec_type = r
         elif type(r) == dict:
-            rec_id = r['id']
-            rec_type = r.get('type', MailRecipient.TYPE_CHARACTER)
+            rec_id = r["id"]
+            rec_type = r.get("type", MailRecipient.TYPE_CHARACTER)
         else:
-            raise ValueError('Invalid recipient input.')
+            raise ValueError("Invalid recipient input.")
 
-        MailRecipient(
-            mail=mail,
-            recipient_id=rec_id,
-            type=rec_type
-        ).save()
+        MailRecipient(mail=mail, recipient_id=rec_id, type=rec_type).save()

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('abyssal_modules', '0010_mutators'),
+        ("abyssal_modules", "0010_mutators"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='moduleattribute',
-            name='value',
+            model_name="moduleattribute",
+            name="value",
             field=models.FloatField(db_index=True),
         ),
     ]

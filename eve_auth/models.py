@@ -12,7 +12,9 @@ from eve_esi import ESI
 
 
 class EVEData(models.Model):
-    user = models.OneToOneField(User, models.CASCADE, primary_key=True, related_name='eve')
+    user = models.OneToOneField(
+        User, models.CASCADE, primary_key=True, related_name="eve"
+    )
 
     @property
     def character_id(self):
@@ -28,7 +30,7 @@ class EVEData(models.Model):
 
     @property
     def all_character_ids(self):
-        return self.user.characters.values_list('character_id', flat=True)
+        return self.user.characters.values_list("character_id", flat=True)
 
 
 @receiver(post_save, sender=User)
@@ -40,7 +42,9 @@ def create_eve_data(sender, instance, created, **kwargs):
 class EveUser(models.Model):
     character_id = models.BigIntegerField(db_index=True, unique=True)
     name = models.CharField(max_length=64, db_index=True, unique=True)
-    owner = models.ForeignKey(User, models.CASCADE, db_index=True, related_name='characters')
+    owner = models.ForeignKey(
+        User, models.CASCADE, db_index=True, related_name="characters"
+    )
 
     scope_read_assets = models.BooleanField()
     scope_open_window = models.BooleanField()
@@ -61,23 +65,21 @@ class EveUser(models.Model):
     @property
     def tokens(self):
         return {
-            'access_token': self.access_token,
-            'refresh_token': self.refresh_token,
-            'expires_in': (
-                self.token_expiry -
-                datetime.datetime.now(datetime.timezone.utc)
+            "access_token": self.access_token,
+            "refresh_token": self.refresh_token,
+            "expires_in": (
+                self.token_expiry - datetime.datetime.now(datetime.timezone.utc)
             ).total_seconds(),
-            'token_type': 'Bearer',
+            "token_type": "Bearer",
         }
 
     @tokens.setter
     def tokens(self, token):
-        self.access_token = token['access_token']
-        self.refresh_token = token['refresh_token']
-        self.token_expiry = (
-            datetime.datetime.now(datetime.timezone.utc) +
-            datetime.timedelta(seconds=token['expires_in'])
-        )
+        self.access_token = token["access_token"]
+        self.refresh_token = token["refresh_token"]
+        self.token_expiry = datetime.datetime.now(
+            datetime.timezone.utc
+        ) + datetime.timedelta(seconds=token["expires_in"])
 
     def get_security(self):
         res = ESI.get_security()
@@ -104,9 +106,9 @@ class EveUser(models.Model):
 
     def get_contracts(self):
         return ESI.request(
-            'get_characters_character_id_contracts',
+            "get_characters_character_id_contracts",
             client=self.get_client(),
-            character_id=self.character_id
+            character_id=self.character_id,
         ).data
 
     def get_assets(self):
@@ -114,19 +116,18 @@ class EveUser(models.Model):
 
         for page in itertools.count(start=1):
             req = ESI.request(
-                'get_characters_character_id_assets',
+                "get_characters_character_id_assets",
                 client=self.get_client(),
                 character_id=self.character_id,
-                page=page
+                page=page,
             )
 
             date = datetime.datetime.strptime(
-                req.header['Last-Modified'][0],
-                "%a, %d %b %Y %H:%M:%S GMT"
+                req.header["Last-Modified"][0], "%a, %d %b %Y %H:%M:%S GMT"
             ).replace(tzinfo=pytz.UTC)
             results += req.data
 
-            if page >= req.header['X-Pages'][0]:
+            if page >= req.header["X-Pages"][0]:
                 break
 
         return results, date
