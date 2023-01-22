@@ -1,4 +1,4 @@
 #!/bin/bash
 
-poetry run python manage.py migrate --noinput
-poetry run python manage.py collectstatic --noinput
+poetry run python -Wd manage.py migrate --noinput
+poetry run python -Wd manage.py collectstatic --noinput
