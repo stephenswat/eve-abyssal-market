@@ -74,8 +74,8 @@ def create_models():
     for t in ModuleType.objects.all():
         try:
             create_model_for_type(t)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.exception("Non-specified exception when creating module!")
 
 
 @db_periodic_task(crontab(minute="0", hour="2"))
