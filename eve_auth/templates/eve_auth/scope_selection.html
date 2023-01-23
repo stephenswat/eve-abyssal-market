@@ -1,6 +1,6 @@
 {% extends 'content_page.html' %}
 {% load static %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 
 {% block title %}Login{% endblock %}
 
@@ -25,9 +25,7 @@
 <form action="" method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Continue to EVE SSO</button>
-    {% endbuttons %}
+    {% bootstrap_button button_type="submit" content="Continue to EVE SSO" %}
 </form>
 </div>
 
