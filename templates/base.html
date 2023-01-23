@@ -62,32 +62,46 @@
       <div class="collapse navbar-collapse" id="navbar-toggled">
         <ul class="navbar-nav navbar-fill">
           <li class="nav-item dropdown dropdown-accordion" data-accordion="#module-accordion">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
               Modules
             </a>
-            <div class="dropdown-menu module-dropdown ">
+            <div class="dropdown-menu module-dropdown">
+              <div class="row mx-2 my-2">
+                {% get_abyssal_type_list as type_list %}
+                {% for r, l in type_list %}
+                  <span class="col-md-3 col-12 align-middle">
+                      <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png" style="padding-right: 7px;">{{ r }}
+                  </span>
+                  <div class="col-md-9 col-12 row m-0 p-0">
+                      {% for n, i in l %}
+                      <span class="col p-1"><a class="btn btn-sm btn-primary btn-block py-0" style="font-size: small;" href="{% url 'abyssal_modules:type_module_list' i %}">{{ n }}</a></span>
+                      {% endfor %}
+                  </div>
+                  <div class="w-100"></div>
+                {% endfor %}
+              </div>
+
+<!-- 
               <div class="accordion" id="accordionExample">
                 {% get_abyssal_type_list as type_list %}
                 {% for r, l in type_list %}
-                <div class="card">
-                  <div class="card-header module-accordion-header" id="module-group-heading-{{ l.0.1 }}">
-                    <h5 class="mb-0">
-                      <a class="btn btn-link module-accordion-button" type="button" data-toggle="collapse" href="#module-group-collapse-{{ l.0.1 }}">
-                        <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png"> {{ r }}
-                      </a>
-                    </h5>
-                  </div>
+                <div class="accordion-item border-0">
+                  <h2 class="accordion-header module-accordion-header" id="module-group-heading-{{ l.0.1 }}">
+                    <a class="accordion-button btn-sm rounded-0 module-type-header" type="button" data-bs-toggle="collapse" data-bs-target="#module-group-collapse-{{ l.0.1 }}" aria-expanded="false" aria-controls="module-group-collapse-{{ l.0.1 }}">
+                      <img height="21px" src="https://image.eveonline.com/Type/{{ l.0.1 }}_32.png" class="pr-2"> {{ r }}
+                    </a>
+                  </h2>
 
-                  <div id="module-group-collapse-{{ l.0.1 }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                      <div class="list-group">
-                        {% for n, i in l %}
-                          <a href="{% url 'abyssal_modules:type_module_list' i %}" class="list-group-item list-group-item-action">{{ n }}</a>
-                        {% endfor %}
-                      </div>
+                  <div id="module-group-collapse-{{ l.0.1 }}" class="accordion-collapse collapse module-type-body" aria-labelledby="module-group-heading-{{ l.0.1 }}" data-parent="#accordionExample">
+                    <div class="list-group px-0 py-0">
+                      {% for n, i in l %}
+                        <a href="{% url 'abyssal_modules:type_module_list' i %}" class="list-group-item list-group-item-action border-0">{{ n }}</a>
+                      {% endfor %}
+                    </div>
                   </div>
                 </div>
                 {% endfor %}
-              </div>
+              </div> -->
             </div>
           </li>
           <li class="nav-item">
@@ -137,7 +151,11 @@
       </div>
     </nav>
 
+    <div class="container" style="min-height: 56px;"></div>
+
     {% block content_container %}{% endblock %}
+
+    <div class="container" style="min-height: 56px;"></div>
 
     <footer class="footer mt-auto py-3 text-light fixed-bottom">
       <div class="container">

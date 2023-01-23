@@ -27,7 +27,8 @@
 }
 
 .list-group-item {
-    padding: 8px;
+    padding: 1px;
+    background-color: inherit;
 }
 
 .parner-logo {
@@ -357,4 +358,17 @@ body.dark-mode .dataTables_processing {
     h1 {
         font-size: 24pt !important;
     }
+}
+
+.module-type-header {
+    background-color: white !important;
+}
+
+.module-type-body {
+    background-color: white !important;
+}
+
+.module-dropdown {
+    min-width: 50rem;
+    font-size: small;
 }
