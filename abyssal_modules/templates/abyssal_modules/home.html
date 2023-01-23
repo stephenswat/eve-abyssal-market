@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container pt-5">
+<div class="container pt-5 pb-5">
     <div class="row">
         {% get_abyssal_type_list as type_list %}
         {% for r, l in type_list %}
@@ -39,44 +39,5 @@
         {% endfor %}
     </div>
 </div>
-
-<div class="container-fluid">
-    <div class="row py-2 my-4 justify-content-center">
-        <div class="col-12 col-lg-3">
-            <div class="card flex-row bg-light">
-                <div class="card-header border-0 parner-logo">
-                    <img src="{% static 'img/partners/mogul.png' %}" class="partner-logo">
-                </div>
-                <div class="card-block p-3">
-                    <h4 class="card-title"><a href="https://beta.mogulfinancial.space/">EVE Mogul</a></h4>
-                    <p class="card-text">If you play the New Eden markets, EVE Mogul is the service for you. Their great tools allow you to track and optimize your market activities.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3">
-            <div class="card flex-row bg-light">
-                <div class="card-header border-0 parner-logo">
-                    <img src="{% static 'img/partners/pyfa.png' %}" class="partner-logo">
-                </div>
-                <div class="card-block p-3">
-                    <h4 class="card-title"><a href="https://github.com/pyfa-org/Pyfa">Pyfa</a></h4>
-                    <p class="card-text">Pyfa is the best tool available for simulating fits and it can import abyssal modules directly from this website!</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3">
-            <div class="card flex-row bg-light">
-                <div class="card-header border-0 parner-logo">
-                    <img src="{% static 'img/partners/discord.png' %}" class="partner-logo">
-                </div>
-                <div class="card-block p-3">
-                    <h4 class="card-title"><a href="http://discord.gg/sFrvsGg">Abyssal Trading Discord</a></h4>
-                    <p class="card-text">Chat about, appraise, buy and sell abyssal modules on Discord. Also has an in-game channel: "<i>abyssal trading discord</i>".</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 {% endblock %}
