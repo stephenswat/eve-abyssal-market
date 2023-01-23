@@ -52,7 +52,7 @@
 
     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
       <a class="navbar-brand" href="/">Abyssal Market</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggled">
@@ -139,7 +139,7 @@
 
     {% block content_container %}{% endblock %}
 
-    <footer class="footer mt-auto py-3 text-light">
+    <footer class="footer mt-auto py-3 text-light fixed-bottom">
       <div class="container">
 
         Made with &#x1F914;&#x1F52A; by <a href="https://evewho.com/pilot/Sharad+Heft">Sharad Heft</a> &bull; Sharad#4720 &bull; 
