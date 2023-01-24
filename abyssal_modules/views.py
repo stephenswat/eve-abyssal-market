@@ -19,6 +19,27 @@ from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
 
 
+class SimilarModuleRedirect(View):
+    def get(self, request, module_id, type_id = None, referer = None):
+        if (referer == "assets"):
+            referer = "abyssal_modules:type_asset_module_list"
+        elif (referer == "contracts"):
+            referer = "abyssal_modules:type_module_list"
+        else:
+            # Default redirection.
+            referer = "abyssal_modules:type_module_list"
+        module = Module.objects.get(id=module_id)
+        if type_id == None:
+            type_id = module.type_id
+        attributes = module.attribute_dict()
+        parameters = ""
+        for key in attributes.keys():
+            if attributes[key]["display"]:
+                parameters += f"{key}={attributes[key]['real_value']}&"
+        rev = reverse(referer, kwargs={"type_id": type_id})
+        return HttpResponseRedirect(f"{rev}?{parameters}")
+
+
 class ModuleList(View):
     def get(self, request):
         return render(

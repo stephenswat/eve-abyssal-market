@@ -1,6 +1,6 @@
 # Abyssal Market
 
-This is the source code behind https://mutaplasmid.space/. It's a website that
+This is the source code behind [https://mutaplasmid.space/]. It's a website that
 allows users to browse, appraise and buy abyssal modules that are available on
 the contract market.
 

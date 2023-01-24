@@ -43,7 +43,7 @@
             <dd>{{ object.mutator.name }}</dd>
         </dl>
         <dl class="col-3">
-            <dt>Open</dt>
+            <dt>Actions</dt>
             <dd>
                 <button
                     class="btn btn-primary btn-copy btn-copy-contract-link btn-open-contract"
@@ -56,6 +56,12 @@
                     data-clipboard-text="{{ object.get_pyfa_string }}"
                 >
                     Pyfa
+                </button>&nbsp;
+                <button
+                    class="btn btn-primary btn-similar-mods"
+                    data-id="{{ object.id }}"
+                >
+                    Similar
                 </button>
             </dd>
         </dl>
@@ -158,5 +164,11 @@ $(document).ready(function () {
 $(document).on("click", ".btn-open-contract-esi", function() {
     open_contract($(this));
 });
+
+$(document).on("click", ".btn-similar-mods", function(e) {
+        const module_id = $(this).data('id');
+        window.location.href = window.location + `similar/`;
+});
+
 </script>
 {% endblock %}

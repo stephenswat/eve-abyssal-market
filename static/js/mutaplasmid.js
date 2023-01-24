@@ -89,26 +89,29 @@ function price_format(contract) {
     return base;
 }
 
-function open_format(mod, logged_in) {
+function action_format(mod, logged_in) {
     if (mod.contract !== null) {
         return `<div class="btn-group" role="group" aria-label="Basic example">
                     <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
                     <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+                    <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
                 </div>`
     } else {
         return `<div class="btn-group" role="group" aria-label="Basic example">
                     <button disabled class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="">ESI</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="">Link</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="">Pyfa</button>
+                    <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
                 </div>`
     }
 
 }
 
-function open_format_non_contract(mod) {
+function action_format_non_contract(mod) {
     return `<div class="btn-group" role="group" aria-label="Basic example">
                 <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
+                <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
             </div>`
 }
 

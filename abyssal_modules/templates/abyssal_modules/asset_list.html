@@ -152,7 +152,7 @@
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            return open_format_non_contract(row);
+                            return action_format_non_contract(row);
                         }
                     }
                 }
@@ -206,6 +206,8 @@
                 );
 
                 table.draw();
+                // Clean up the URL.
+                clean_url();
             }
         });
     });
@@ -242,6 +244,18 @@
         attr_val[attr_id] = range_to_price(ui.values, 100000);
     }
 
+    // Clean up the URL after reading the parameters.
+    function clean_url()
+    {
+        window.history.pushState(null, '', window.location.origin + window.location.pathname);
+    }
+
+    // Button to view similar modules.
+    $(document).on("click", ".btn-similar-mods", function(e) {
+        const module_id = $(this).data('id');
+        window.location.href = window.location + `similar/${module_id}/`;
+    });
+
     function initialize_slider(attr_id) {
         var range;
         var values;
@@ -255,6 +269,18 @@
             range = attr_val[attr_id];
             values = attr_val[attr_id];
             slide = attr_slider_fun;
+        }
+
+        // Pull possible parameters
+        const url = new URL(window.location);
+        var middle = url.searchParams.get(`${attr_id}`);
+        if (middle !== null && middle !== NaN)
+        {
+            middle = +(middle);
+            const percent_range = 0.2;
+            const value_range = percent_range * +(range[1] - range[0]);
+            values = [middle - value_range, middle + value_range];
+            attr_val[attr_id] = values;
         }
 
         $("#attr-" + attr_id + "-range").slider({
