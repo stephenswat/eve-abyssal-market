@@ -7,12 +7,12 @@ import abyssal_modules.views
 app_name = "abyssal_modules"
 
 urlpatterns = [
-    path (
+    path(
         "type/<int:type_id>/<str:referer>/similar/<int:module_id>/",
         abyssal_modules.views.SimilarModuleRedirect.as_view(),
         name="similar_view",
     ),
-    path (
+    path(
         "module/<int:module_id>/similar/",
         abyssal_modules.views.SimilarModuleRedirect.as_view(),
         name="similar_view",

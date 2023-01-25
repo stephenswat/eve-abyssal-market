@@ -20,10 +20,10 @@ from abyssal_modules.tasks import create_module
 
 
 class SimilarModuleRedirect(View):
-    def get(self, request, module_id, type_id = None, referer = None):
-        if (referer == "assets"):
+    def get(self, request, module_id, type_id=None, referer=None):
+        if referer == "assets":
             referer = "abyssal_modules:type_asset_module_list"
-        elif (referer == "contracts"):
+        elif referer == "contracts":
             referer = "abyssal_modules:type_module_list"
         else:
             # Default redirection.
