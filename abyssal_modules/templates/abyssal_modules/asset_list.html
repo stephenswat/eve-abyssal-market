@@ -273,11 +273,12 @@
 
         // Pull possible parameters
         const url = new URL(window.location);
-        var middle = url.searchParams.get(`${attr_id}`);
+        let middle = url.searchParams.get(`${attr_id}`);
+        let percent_range = url.searchParams.get(`percent_range`);
         if (middle !== null && middle !== NaN)
         {
+            percent_range = +(percent_range);
             middle = +(middle);
-            const percent_range = 0.2;
             const value_range = percent_range * +(range[1] - range[0]);
             values = [middle - value_range, middle + value_range];
             attr_val[attr_id] = values;

@@ -33,9 +33,17 @@ class SimilarModuleRedirect(View):
             type_id = module.type_id
         attributes = module.attribute_dict()
         parameters = ""
+        data = request.GET
         for key in attributes.keys():
             if attributes[key]["display"]:
-                parameters += f"{key}={attributes[key]['real_value']}&"
+                if f"{key}_check" not in data.keys() or data[f"{key}_check"] == "true":
+                    parameters += f"{key}={attributes[key]['real_value']}&"
+
+        if "percent_range" in data.keys():
+            parameters += f"percent_range={float(data['percent_range']) / 100}"
+        else:
+            parameters += f"percent_range=0.2"
+
         rev = reverse(referer, kwargs={"type_id": type_id})
         return HttpResponseRedirect(f"{rev}?{parameters}")
 
