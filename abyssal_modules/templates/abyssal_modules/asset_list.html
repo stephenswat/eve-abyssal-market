@@ -78,9 +78,11 @@
     var price_range;
     var module_type = {{ module_type.id }};
     var attr_list = [];
+    var attr_names = [];
 
     {% for at in attributes %}
     attr_list.push({{ at.id }});
+    attr_names.push("{{ at.name }}");
     {% endfor %}
 
     function icon_format(data) {
@@ -152,7 +154,7 @@
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            return action_format_non_contract(row);
+                            return action_format_non_contract(row, attr_list, attr_names);
                         }
                     }
                 }
@@ -253,7 +255,16 @@
     // Button to view similar modules.
     $(document).on("click", ".btn-similar-mods", function(e) {
         const module_id = $(this).data('id');
-        window.location.href = window.location + `similar/${module_id}/`;
+        let params = new URLSearchParams();
+
+        // Get values.
+        params.append("percent_range", $(`#${module_id}_percent_range`).val());
+        {% for at in attributes %}
+        params.append("{{at.id}}_check", $(`#${module_id}_{{at.id}}_check`).is(":checked"));
+        {% endfor %}
+
+        // Pass values to /similar/
+        window.location.href = window.location + `similar/${module_id}/` + "?" + params.toString();
     });
 
     function initialize_slider(attr_id) {

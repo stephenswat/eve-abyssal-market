@@ -89,30 +89,89 @@ function price_format(contract) {
     return base;
 }
 
-function action_format(mod, logged_in) {
+function action_format(mod, logged_in, ids, names) {
     if (mod.contract !== null) {
         return `<div class="btn-group" role="group" aria-label="Basic example">
                     <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
                     <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
-                    <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
+                    <!-- Similar Button -->
+                    ` + generate_similar_button(mod, ids, names) + `
                 </div>`
     } else {
         return `<div class="btn-group" role="group" aria-label="Basic example">
                     <button disabled class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="">ESI</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="">Link</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="">Pyfa</button>
-                    <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
+                    <!-- Similar Button -->
+                    ` + generate_similar_button(mod, ids, names) + `
                 </div>`
     }
 
 }
 
-function action_format_non_contract(mod) {
+function action_format_non_contract(mod, ids, names) {
     return `<div class="btn-group" role="group" aria-label="Basic example">
                 <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
-                <button class="btn btn-primary btn-similar-mods" data-id="${mod.id}">Similar</button>
+                <!-- Similar Button -->
+                ` + generate_similar_button(mod, ids, names) + `
+                <!-- DEBUG -->
+                <button class="btn btn-std-size btn-primary btn-sell">Sell</button>
             </div>`
+}
+
+function generate_similar_button(mod, ids, names) {
+    // There's probably a better way to do this, but I'm too lazy to figure it out.
+    output = `
+    <div
+        style="margin: 0; padding: 0;"
+        class="btn btn-primary"
+    >
+        <button
+            style="margin-right: 0; padding-right: 0;"
+            class="btn btn-primary btn-similar-mods"
+            data-id="${mod.id}"
+        >
+            Similar
+        </button>
+        <a
+            style="margin-left: 0; padding-left: 0; background-color: transparent; border: transparent;"
+            class="btn btn-primary"
+            data-bs-toggle="dropdown"
+            data-bs-auto-close="outside">
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin 15px; z-index: 100; position:relative;">
+            <input id="${mod.id}_percent_range" type="number" min="0" max="100" value="15">
+            <label for="${mod.id}_percent_range">&nbsp;Percent Range</label>`
+    for (let i = 0; i < ids.length; i++)
+    {
+        let id = ids[i];
+        let name = names[i];
+        output += `
+        <span>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="${mod.id}_${id}_check" checked>
+                <label class="form-check-label" for="${mod.id}_${id}_check">
+                <img src="/static/img/attributes/${id}.png" title="${name}">&nbsp;${name}
+                </label>
+            </div>
+        </span>
+        `
+    }
+    output +=
+    `   <div>
+            <button
+                class="btn btn-primary btn-small mx-auto d-block btn-similar-mods"
+                data-id="${mod.id}"
+            >
+                Submit
+            </button>
+        </div>
+    </div>
+    </div>`
+
+    return output;
 }
 
 function attr_format(attr, data) {
