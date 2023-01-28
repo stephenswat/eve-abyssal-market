@@ -91,7 +91,7 @@ function price_format(contract) {
 
 function action_format(mod, logged_in, ids, names) {
     if (mod.contract !== null) {
-        return `<div class="btn-group" role="group" aria-label="Basic example">
+        return `<div class="btn-group" role="group" style="display: inline-block;">
                     <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
                     <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
@@ -99,7 +99,7 @@ function action_format(mod, logged_in, ids, names) {
                     ` + generate_similar_button(mod, ids, names) + `
                 </div>`
     } else {
-        return `<div class="btn-group" role="group" aria-label="Basic example">
+        return `<div class="btn-group" role="group" style="display: inline-block;">
                     <button disabled class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="">ESI</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="">Link</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="">Pyfa</button>
@@ -111,7 +111,7 @@ function action_format(mod, logged_in, ids, names) {
 }
 
 function action_format_non_contract(mod, ids, names) {
-    return `<div class="btn-group" role="group" aria-label="Basic example">
+    return `<div class="btn-group" role="group" style="display: inline-block;">
                 <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
                 <!-- Similar Button -->
                 ` + generate_similar_button(mod, ids, names) + `
@@ -124,21 +124,22 @@ function generate_similar_button(mod, ids, names) {
     // There's probably a better way to do this, but I'm too lazy to figure it out.
     output = `
     <div
-        style="margin: 0; padding: 0;"
-        class="btn btn-primary"
+        style="margin: 0; padding: 0; border: 0px; width: auto;"
+        class="btn btn-primary btn-std-size"
     >
         <button
-            style="margin-right: 0; padding-right: 0;"
+            style="margin-right: 0; padding-right: 5px; float:left;"
             class="btn btn-primary btn-similar-mods"
             data-id="${mod.id}"
         >
             Similar
         </button>
         <a
-            style="margin-left: 0; padding-left: 0; background-color: transparent; border: transparent;"
+            style="margin-left: 0; padding-left: 0; float:right; position: absolute;"
             class="btn btn-primary"
             data-bs-toggle="dropdown"
-            data-bs-auto-close="outside">
+            data-bs-auto-close="outside"
+        >
             <i class="fa fa-caret-down" aria-hidden="true"></i>
         </a>
         <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin 15px; z-index: 100; position:relative;">
