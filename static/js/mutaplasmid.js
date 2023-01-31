@@ -91,7 +91,7 @@ function price_format(contract) {
 
 function action_format(mod, logged_in, ids, names) {
     if (mod.contract !== null) {
-        return `<div class="btn-group" role="group" style="display: inline-block;">
+        return `<div class="btn-group" role="group" style="display: inline-flex;">
                     <button ${logged_in ? "" : "disabled"} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="${mod.contract.id}">ESI</button>
                     <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//${mod.contract.id}>Contract ${mod.contract.id}</url>">Link</button>
                     <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
@@ -99,7 +99,7 @@ function action_format(mod, logged_in, ids, names) {
                     ` + generate_similar_button(mod, ids, names) + `
                 </div>`
     } else {
-        return `<div class="btn-group" role="group" style="display: inline-block;">
+        return `<div class="btn-group" role="group" style="display: inline-flex;">
                     <button disabled class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="">ESI</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="">Link</button>
                     <button disabled class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="">Pyfa</button>
@@ -111,12 +111,10 @@ function action_format(mod, logged_in, ids, names) {
 }
 
 function action_format_non_contract(mod, ids, names) {
-    return `<div class="btn-group" role="group" style="display: inline-block;">
+    return `<div class="btn-group" role="group" style="display: inline-flex;">
                 <button class="btn btn-std-size btn-primary btn-copy" data-clipboard-text="${mod.pyfa}">Pyfa</button>
                 <!-- Similar Button -->
                 ` + generate_similar_button(mod, ids, names) + `
-                <!-- DEBUG -->
-                <button class="btn btn-std-size btn-primary btn-sell">Sell</button>
             </div>`
 }
 
