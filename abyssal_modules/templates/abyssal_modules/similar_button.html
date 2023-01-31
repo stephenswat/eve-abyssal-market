@@ -1,12 +1,12 @@
 {% load static %}
 
 <div
-    style="margin: 0; padding: 0; width: auto;"
-    class="btn btn-primary"
+    style="margin: 0; padding: 0; border: 0px; width: auto;"
+    class="btn btn-primary btn-std-size"
 >
     <button
-        style="margin-right: 0; padding-right: 0;"
-        class="btn btn-primary btn-similar-mods;"
+        style="margin-right: 0; padding-right: 5px; float:left;"
+        class="btn btn-primary btn-similar-mods"
         data-id="{{ object.id }}"
     >
         Similar
@@ -18,9 +18,9 @@
         data-bs-auto-close="outside">
         <i class="fa fa-caret-down" aria-hidden="true"></i>
     </a>
-    <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin 15px; z-index: 100; position:relative;">
-        <input id="percent_range" type="number" min="0" max="100" value="15">
-        <label for="percent_range">&nbsp;Percent Range</label>
+    <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin: 15px; z-index: 100; position:relative;">
+        <input id="{{ object.id }}_percent_range" type="number" min="0" max="100" value="15">
+        <label for="{{ object.id }}_percent_range">&nbsp;Percent Range</label>
         <!-- Add toggles for each of the attributes -->
         {% for i, a in attributes %}
         {% if a.display %}
@@ -36,7 +36,8 @@
         {% endfor %}
         <div>
             <button
-                class="btn btn-primary btn-small mx-auto d-block btn-similar-mods"
+                class="btn btn-primary mx-auto d-block btn-similar-mods"
+                style="color: white;"
                 data-id="{{ object.id }}"
             >
                 Submit

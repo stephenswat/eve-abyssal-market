@@ -140,7 +140,7 @@ function generate_similar_button(mod, ids, names) {
         >
             <i class="fa fa-caret-down" aria-hidden="true"></i>
         </a>
-        <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin 15px; z-index: 100; position:relative;">
+        <div class="dropdown-menu" id="similar_form" style="padding: 15px; margin: 15px; z-index: 100; position:relative;">
             <input id="${mod.id}_percent_range" type="number" min="0" max="100" value="15">
             <label for="${mod.id}_percent_range">&nbsp;Percent Range</label>`
     for (let i = 0; i < ids.length; i++)
@@ -161,7 +161,7 @@ function generate_similar_button(mod, ids, names) {
     output +=
     `   <div>
             <button
-                class="btn btn-primary btn-small mx-auto d-block btn-similar-mods"
+                class="btn btn-primary mx-auto d-block btn-similar-mods"
                 data-id="${mod.id}"
             >
                 Submit

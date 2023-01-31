@@ -166,7 +166,7 @@ $(document).on("click", ".btn-similar-mods", function(e) {
     let params = new URLSearchParams(url.search);
 
     // Get values.
-    params.append("percent_range", $("#percent_range").val());
+    params.append("percent_range", $("#{{object.id}}_percent_range").val());
     {% for i, a in object.attribute_dict.items %}{% if a.display %}
     params.append("{{i}}_check", $("#{{i}}_check").is(":checked"));
     {% endif %}{% endfor %}
