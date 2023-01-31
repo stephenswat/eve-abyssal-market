@@ -78,9 +78,11 @@
     var price_range;
     var module_type = {{ module_type.id }};
     var attr_list = [];
+    var attr_names = [];
 
     {% for at in attributes %}
     attr_list.push({{ at.id }});
+    attr_names.push("{{ at.name }}");
     {% endfor %}
 
     function icon_format(data) {
@@ -152,7 +154,7 @@
                     'orderable': false,
                     'render': {
                         '_': function (data, type, row, meta) {
-                            return open_format_non_contract(row);
+                            return action_format_non_contract(row, attr_list, attr_names);
                         }
                     }
                 }
@@ -206,6 +208,8 @@
                 );
 
                 table.draw();
+                // Clean up the URL.
+                clean_url();
             }
         });
     });
@@ -242,6 +246,27 @@
         attr_val[attr_id] = range_to_price(ui.values, 100000);
     }
 
+    // Clean up the URL after reading the parameters.
+    function clean_url()
+    {
+        window.history.pushState(null, '', window.location.origin + window.location.pathname);
+    }
+
+    // Button to view similar modules.
+    $(document).on("click", ".btn-similar-mods", function(e) {
+        const module_id = $(this).data('id');
+        let params = new URLSearchParams();
+
+        // Get values.
+        params.append("percent_range", $(`#${module_id}_percent_range`).val());
+        {% for at in attributes %}
+        params.append("{{at.id}}_check", $(`#${module_id}_{{at.id}}_check`).is(":checked"));
+        {% endfor %}
+
+        // Pass values to /similar/
+        window.location.href = window.location + `similar/${module_id}/` + "?" + params.toString();
+    });
+
     function initialize_slider(attr_id) {
         var range;
         var values;
@@ -255,6 +280,19 @@
             range = attr_val[attr_id];
             values = attr_val[attr_id];
             slide = attr_slider_fun;
+        }
+
+        // Pull possible parameters
+        const url = new URL(window.location);
+        let middle = url.searchParams.get(`${attr_id}`);
+        let percent_range = url.searchParams.get(`percent_range`);
+        if (middle !== null && middle !== NaN)
+        {
+            percent_range = +(percent_range);
+            middle = +(middle);
+            const value_range = percent_range * +(range[1] - range[0]);
+            values = [middle - value_range, middle + value_range];
+            attr_val[attr_id] = values;
         }
 
         $("#attr-" + attr_id + "-range").slider({
