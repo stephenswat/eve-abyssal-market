@@ -172,7 +172,7 @@ $(document).on("click", ".btn-similar-mods", function(e) {
     {% endif %}{% endfor %}
 
     // Pass values to /similar/
-    window.location.href = url.toString() + "?" + params.toString();
+    window.open(url.toString() + "?" + params.toString());
 });
 
 </script>

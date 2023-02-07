@@ -264,7 +264,7 @@
         {% endfor %}
 
         // Pass values to /similar/
-        window.location.href = window.location + `similar/${module_id}/` + "?" + params.toString();
+        window.open(window.location + `similar/${module_id}/` + "?" + params.toString());
     });
 
     function initialize_slider(attr_id) {
