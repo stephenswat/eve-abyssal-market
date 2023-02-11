@@ -147,4 +147,8 @@ class TypeAttribute(models.Model):
             976,
             977,
             1255,
+            2307,
+            2306,
+            2347,
+            2346,
         }
