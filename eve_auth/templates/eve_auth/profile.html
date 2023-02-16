@@ -23,7 +23,7 @@
 <div class="container my-5">
     <dl>
     {% for c in characters.all %}
-    <dt>{{ c.name }}</dt>
+    <dt><a href="{% url 'abyssal_modules:creator_view' pk=c.character_id %}">{{ c.name }}</a></dt>
     <dd>
     Permission to open windows: {{ c.scope_open_window|yesno:"Yes,No" }}
     <br>
