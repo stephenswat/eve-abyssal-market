@@ -67,7 +67,7 @@ def scan_contract(contract_dict, region_id):
             if item["type_id"] in abyssal_ids and item.get("is_included", True):
                 items += 1
 
-                logger.info(
+                logger.debug(
                     "Found abyssal module %d in contract %d.",
                     item["item_id"],
                     contract_dict["contract_id"],
