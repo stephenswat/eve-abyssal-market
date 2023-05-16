@@ -25,7 +25,7 @@ def create_module(type_id, item_id, force=False):
         try:
             return Module.objects.get(id=item_id)
         except Module.DoesNotExist:
-            pass
+            logger.exception("Module %d with type %d does not exist!", item_id, type_id)
 
     try:
         module_data = ESI.request(
@@ -64,7 +64,7 @@ def create_module(type_id, item_id, force=False):
                     value=a["value"],
                 ).save()
             except (ModuleDogmaAttribute.DoesNotExist, TypeAttribute.DoesNotExist):
-                pass
+                logger.exception("Module attribute or type attribute not found!")
 
     return res
 

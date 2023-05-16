@@ -180,6 +180,14 @@ LOGGING = {
             "maxBytes": 10**8,
             "backupCount": 5,
         },
+        "file_market": {
+            "level": "DEBUG",
+            "formatter": "standard",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "/logs/market.log",
+            "maxBytes": 10**8,
+            "backupCount": 5,
+        },
         "file_esi": {
             "level": "DEBUG",
             "formatter": "standard",
@@ -191,6 +199,56 @@ LOGGING = {
     },
     "loggers": {
         "": {"level": "INFO", "handlers": ["console", "file_other"]},
+        "abyssal_api": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "abyssal_market": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "abyssal_modules": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "asset_scanner": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "contract_scanner": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "eve_auth": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "eve_esi": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "eve_mail_queue": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "eve_sde": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
+        "price_predictor": {
+            "level": "INFO",
+            "handlers": ["console", "file_market"],
+            "propagate": False,
+        },
         "huey": {
             "level": "INFO",
             "handlers": ["console", "file_huey"],

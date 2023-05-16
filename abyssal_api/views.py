@@ -1,3 +1,6 @@
+import logging
+import math
+
 from django.core.cache import cache
 from django.http import JsonResponse, Http404
 from django.views import View
@@ -12,6 +15,9 @@ from abyssal_modules.models.attributes import ModuleAttributeView, ModuleDogmaAt
 from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.tasks import create_module
 from eve_sde.models import InvType
+
+
+logger = logging.getLogger(__name__)
 
 
 """
@@ -205,11 +211,15 @@ class ModuleAppraisalView(generics.GenericAPIView, mixins.RetrieveModelMixin):
             )
 
         try:
-            return Response(
-                AppraisalSerializer(PricePredictor.predict_price(module)).data
-            )
+            appraisal = PricePredictor.predict_price(module)
         except Exception:
             return Response({"error": "No prediction available"})
+
+        if math.isnan(appraisal["confidence"]):
+            logger.warning("Appraisal for module %d returned no confidence.", pk)
+            appraisal["confidence"] = None
+
+        return Response(appraisal)
 
 
 class ModuleView(generics.CreateAPIView):
