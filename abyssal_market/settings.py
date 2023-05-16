@@ -265,7 +265,7 @@ LOGGING = {
             "propagate": False,
         },
         "pyswagger": {
-            "level": "INFO",
+            "level": "WARNING",
             "handlers": ["console", "file_esi"],
             "propagate": False,
         },
