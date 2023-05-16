@@ -5,6 +5,8 @@ secrets:
     file: ./secrets/pg_password.dev.txt
   configuration:
     file: ./secrets/configuration.dev.yaml
+  grafana_password:
+    file: ./secrets/grafana_password.dev.txt
 
 services:
   server:

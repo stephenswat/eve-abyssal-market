@@ -1,0 +1,12 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+  external_labels:
+      monitor: 'abyssal-market'
+
+scrape_configs:
+  - job_name: 'core'
+
+    static_configs:
+      - targets: ['localhost:9090', 'node-exporter:9100']
