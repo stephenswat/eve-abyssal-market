@@ -375,6 +375,12 @@ ITEMS = [
         "relevant_attributes": RELEVANT_ATTRIBUTES["damage_mod"],
     },
     {
+        "abyssal_id": 78621,
+        "normal_id": 54973,
+        "name": "Abyssal Vorton Tuning System",
+        "relevant_attributes": RELEVANT_ATTRIBUTES["damage_mod"],
+    },
+    {
         "abyssal_id": 52227,
         "normal_id": 2048,
         "name": "Abyssal Damage Control",
