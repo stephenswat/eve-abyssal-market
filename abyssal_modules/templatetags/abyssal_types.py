@@ -70,6 +70,7 @@ def get_abyssal_type_list():
                 ("Heat Sink", 49726),
                 ("Ballistic Control", 49738),
                 ("Entropic Sink", 49734),
+                ("Vorton Tuning Sys.", 78621),
                 ("Drone Amp.", 60482),
             ],
         ),
