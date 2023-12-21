@@ -63,6 +63,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "abyssal_modules.context_processors.google_analytics",
+                "abyssal_modules.context_processors.google_adsense",
                 "eve_auth.context_processors.user_eve_characters",
             ],
         },

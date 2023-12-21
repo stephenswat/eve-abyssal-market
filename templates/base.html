@@ -15,6 +15,10 @@
     </script>
     {% endif %}
 
+    {% if ADSENSE_OWNER_TAG %}
+    <meta name="google-adsense-account" content="{{ ADSENSE_OWNER_TAG }}">
+    {% endif %}
+
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
