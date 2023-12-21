@@ -301,6 +301,8 @@ if "SENTRY_DSN" in _CONFIG:
 
 GA_TRACKING_ID = _CONFIG.get("GA_TRACKING_ID", None)
 
+ADSENSE_OWNER_TAG = _CONFIG.get("ADSENSE_OWNER_TAG", None)
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
