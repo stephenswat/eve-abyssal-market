@@ -49,6 +49,20 @@
     {% bootstrap_form form %}
     {% bootstrap_button button_type="submit" content="Submit" %}
 </form>
+
+{% if ADSENSE_PUBLISHER_ID and ADSENSE_SLOTS.APPRAISAL_PAGE_BOTTOM %}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ ADSENSE_PUBLISHER_ID }}"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="{{ ADSENSE_PUBLISHER_ID }}"
+     data-ad-slot="{{ ADSENSE_SLOTS.APPRAISAL_PAGE_BOTTOM }}"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+{% endif %}
 </div>
 
 {% endblock %}
