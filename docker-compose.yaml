@@ -102,3 +102,5 @@ services:
     restart: always
     ports:
         - 33761:5173
+    volumes:
+      - ./frontend/:/code/
