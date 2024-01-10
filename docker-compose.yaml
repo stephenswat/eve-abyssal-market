@@ -97,3 +97,11 @@ services:
     volumes: *django-volumes
     entrypoint: /code/run/consumer.sh
     depends_on: *django-dependencies
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+        - 33761:5173

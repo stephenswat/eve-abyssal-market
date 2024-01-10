@@ -11,3 +11,5 @@ secrets:
 services:
   server:
     entrypoint: /code/run/server.dev.sh
+  frontend:
+    entrypoint: /code/run/dev.sh

@@ -1,0 +1,6 @@
+Dockerfile
+LICENSE
+README.md
+docker-compose.*
+setup.cfg
+secrets/

@@ -41,7 +41,7 @@
             </a>
             <div class="dropdown-menu module-dropdown">
               <div class="row mx-2 my-2">
-                {% get_abyssal_type_list as type_list %}
+                <!-- {% get_abyssal_type_list as type_list %}
                 {% for r, l in type_list %}
                 <span class="col-md-3 col-12 align-middle">
                   <img
@@ -60,7 +60,7 @@
                   {% endfor %}
                 </div>
                 <div class="w-100" />
-                {% endfor %}
+                {% endfor %} -->
               </div>
             </div>
           </li>

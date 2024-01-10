@@ -9,6 +9,7 @@
     }
   ],
   "compilerOptions": {"strictNullChecks": true},
+  
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",

@@ -1,4 +1,4 @@
-import { createApp } from 'vue/dist/vue.esm-bundler'
+import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as bootstrap from 'bootstrap'
 
