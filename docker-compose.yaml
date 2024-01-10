@@ -64,6 +64,7 @@ services:
     volumes: &django-volumes
       - static_vol:/static
       - log_vol:/logs
+      - ./backend:/code
     restart: "no"
     entrypoint: /code/run/migrate.sh
     depends_on:

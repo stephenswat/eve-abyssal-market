@@ -8,4 +8,3 @@ RUN pip3 install poetry
 COPY pyproject.toml poetry.lock /code/
 WORKDIR /code/
 RUN poetry install
-COPY . /code/
