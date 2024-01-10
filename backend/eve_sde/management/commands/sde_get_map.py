@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from eve_sde.models import Region, Constellation, SolarSystem
+from eve_sde.models import Region, Constellation, SolarSystem, Station
 from eve_sde.command import SDECommand, SDE_BASE
 
 
@@ -8,6 +8,7 @@ SOLARSYSTEMS_URL = SDE_BASE + "mapSolarSystems.csv.bz2"
 STARGATES_URL = SDE_BASE + "mapSolarSystemJumps.csv.bz2"
 REGIONS_URL = SDE_BASE + "mapRegions.csv.bz2"
 CONSTELLATIONS_URL = SDE_BASE + "mapConstellations.csv.bz2"
+STATIONS_URL = SDE_BASE + "staStations.csv.bz2"
 
 
 class Command(SDECommand):
@@ -37,6 +38,16 @@ class Command(SDECommand):
             },
         )
 
+    def _create_stations_helper(self, x):
+        Station.objects.update_or_create(
+            id=int(x["stationID"]),
+            defaults={
+                "name": x["stationName"],
+                "solar_system_id": int(x["solarSystemID"]),
+                "inv_type_id": int(x["stationTypeID"]),
+            },
+        )
+
     def _create_stargate_helper(self, x):
         ssid = int(x["fromSolarSystemID"])
         if self.last_system is None or self.last_system.id != ssid:
@@ -47,7 +58,7 @@ class Command(SDECommand):
     @transaction.atomic()
     def create_regions(self):
         self._create_helper(
-            REGIONS_URL, "regions", self._create_regions_helper, total=100
+            REGIONS_URL, "regions", self._create_regions_helper
         )
 
     @transaction.atomic()
@@ -56,20 +67,25 @@ class Command(SDECommand):
             CONSTELLATIONS_URL,
             "constellations",
             self._create_constellations_helper,
-            total=1120,
         )
 
     @transaction.atomic()
     def create_systems(self):
         self._create_helper(
-            SOLARSYSTEMS_URL, "systems", self._create_systems_helper, total=8035
+            SOLARSYSTEMS_URL, "systems", self._create_systems_helper
         )
 
     @transaction.atomic()
     def create_gates(self):
         self.last_system = None
         self._create_helper(
-            STARGATES_URL, "stargates", self._create_stargate_helper, total=13826
+            STARGATES_URL, "stargates", self._create_stargate_helper
+        )
+
+    @transaction.atomic()
+    def create_stations(self):
+        self._create_helper(
+            STATIONS_URL, "stations", self._create_stations_helper
         )
 
     def handle(self, *args, **options):
@@ -77,3 +93,4 @@ class Command(SDECommand):
         self.create_constellations()
         self.create_systems()
         self.create_gates()
+        self.create_stations()

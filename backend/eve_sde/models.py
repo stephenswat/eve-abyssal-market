@@ -35,3 +35,14 @@ class InvType(models.Model):
     id = models.IntegerField(primary_key=True)
     group_id = models.IntegerField(db_index=True)
     name = models.CharField(max_length=128)
+
+
+class Station(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=512)
+    inv_type = models.ForeignKey(InvType, models.CASCADE)
+
+    solar_system = models.ForeignKey(SolarSystem, models.DO_NOTHING, db_index=True)
+
+    def __str__(self):
+        return self.name
