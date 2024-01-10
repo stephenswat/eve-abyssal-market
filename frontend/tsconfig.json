@@ -1,0 +1,16 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {"strictNullChecks": true},
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+  ]
+}
