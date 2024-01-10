@@ -57,8 +57,7 @@ services:
 
   migrate:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend/
     secrets: &django-secrets
       - postgres_password
       - configuration
@@ -73,8 +72,7 @@ services:
 
   server:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend/
     secrets: *django-secrets
     restart: always
     volumes: *django-volumes
@@ -90,8 +88,7 @@ services:
 
   consumer:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend/
     secrets: *django-secrets
     restart: always
     volumes: *django-volumes
@@ -100,7 +97,7 @@ services:
 
   frontend:
     build:
-      context: frontend
+      context: ./frontend/
       dockerfile: Dockerfile
     restart: always
     ports:
