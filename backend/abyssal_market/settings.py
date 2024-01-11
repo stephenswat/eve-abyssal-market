@@ -15,7 +15,6 @@ INSTALLED_APPS = [
     "eve_auth",
     "eve_esi",
     "eve_sde",
-    "eve_mail_queue",
     "abyssal_api",
     "abyssal_modules",
     "asset_scanner",
@@ -231,11 +230,6 @@ LOGGING = {
             "propagate": False,
         },
         "eve_esi": {
-            "level": "INFO",
-            "handlers": ["console", "file_market"],
-            "propagate": False,
-        },
-        "eve_mail_queue": {
             "level": "INFO",
             "handlers": ["console", "file_market"],
             "propagate": False,
