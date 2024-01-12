@@ -10,13 +10,13 @@ volumes:
 services:
   redis:
     image: redis:7.0.8
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
 
   postgres:
     image: postgres:15.1
-    restart: always
+    restart: unless-stopped
     user: postgres
     secrets:
       - postgres_password
@@ -34,18 +34,18 @@ services:
 
   prometheus:
     image: prom/prometheus
-    restart: always
+    restart: unless-stopped
     volumes:
       - prometheus_vol:/prometheus
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
 
   node-exporter:
     image: prom/node-exporter
-    restart: always
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana
-    restart: always
+    restart: unless-stopped
     secrets:
       - grafana_password
     environment:
@@ -74,7 +74,7 @@ services:
     build:
       context: ./backend/
     secrets: *django-secrets
-    restart: always
+    restart: unless-stopped
     volumes: *django-volumes
     depends_on: &django-dependencies
       redis:
@@ -90,7 +90,7 @@ services:
     build:
       context: ./backend/
     secrets: *django-secrets
-    restart: always
+    restart: unless-stopped
     volumes: *django-volumes
     entrypoint: /code/run/consumer.sh
     depends_on: *django-dependencies
@@ -99,7 +99,7 @@ services:
     build:
       context: ./frontend/
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     ports:
         - 33761:5173
     volumes:
