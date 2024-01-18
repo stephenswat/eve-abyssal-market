@@ -13,7 +13,7 @@ SCOPE_NAMES = {
 
 class EveAuthBackend:
     def authenticate(self, request, info=None, tokens=None):
-        scopes = info["Scopes"].split(" ")
+        scopes = info["Scopes"]
 
         try:
             character = EveUser.objects.get(character_id=info["CharacterID"])

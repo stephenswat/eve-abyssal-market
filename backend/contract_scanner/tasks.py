@@ -12,6 +12,7 @@ from abyssal_modules.models.modules import ModuleType
 from contract_scanner.models import Contract, PlexPriceRecord
 from contract_scanner.metrics import COUNTER_CONTRACTS_FOUND, COUNTER_CONTRACTS_SCANNED
 from eve_esi import ESI
+from eve_esi.api import get_universe_regions
 from abyssal_modules.tasks import create_module
 
 
@@ -97,7 +98,7 @@ def scan_public_contracts(scan_all=False):
     ):
         return
 
-    all_regions = ESI.request("get_universe_regions").data
+    all_regions = get_universe_regions()
     all_contract_ids = set()
 
     for region in all_regions:

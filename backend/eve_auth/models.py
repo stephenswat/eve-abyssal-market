@@ -1,7 +1,7 @@
 import datetime
 import itertools
 import pytz
-from esipy.exceptions import APIException
+from eve_auth.security import APIException
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -103,34 +103,6 @@ class EveUser(models.Model):
 
     def get_client(self):
         return ESI.get_client(self.get_security())
-
-    def get_contracts(self):
-        return ESI.request(
-            "get_characters_character_id_contracts",
-            client=self.get_client(),
-            character_id=self.character_id,
-        ).data
-
-    def get_assets(self):
-        results = []
-
-        for page in itertools.count(start=1):
-            req = ESI.request(
-                "get_characters_character_id_assets",
-                client=self.get_client(),
-                character_id=self.character_id,
-                page=page,
-            )
-
-            date = datetime.datetime.strptime(
-                req.header["Last-Modified"][0], "%a, %d %b %Y %H:%M:%S GMT"
-            ).replace(tzinfo=pytz.UTC)
-            results += req.data
-
-            if page >= req.header["X-Pages"][0]:
-                break
-
-        return results, date
 
     @property
     def is_staff(self):

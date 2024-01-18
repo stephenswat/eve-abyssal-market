@@ -17,6 +17,7 @@ from eve_auth.models import EveUser
 from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
+from swagger_client.api import UserInterfaceApi
 
 
 class SimilarModuleRedirect(View):
@@ -173,11 +174,8 @@ class OpenContractView(LoginRequiredMixin, View):
         except EveUser.DoesNotExist:
             return HttpResponse(status=403)
 
-        ESI.request(
-            "post_ui_openwindow_contract",
-            client=character.get_client(),
-            contract_id=int(request.POST["contract_id"]),
-        )
+
+        UserInterfaceApi().post_ui_openwindow_contract(contract_id=int(request.POST["contract_id"]), token=character.tokens["access_token"])
 
         return HttpResponse(status=204)
 
