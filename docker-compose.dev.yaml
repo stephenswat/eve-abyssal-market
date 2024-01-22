@@ -13,3 +13,6 @@ services:
     entrypoint: /code/run/server.dev.sh
   frontend:
     entrypoint: /code/run/dev.sh
+  consumer:
+    environment:
+      - CONSUMER_COUNT=2

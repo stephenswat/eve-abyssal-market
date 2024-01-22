@@ -13,3 +13,6 @@ services:
     entrypoint: /code/run/server.prod.sh
   frontend:
     entrypoint: /code/run/prod.sh
+  consumer:
+    environment:
+      - CONSUMER_COUNT=32
