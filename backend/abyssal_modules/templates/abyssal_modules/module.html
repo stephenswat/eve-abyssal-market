@@ -124,9 +124,9 @@
             {% for c in contracts %}
             <tr>
                 <td>{{ c.id }}</td>
-                <td>{{ c.issued_at }}</td>
-                <td>{{ c.expires_at }}</td>
-                <td>{{ c.price|intword }} ISK</td>
+                <td data-order="{{ c.issued_at|date:"U" }}">{{ c.issued_at }}</td>
+                <td data-order="{{ c.expires_at|date:"U" }}">{{ c.expires_at }}</td>
+                <td data-order="{{ c.price }}">{{ c.price|intword }} ISK</td>
                 <td>{{ c.sold|yesno:"Yes,No,Unknown" }}</td>
                 <td>
                     {% if c.available %}
@@ -164,6 +164,31 @@
 <script>
 $(document).ready(function () {
     $('#contract-table').DataTable({
+        "columns": [
+            {
+                'name': 'id',
+                'type': 'num'
+            },
+            {
+                'name': 'issued',
+                'type': 'num'
+            },
+            {
+                'name': 'expires',
+                'type': 'num'
+            },
+            {
+                'name': 'price',
+                'type': 'num'
+            },
+            {
+                'name': 'sold',
+            },
+            {
+                'name': 'actions',
+                'orderable': false,
+            }
+        ],
         "order": []
     });
 });
