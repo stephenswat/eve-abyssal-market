@@ -135,11 +135,11 @@
                     {% if d >= 0 %}
                     <td class="text-success">+{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
                     {% else %}
-                    <td class="text-danger">+{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    <td class="text-danger">{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
                     {% endif %}
                     {% else %}
                     {% if d >= 0 %}
-                    <td class="text-danger">{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    <td class="text-danger">+{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
                     {% else %}
                     <td class="text-success">{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
                     {% endif %}
