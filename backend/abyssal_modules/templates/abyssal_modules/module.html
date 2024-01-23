@@ -107,6 +107,63 @@
 
     {% endif %}
 
+    <h4>Meta comparison</h4>
+
+        Green values indicate that the abyssal module is <emph>better</emph> than the meta module, and a red value indicates that the abyssal module is <emph>worse</emph>.
+
+        <table class="table static-comparison-table dt-responsive" id="static-comparison-table" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Meta Level</th>
+                    {% for i, a in object.attribute_dict.items %}
+                    {% if a.display %}
+                    <th><img src="/static/img/attributes/{{ i }}.png" title="{{ a.name }}"></dt></th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in static_modules %}
+                <tr>
+                    <td>{{ m.module_name }}</td>
+                    <td>{{ m.attributes.633.real_value }}</td>
+                    {% for i, a in object.attribute_dict.items %}
+                    {% if a.display %}
+                    {% with d=m.attributes|delta:i %}
+                    {% if a.high_is_good %}
+                    {% if d >= 0 %}
+                    <td class="text-success">+{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    {% else %}
+                    <td class="text-danger">+{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    {% endif %}
+                    {% else %}
+                    {% if d >= 0 %}
+                    <td class="text-danger">{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    {% else %}
+                    <td class="text-success">{{ d|format_attribute_basic:i }} {{ a.unit }}</td>
+                    {% endif %}
+                    {% endif %}
+                    {% endwith %}
+                    {% endif %}
+                    {% endfor %}
+                    <!-- <td data-order="{{ c.issued_at|date:"U" }}">{{ c.issued_at }}</td>
+                    <td data-order="{{ c.expires_at|date:"U" }}">{{ c.expires_at }}</td>
+                    <td data-order="{{ c.price }}">{{ c.price|intword }} ISK</td>
+                    <td>{{ c.sold|yesno:"Yes,No,Unknown" }}</td>
+                    <td>
+                        {% if c.available %}
+                        <button {% if not request.user.is_authenticated %}disabled{% endif %} class="btn btn-std-size btn-primary btn-open-contract-esi btn-open-contract" data-contract-id="{{ c.id }}">ESI</button>
+                        <button class="btn btn-std-size btn-primary btn-copy btn-copy-contract-link btn-open-contract" data-clipboard-text="<url=contract:30000142//{{ c.id }}>Contract {{ c.id }}</url>">Link</button>
+                        {% else %}
+                        &ndash;
+                        {% endif %}
+                    </td> -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     <h4>Contract history</h4>
 
     <table class="table contract-table dt-responsive" id="contract-table" width="100%">
@@ -190,6 +247,10 @@ $(document).ready(function () {
             }
         ],
         "order": []
+    });
+    $('#static-comparison-table').DataTable({
+        "order": [],
+        "pageLength": 100,
     });
 });
 

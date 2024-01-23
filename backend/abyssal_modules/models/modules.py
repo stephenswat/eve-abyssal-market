@@ -147,6 +147,7 @@ class ModuleBase(models.Model):
                 "unit": x.attribute.unit_str,
                 "display": x.new_attribute.display,
                 "name": x.attribute.name,
+                "high_is_good": x.new_attribute.high_is_good,
             }
             for x in self.attribute_values.all()
         }

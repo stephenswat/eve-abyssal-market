@@ -18,7 +18,6 @@ from price_predictor.models import PricePredictor
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
 
-
 class SimilarModuleRedirect(View):
     def get(self, request, module_id, type_id=None, referer=None):
         if referer == "assets":
@@ -130,6 +129,8 @@ class ModuleView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        static_modules = [m.as_dict() for m in StaticModule.objects.filter(type=self.object.type).all()]
+
         try:
             price_prediction = PricePredictor.predict_price(self.object)
         except Exception:
@@ -137,6 +138,18 @@ class ModuleView(DetailView):
 
         context["prediction"] = price_prediction
         context["contracts"] = self.object.contracts.all()
+
+        module_attributes = self.object.as_dict()
+
+        for v in static_modules:
+            for k, vv in v["attributes"].items():
+                if vv["display"]:
+                    vv["delta"] = module_attributes["attributes"][k]["real_value"] - vv["real_value"]
+
+        print(static_modules)
+
+        context["static_modules"] = static_modules
+
         return context
 
 
