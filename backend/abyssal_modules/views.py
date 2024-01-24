@@ -14,7 +14,7 @@ from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.models.mutators import Mutator
 from eve_esi import ESI
 from eve_auth.models import EveUser
-from price_predictor.models import PricePredictor
+from price_predictor.utils import predict_price
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
 
@@ -131,12 +131,7 @@ class ModuleView(DetailView):
 
         static_modules = [m.as_dict() for m in StaticModule.objects.filter(type=self.object.type).all()]
 
-        try:
-            price_prediction = PricePredictor.predict_price(self.object)
-        except Exception:
-            price_prediction = None
-
-        context["prediction"] = price_prediction
+        context["prediction"] = predict_price(self.object)
         context["contracts"] = self.object.contracts.all()
 
         module_attributes = self.object.as_dict()

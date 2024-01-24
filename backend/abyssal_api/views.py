@@ -9,7 +9,7 @@ from rest_framework import serializers, generics, status, mixins
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 
-from price_predictor.models import PricePredictor
+from price_predictor.utils import predict_price
 from abyssal_modules.models.modules import Module, ModuleType, StaticModule
 from abyssal_modules.models.attributes import ModuleAttributeView, ModuleDogmaAttribute
 from abyssal_modules.models.characters import EveCharacter
@@ -210,14 +210,7 @@ class ModuleAppraisalView(generics.GenericAPIView, mixins.RetrieveModelMixin):
                 {"error": "Module not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        try:
-            appraisal = PricePredictor.predict_price(module)
-        except Exception:
-            return Response({"error": "No prediction available"})
-
-        if math.isnan(appraisal["confidence"]):
-            logger.warning("Appraisal for module %d returned no confidence.", pk)
-            appraisal["confidence"] = None
+        appraisal = {"price": predict_price(module)}
 
         return Response(appraisal)
 
