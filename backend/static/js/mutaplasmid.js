@@ -63,27 +63,31 @@ function initializeEsiButtons() {
     });
 }
 
-function price_format(contract) {
+function price_format(data) {
     base = ""
 
-    if (contract === null) {
+    if (data.contract === null) {
         return "-";
     }
 
-    if (contract.price.isk > 0 && contract.price.plex > 0) {
-        base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span> + <span class="plex-field">${contract.price.plex}</span>`;
-    } else if (contract.price.plex > 0) {
-        base += `<span class="plex-field">${contract.price.plex}</span>`;
+    if (data.contract.price.isk > 0 && data.contract.price.plex > 0) {
+        base += `<span class="price-field">${price_humanize_verbose(data.contract.price.isk)}</span> + <span class="plex-field">${data.contract.price.plex}</span>`;
+    } else if (data.contract.price.plex > 0) {
+        base += `<span class="plex-field">${data.contract.price.plex}</span>`;
     } else {
-        base += `<span class="price-field">${price_humanize_verbose(contract.price.isk)}</span>`;
+        base += `<span class="price-field">${price_humanize_verbose(data.contract.price.isk)}</span>`;
     }
 
-    if (contract.multi_item) {
+    if (data.contract.multi_item) {
         base += `<span class="annotation-multi-item text-muted" title="This contract includes other items."></span>`
     }
 
-    if (contract.auction) {
+    if (data.contract.auction) {
         base += `<span class="annotation-auction text-muted" title="This is an auction."></span>`
+    }
+
+    if (data.price_prediction) {
+        base += `<br/><small class="text-muted">${price_humanize_verbose(data.price_prediction)}</small>`
     }
 
     return base;

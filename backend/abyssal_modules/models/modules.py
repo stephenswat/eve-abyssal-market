@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils import timezone
-from django.db.models import F, Value
+from django.db.models import F, Value, OuterRef, Subquery
 from django.db.models import ExpressionWrapper, BigIntegerField, DecimalField
-from django.db.models.functions import Cast
+from django.db.models.functions import Cast, Coalesce
 from django.utils.functional import cached_property
+
+from price_predictor.models import PricePredictionRecord
 
 
 DERIVED_ATTRIBUTES = {
@@ -94,6 +96,7 @@ class ModuleManager(models.Manager):
                 "attribute_values__new_attribute__attribute",
                 "type",
             )
+            .annotate(price_prediction=PricePredictionRecord.objects.filter(module_id=OuterRef("id")).order_by('-date').values("price")[:1])
         )
 
 
@@ -198,12 +201,17 @@ class ModuleBase(models.Model):
             return attrs[attr_id].value
 
     def as_dict(self):
-        return {
+        d = {
             "id": self.id,
             "type_id": self.type.id,
             "type_name": self.type.name,
             "attributes": self.attribute_dict(),
         }
+
+        if isinstance(self, Module):
+            d["price_prediction"] = self.price_prediction
+
+        return d
 
 
 class StaticModuleManager(models.Manager):

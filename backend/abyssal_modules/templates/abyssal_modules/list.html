@@ -202,14 +202,14 @@
                 {% endfor %}
                 {
                     'name': 'price',
-                    'data': 'contract',
+                    'data': null,
                     'type': 'num',
                     'render': {
                         'display': function (data, type, row, meta) {
                             return price_format(data);
                         },
                         '_': function (data, type, row, meta) {
-                            return data === null ? 0 : data.price.total;
+                            return data.contract === null ? 0 : data.contract.price.total;
                         },
                     }
                 },
@@ -249,7 +249,7 @@
                 data = table
                     .column("price:name")
                     .data()
-                    .map(function (n) { return n === null ? 0 : parseFloat(n.price.total); })
+                    .map(function (n) { return n.contract === null ? 0 : parseFloat(n.contract.price.total); })
                     .sort(function (a, b) { return a - b; });
 
                 attr_val["price"] = [0, data.reverse()[0] * 1.001];
