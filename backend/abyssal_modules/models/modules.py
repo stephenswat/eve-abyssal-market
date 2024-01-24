@@ -97,6 +97,7 @@ class ModuleManager(models.Manager):
                 "type",
             )
             .annotate(price_prediction=PricePredictionRecord.objects.filter(module_id=OuterRef("id")).order_by('-date').values("price")[:1])
+            .annotate(price_prediction_date=PricePredictionRecord.objects.filter(module_id=OuterRef("id")).order_by('-date').values("date")[:1])
         )
 
 
@@ -210,6 +211,7 @@ class ModuleBase(models.Model):
 
         if isinstance(self, Module):
             d["price_prediction"] = self.price_prediction
+            d["price_prediction_date"] = self.price_prediction_date
 
         return d
 

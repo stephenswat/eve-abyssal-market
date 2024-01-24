@@ -87,7 +87,7 @@ function price_format(data) {
     }
 
     if (data.price_prediction) {
-        base += `<br/><small class="text-muted">Est. ${price_humanize_verbose(data.price_prediction)}</small>`
+        base += `<br/><small class="text-muted price-field">Est. ${price_humanize_verbose(data.price_prediction)}</small>`
     }
 
     return base;

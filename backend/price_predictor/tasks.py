@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 from huey import crontab
-from huey.contrib.djhuey import db_periodic_task
+from huey.contrib.djhuey import db_periodic_task, db_task
 
 from sklearn.svm import SVR
 from sklearn.preprocessing import StandardScaler
@@ -12,8 +12,9 @@ from sklearn.model_selection import cross_val_score
 
 from django.db.models import F
 
-from abyssal_modules.models.modules import ModuleType
+from abyssal_modules.models.modules import ModuleType, Module
 from price_predictor.models import PricePredictor
+from price_predictor.utils import predict_price
 
 
 logger = logging.getLogger(__name__)
@@ -83,3 +84,8 @@ def clean_old_models():
     PricePredictor.objects.filter(
         date__lt=timezone.now() - datetime.timedelta(days=3)
     ).delete()
+
+@db_task(retries=10, retry_delay=60)
+def queue_price_prediction(module_id):
+    module = Module.objects.filter(id=module_id).get()
+    predict_price(module)

@@ -15,6 +15,7 @@ from abyssal_modules.models.attributes import ModuleAttributeView, ModuleDogmaAt
 from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.tasks import create_module
 from eve_sde.models import InvType
+from price_predictor.tasks import queue_price_prediction
 
 
 logger = logging.getLogger(__name__)
@@ -42,6 +43,13 @@ class AvailableTypedModuleListAPI(View):
             res += [m.as_dict() for m in StaticModule.objects.filter(type=module_type)]
 
             cache.set(key, res, 60 * 15)
+
+        for m in res:
+            if "price_prediction_date" in m:
+                d = m["price_prediction_date"]
+
+                if d is None or (datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() >= 259200:
+                    queue_price_prediction(m["id"])
 
         return JsonResponse(res, safe=False)
 
