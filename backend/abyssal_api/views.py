@@ -43,14 +43,14 @@ class AvailableTypedModuleListAPI(View):
 
             res += [m.as_dict() for m in StaticModule.objects.filter(type=module_type)]
 
+            for m in res:
+                if "price_prediction_date" in m:
+                    d = m["price_prediction_date"]
+
+                    if d is None or (datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() >= 259200:
+                        queue_price_prediction(m["id"])
+
             cache.set(key, res, 60 * 15)
-
-        for m in res:
-            if "price_prediction_date" in m:
-                d = m["price_prediction_date"]
-
-                if d is None or (datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() >= 259200:
-                    queue_price_prediction(m["id"])
 
         return JsonResponse(res, safe=False)
 
