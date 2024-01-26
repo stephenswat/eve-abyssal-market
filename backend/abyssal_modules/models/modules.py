@@ -186,6 +186,7 @@ class ModuleBase(models.Model):
                 "rating": None,
                 "unit": data["unit_str"],
                 "display": True,
+                "high_is_good": data["high_is_good"],
                 "name": data["name"],
             }
 
