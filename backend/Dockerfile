@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 
 RUN apt-get update
-RUN apt-get install -y python3 python-is-python3 python3-pip libpq-dev
+RUN apt-get install -y python3 python-is-python3 python3-pip libpq-dev libpng-dev imagemagick
 RUN pip3 install poetry
 
 COPY pyproject.toml poetry.lock /code/

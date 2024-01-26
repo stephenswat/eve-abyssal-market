@@ -44,6 +44,11 @@ urlpatterns = [
         name="module_view",
     ),
     path(
+        "module/<int:pk>/image/",
+        abyssal_modules.views.ModuleImageView.as_view(),
+        name="module_image_view",
+    ),
+    path(
         "creator/<int:pk>/",
         abyssal_modules.views.CreatorView.as_view(),
         name="creator_view",
