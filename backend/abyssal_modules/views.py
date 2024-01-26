@@ -219,6 +219,7 @@ class ModuleImageView(DetailView):
                     if k in mutator_dict:
                         y = IMG_MARGINS + HEADER_HEIGHT + BLOCK_DISTANCE + (BLOCK_HEIGHT + BLOCK_DISTANCE) * i
 
+                        logger.info(k)
 
                         draw.rectangle(left=IMG_MARGINS, top=y, width=INNER_WIDTH - 1, height=BLOCK_HEIGHT - 1)
                         draw.push()
@@ -228,8 +229,12 @@ class ModuleImageView(DetailView):
                         draw.push()
                         delta = v["real_value"] - base_module_dict[k]["real_value"]
                         logger.info(delta)
-                        min_mutated_value = float(mutator_dict[k][0]) * base_module_dict[k]["real_value"]
-                        max_mutated_value = float(mutator_dict[k][1]) * base_module_dict[k]["real_value"]
+                        v1 = float(mutator_dict[k][0]) * base_module_dict[k]["real_value"]
+                        v2 = float(mutator_dict[k][1]) * base_module_dict[k]["real_value"]
+
+                        min_mutated_value = min(v1, v2)
+                        max_mutated_value = max(v1, v2)
+
                         if correct_high_is_good(v["high_is_good"], k):
                             if delta < 0:
                                 max_delta = min_mutated_value - base_module_dict[k]["real_value"]
@@ -252,6 +257,9 @@ class ModuleImageView(DetailView):
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
+                        if right <= left:
+                            right = left + 1
+                            logger.error("Had to manually correct right-most edge of bar for attribute %d", k)
                         draw.rectangle(left=IMG_MARGINS + left, right=right + IMG_MARGINS - 1, top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT, height=STAT_BAR_HEIGHT - 1)
                         draw.pop()
                         draw.push()
