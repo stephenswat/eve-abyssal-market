@@ -57,9 +57,7 @@ class Command(SDECommand):
 
     @transaction.atomic()
     def create_regions(self):
-        self._create_helper(
-            REGIONS_URL, "regions", self._create_regions_helper
-        )
+        self._create_helper(REGIONS_URL, "regions", self._create_regions_helper)
 
     @transaction.atomic()
     def create_constellations(self):
@@ -71,22 +69,16 @@ class Command(SDECommand):
 
     @transaction.atomic()
     def create_systems(self):
-        self._create_helper(
-            SOLARSYSTEMS_URL, "systems", self._create_systems_helper
-        )
+        self._create_helper(SOLARSYSTEMS_URL, "systems", self._create_systems_helper)
 
     @transaction.atomic()
     def create_gates(self):
         self.last_system = None
-        self._create_helper(
-            STARGATES_URL, "stargates", self._create_stargate_helper
-        )
+        self._create_helper(STARGATES_URL, "stargates", self._create_stargate_helper)
 
     @transaction.atomic()
     def create_stations(self):
-        self._create_helper(
-            STATIONS_URL, "stations", self._create_stations_helper
-        )
+        self._create_helper(STATIONS_URL, "stations", self._create_stations_helper)
 
     def handle(self, *args, **options):
         self.create_regions()

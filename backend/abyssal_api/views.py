@@ -47,7 +47,13 @@ class AvailableTypedModuleListAPI(View):
                 if "price_prediction_date" in m:
                     d = m["price_prediction_date"]
 
-                    if d is None or (datetime.datetime.now(datetime.timezone.utc) - d).total_seconds() >= 259200:
+                    if (
+                        d is None
+                        or (
+                            datetime.datetime.now(datetime.timezone.utc) - d
+                        ).total_seconds()
+                        >= 259200
+                    ):
                         queue_price_prediction(m["id"])
 
             cache.set(key, res, 60 * 15)

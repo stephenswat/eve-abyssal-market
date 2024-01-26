@@ -23,11 +23,16 @@ from eve_auth.models import EveUser
 from price_predictor.utils import predict_price
 from abyssal_modules.forms import ModuleLinkForm
 from abyssal_modules.tasks import create_module
-from abyssal_modules.utils import format_attribute_basic, render_attribute_value, correct_high_is_good
+from abyssal_modules.utils import (
+    format_attribute_basic,
+    render_attribute_value,
+    correct_high_is_good,
+)
 
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class SimilarModuleRedirect(View):
     def get(self, request, module_id, type_id=None, referer=None):
@@ -140,18 +145,26 @@ class ModuleView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        static_modules = [m.as_dict() for m in StaticModule.objects.filter(type=self.object.type).all()]
+        static_modules = [
+            m.as_dict()
+            for m in StaticModule.objects.filter(type=self.object.type).all()
+        ]
 
         context["prediction"] = predict_price(self.object)
         context["contracts"] = self.object.contracts.all()
-        context["image_url"] = self.request.build_absolute_uri(reverse("abyssal_modules:module_image_view", kwargs={"pk": self.object.id}))
+        context["image_url"] = self.request.build_absolute_uri(
+            reverse("abyssal_modules:module_image_view", kwargs={"pk": self.object.id})
+        )
 
         module_attributes = self.object.as_dict()
 
         for v in static_modules:
             for k, vv in v["attributes"].items():
                 if vv["display"]:
-                    vv["delta"] = module_attributes["attributes"][k]["real_value"] - vv["real_value"]
+                    vv["delta"] = (
+                        module_attributes["attributes"][k]["real_value"]
+                        - vv["real_value"]
+                    )
 
         print(static_modules)
 
@@ -180,92 +193,188 @@ class ModuleImageView(DetailView):
         mutator = Mutator.objects.get(item_type_id=self.object.mutator_id)
         mutated_attrs = MutatorAttribute.objects.filter(mutator_id=mutator.id)
 
-        mutator_dict = {v.attribute.attribute_id: (v.min_modifier, v.max_modifier) for v in mutated_attrs}
+        mutator_dict = {
+            v.attribute.attribute_id: (v.min_modifier, v.max_modifier)
+            for v in mutated_attrs
+        }
 
         with Drawing() as draw:
-            with Image(width=INNER_WIDTH + 2 * IMG_MARGINS, height=2 * IMG_MARGINS + len(mutator_dict) * (BLOCK_HEIGHT + BLOCK_DISTANCE) + HEADER_HEIGHT, format="png", background=Color('#020202')) as img:
+            with Image(
+                width=INNER_WIDTH + 2 * IMG_MARGINS,
+                height=2 * IMG_MARGINS
+                + len(mutator_dict) * (BLOCK_HEIGHT + BLOCK_DISTANCE)
+                + HEADER_HEIGHT,
+                format="png",
+                background=Color("#020202"),
+            ) as img:
                 draw.font_family = "DejaVu Sans"
-                draw.fill_color = Color('#ffffff')
-                draw.text(10, 20, 'Abyssal Ballistic Control System')
+                draw.fill_color = Color("#ffffff")
+                draw.text(10, 20, "Abyssal Ballistic Control System")
                 draw.fill_color = Color("#28353b")
-                draw.rectangle(left=IMG_MARGINS, top=IMG_MARGINS, width=INNER_WIDTH - 1, height=HEADER_HEIGHT - 1)
+                draw.rectangle(
+                    left=IMG_MARGINS,
+                    top=IMG_MARGINS,
+                    width=INNER_WIDTH - 1,
+                    height=HEADER_HEIGHT - 1,
+                )
                 draw.font_size = 12
                 draw.push()
-                draw.fill_color = Color('#ffffff')
+                draw.fill_color = Color("#ffffff")
                 draw.text(IMG_MARGINS + 32 + 2, 24, self.object.type.name)
                 draw.text(IMG_MARGINS + 32 + 2, 24 + 32, self.object.source.name)
                 draw.text(IMG_MARGINS + 32 + 2, 24 + 32 + 32, self.object.mutator.name)
                 draw.pop()
 
-                type_img_path = finders.find("img/types_32/%d.png" % self.object.type_id)
+                type_img_path = finders.find(
+                    "img/types_32/%d.png" % self.object.type_id
+                )
                 if type_img_path is not None:
                     with Image(filename=type_img_path) as embed_img:
-                        draw.composite(operator='atop', image=embed_img, left=IMG_MARGINS, top=IMG_MARGINS, width=embed_img.width, height=embed_img.height)
+                        draw.composite(
+                            operator="atop",
+                            image=embed_img,
+                            left=IMG_MARGINS,
+                            top=IMG_MARGINS,
+                            width=embed_img.width,
+                            height=embed_img.height,
+                        )
 
-                source_img_path = finders.find("img/types_32/%d.png" % self.object.source_id)
+                source_img_path = finders.find(
+                    "img/types_32/%d.png" % self.object.source_id
+                )
                 if source_img_path is not None:
                     with Image(filename=source_img_path) as embed_img:
-                        draw.composite(operator='atop', image=embed_img, left=IMG_MARGINS, top=IMG_MARGINS + 32, width=embed_img.width, height=embed_img.height)
+                        draw.composite(
+                            operator="atop",
+                            image=embed_img,
+                            left=IMG_MARGINS,
+                            top=IMG_MARGINS + 32,
+                            width=embed_img.width,
+                            height=embed_img.height,
+                        )
 
-                mutator_img_path = finders.find("img/types_32/%d.png" % self.object.mutator_id)
+                mutator_img_path = finders.find(
+                    "img/types_32/%d.png" % self.object.mutator_id
+                )
                 if mutator_img_path is not None:
                     with Image(filename=mutator_img_path) as embed_img:
-                        draw.composite(operator='atop', image=embed_img, left=IMG_MARGINS, top=IMG_MARGINS + 64, width=embed_img.width, height=embed_img.height)
+                        draw.composite(
+                            operator="atop",
+                            image=embed_img,
+                            left=IMG_MARGINS,
+                            top=IMG_MARGINS + 64,
+                            width=embed_img.width,
+                            height=embed_img.height,
+                        )
 
                 i = 0
 
                 for k in sorted(mutator_dict.keys()):
                     v = attr_dict["attributes"][k]
                     if k in mutator_dict:
-                        y = IMG_MARGINS + HEADER_HEIGHT + BLOCK_DISTANCE + (BLOCK_HEIGHT + BLOCK_DISTANCE) * i
+                        y = (
+                            IMG_MARGINS
+                            + HEADER_HEIGHT
+                            + BLOCK_DISTANCE
+                            + (BLOCK_HEIGHT + BLOCK_DISTANCE) * i
+                        )
 
                         logger.info(k)
 
-                        draw.rectangle(left=IMG_MARGINS, top=y, width=INNER_WIDTH - 1, height=BLOCK_HEIGHT - 1)
+                        draw.rectangle(
+                            left=IMG_MARGINS,
+                            top=y,
+                            width=INNER_WIDTH - 1,
+                            height=BLOCK_HEIGHT - 1,
+                        )
                         draw.push()
                         draw.fill_color = Color("#445c66")
-                        draw.rectangle(left=IMG_MARGINS, top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT, width=INNER_WIDTH - 1, height=STAT_BAR_HEIGHT - 1)
+                        draw.rectangle(
+                            left=IMG_MARGINS,
+                            top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT,
+                            width=INNER_WIDTH - 1,
+                            height=STAT_BAR_HEIGHT - 1,
+                        )
                         draw.pop()
                         draw.push()
                         delta = v["real_value"] - base_module_dict[k]["real_value"]
                         logger.info(delta)
-                        v1 = float(mutator_dict[k][0]) * base_module_dict[k]["real_value"]
-                        v2 = float(mutator_dict[k][1]) * base_module_dict[k]["real_value"]
+                        v1 = (
+                            float(mutator_dict[k][0])
+                            * base_module_dict[k]["real_value"]
+                        )
+                        v2 = (
+                            float(mutator_dict[k][1])
+                            * base_module_dict[k]["real_value"]
+                        )
 
                         min_mutated_value = min(v1, v2)
                         max_mutated_value = max(v1, v2)
 
                         if correct_high_is_good(v["high_is_good"], k):
                             if delta < 0:
-                                max_delta = min_mutated_value - base_module_dict[k]["real_value"]
+                                max_delta = (
+                                    min_mutated_value
+                                    - base_module_dict[k]["real_value"]
+                                )
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
                             else:
-                                max_delta = max_mutated_value - base_module_dict[k]["real_value"]
+                                max_delta = (
+                                    max_mutated_value
+                                    - base_module_dict[k]["real_value"]
+                                )
                                 draw.fill_color = Color("#69904f")
                                 left = INNER_WIDTH // 2
-                                right = (INNER_WIDTH // 2) + (delta / max_delta) * (INNER_WIDTH // 2)
+                                right = (INNER_WIDTH // 2) + (delta / max_delta) * (
+                                    INNER_WIDTH // 2
+                                )
                         else:
                             if delta < 0:
-                                max_delta = min_mutated_value - base_module_dict[k]["real_value"]
+                                max_delta = (
+                                    min_mutated_value
+                                    - base_module_dict[k]["real_value"]
+                                )
                                 draw.fill_color = Color("#69904f")
                                 left = INNER_WIDTH // 2
-                                right = (INNER_WIDTH // 2) + (delta / max_delta) * (INNER_WIDTH // 2)
+                                right = (INNER_WIDTH // 2) + (delta / max_delta) * (
+                                    INNER_WIDTH // 2
+                                )
                             else:
-                                max_delta = max_mutated_value - base_module_dict[k]["real_value"]
+                                max_delta = (
+                                    max_mutated_value
+                                    - base_module_dict[k]["real_value"]
+                                )
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
                         if right <= left:
                             right = left + 1
-                            logger.error("Had to manually correct right-most edge of bar for attribute %d", k)
-                        draw.rectangle(left=IMG_MARGINS + left, right=right + IMG_MARGINS - 1, top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT, height=STAT_BAR_HEIGHT - 1)
+                            logger.error(
+                                "Had to manually correct right-most edge of bar for attribute %d",
+                                k,
+                            )
+                        draw.rectangle(
+                            left=IMG_MARGINS + left,
+                            right=right + IMG_MARGINS - 1,
+                            top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT,
+                            height=STAT_BAR_HEIGHT - 1,
+                        )
                         draw.pop()
                         draw.push()
-                        draw.fill_color = Color('#ffffff')
+                        draw.fill_color = Color("#ffffff")
                         draw.text(IMG_MARGINS + 32 + 2, y + 13, v["name"])
-                        draw.text(IMG_MARGINS + 32 + 2, y + 27, "{val} {unit}".format(val=format_attribute_basic(render_attribute_value(v["real_value"], k), k), unit=v["unit"]))
+                        draw.text(
+                            IMG_MARGINS + 32 + 2,
+                            y + 27,
+                            "{val} {unit}".format(
+                                val=format_attribute_basic(
+                                    render_attribute_value(v["real_value"], k), k
+                                ),
+                                unit=v["unit"],
+                            ),
+                        )
                         draw.pop()
 
                         draw.push()
@@ -279,25 +388,43 @@ class ModuleImageView(DetailView):
                                 draw.fill_color = Color("#69904f")
                             else:
                                 draw.fill_color = Color("#bf3438")
-                        rendered_delta = render_attribute_value(v["real_value"], k) - render_attribute_value(base_module_dict[k]["real_value"], k)
+                        rendered_delta = render_attribute_value(
+                            v["real_value"], k
+                        ) - render_attribute_value(base_module_dict[k]["real_value"], k)
 
                         if rendered_delta >= 0:
                             prefix = "+"
                         else:
                             prefix = ""
 
-                        draw.text(IMG_MARGINS + 32 + 2 + 96, y + 27, "{prefix}{val} {unit}".format(prefix=prefix, val=format_attribute_basic(rendered_delta, k), unit=v["unit"]))
+                        draw.text(
+                            IMG_MARGINS + 32 + 2 + 96,
+                            y + 27,
+                            "{prefix}{val} {unit}".format(
+                                prefix=prefix,
+                                val=format_attribute_basic(rendered_delta, k),
+                                unit=v["unit"],
+                            ),
+                        )
                         draw.pop()
 
                         attr_img_path = finders.find("img/attributes_32/%d.png" % k)
                         if attr_img_path is not None:
                             with Image(filename=attr_img_path) as embed_img:
-                                draw.composite(operator='atop', image=embed_img, left=IMG_MARGINS, top=y, width=embed_img.width, height=embed_img.height)
+                                draw.composite(
+                                    operator="atop",
+                                    image=embed_img,
+                                    left=IMG_MARGINS,
+                                    top=y,
+                                    width=embed_img.width,
+                                    height=embed_img.height,
+                                )
                         i += 1
                 draw(img)
 
-                return HttpResponse(img.make_blob(format="png"), content_type='image/png')
-
+                return HttpResponse(
+                    img.make_blob(format="png"), content_type="image/png"
+                )
 
 
 class CreatorView(DetailView):

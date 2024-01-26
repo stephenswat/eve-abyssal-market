@@ -2,6 +2,7 @@ import datetime
 
 from price_predictor.models import PricePredictor, PricePredictionRecord
 
+
 def predict_price(module):
     try:
         record = PricePredictionRecord.objects.filter(module=module).latest("date")
@@ -24,11 +25,7 @@ def predict_price(module):
 
             price = max(0, model.predict(scaled_features)[0] * 1000000)
 
-            record = PricePredictionRecord(
-                module=module,
-                model=model_row,
-                price=price
-            )
+            record = PricePredictionRecord(module=module, model=model_row, price=price)
 
             record.save()
         except PricePredictor.DoesNotExist as e:

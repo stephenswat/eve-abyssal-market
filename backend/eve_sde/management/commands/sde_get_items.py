@@ -22,7 +22,8 @@ class Command(SDECommand):
     @transaction.atomic()
     def create_invtypes(self):
         self._create_helper(
-            INVTYPES_URL, "inventory types", self._create_invtypes_helper)
+            INVTYPES_URL, "inventory types", self._create_invtypes_helper
+        )
 
     def handle(self, *args, **options):
         self.create_invtypes()

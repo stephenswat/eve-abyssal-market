@@ -85,6 +85,7 @@ def clean_old_models():
         date__lt=timezone.now() - datetime.timedelta(days=3)
     ).delete()
 
+
 @db_task(retries=10, retry_delay=60)
 def queue_price_prediction(module_id):
     module = Module.objects.filter(id=module_id).get()

@@ -8,6 +8,7 @@ def format_attribute_basic(val, attr):
     else:
         return "%.1f" % val
 
+
 def render_attribute_value(val, attr):
     if attr == 73:
         return 0.001 * val
@@ -29,6 +30,7 @@ def render_attribute_value(val, attr):
         return 100 * (1 - val)
     else:
         return val
+
 
 def correct_high_is_good(val, attr):
     if attr == 204:

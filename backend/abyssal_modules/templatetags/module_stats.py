@@ -15,6 +15,7 @@ def format_attribute(mod, attr):
     else:
         return "%.1f" % val
 
+
 @register.filter
 def format_attribute_basic(val, attr):
     if attr == 64:
@@ -23,6 +24,7 @@ def format_attribute_basic(val, attr):
         return "%.0f" % val
     else:
         return "%.1f" % val
+
 
 @register.filter()
 def delta(d, attr):

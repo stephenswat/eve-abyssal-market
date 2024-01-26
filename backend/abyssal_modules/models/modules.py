@@ -96,8 +96,20 @@ class ModuleManager(models.Manager):
                 "attribute_values__new_attribute__attribute",
                 "type",
             )
-            .annotate(price_prediction=PricePredictionRecord.objects.filter(module_id=OuterRef("id")).order_by('-date').values("price")[:1])
-            .annotate(price_prediction_date=PricePredictionRecord.objects.filter(module_id=OuterRef("id")).order_by('-date').values("date")[:1])
+            .annotate(
+                price_prediction=PricePredictionRecord.objects.filter(
+                    module_id=OuterRef("id")
+                )
+                .order_by("-date")
+                .values("price")[:1]
+            )
+            .annotate(
+                price_prediction_date=PricePredictionRecord.objects.filter(
+                    module_id=OuterRef("id")
+                )
+                .order_by("-date")
+                .values("date")[:1]
+            )
         )
 
 

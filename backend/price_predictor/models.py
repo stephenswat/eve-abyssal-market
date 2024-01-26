@@ -2,8 +2,11 @@ import pickle
 
 from django.db import models
 
+
 class PricePredictor(models.Model):
-    type = models.ForeignKey("abyssal_modules.ModuleType", models.CASCADE, db_index=True)
+    type = models.ForeignKey(
+        "abyssal_modules.ModuleType", models.CASCADE, db_index=True
+    )
     date = models.DateTimeField(auto_now_add=True, db_index=True)
     quality = models.FloatField()
 
