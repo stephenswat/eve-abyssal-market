@@ -269,7 +269,10 @@ class ModuleImageView(DetailView):
 
                 i = 0
 
-                for k in sorted(mutator_dict.keys()):
+                for k in sorted(
+                    mutator_dict.keys(),
+                    key=lambda x: attr_dict["attributes"][x]["name"].lower(),
+                ):
                     v = attr_dict["attributes"][k]
                     if k in mutator_dict:
                         y = (
