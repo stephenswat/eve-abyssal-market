@@ -190,19 +190,23 @@ class ModuleImageView(DetailView):
         base_module = StaticModule.objects.get(source_id=self.object.source_id)
         base_module_dict = base_module.as_dict()["attributes"]
 
-        mutator = Mutator.objects.get(item_type_id=self.object.mutator_id)
-        mutated_attrs = MutatorAttribute.objects.filter(mutator_id=mutator.id)
+        all_mutators = Mutator.objects.filter(result_id=self.object.type_id)
 
-        mutator_dict = {
-            v.attribute.attribute_id: (v.min_modifier, v.max_modifier)
-            for v in mutated_attrs
+        mutator = Mutator.objects.get(item_type_id=self.object.mutator_id)
+
+        mutator_dicts = {
+            m.id: {
+                v.attribute.attribute_id: (v.min_modifier, v.max_modifier)
+                for v in MutatorAttribute.objects.filter(mutator_id=m.id)
+            }
+            for m in all_mutators
         }
 
         with Drawing() as draw:
             with Image(
                 width=INNER_WIDTH + 2 * IMG_MARGINS,
                 height=2 * IMG_MARGINS
-                + len(mutator_dict) * (BLOCK_HEIGHT + BLOCK_DISTANCE)
+                + len(mutator_dicts[mutator.id]) * (BLOCK_HEIGHT + BLOCK_DISTANCE)
                 + HEADER_HEIGHT,
                 format="png",
                 background=Color("#020202"),
@@ -270,11 +274,11 @@ class ModuleImageView(DetailView):
                 i = 0
 
                 for k in sorted(
-                    mutator_dict.keys(),
+                    mutator_dicts[mutator.id].keys(),
                     key=lambda x: attr_dict["attributes"][x]["name"].lower(),
                 ):
                     v = attr_dict["attributes"][k]
-                    if k in mutator_dict:
+                    if k in mutator_dicts[mutator.id]:
                         y = (
                             IMG_MARGINS
                             + HEADER_HEIGHT
@@ -291,7 +295,7 @@ class ModuleImageView(DetailView):
                             height=BLOCK_HEIGHT - 1,
                         )
                         draw.push()
-                        draw.fill_color = Color("#445c66")
+                        draw.fill_color = Color("#303030")
                         draw.rectangle(
                             left=IMG_MARGINS,
                             top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT,
@@ -302,53 +306,119 @@ class ModuleImageView(DetailView):
                         draw.push()
                         delta = v["real_value"] - base_module_dict[k]["real_value"]
                         logger.info(delta)
+
                         v1 = (
-                            float(mutator_dict[k][0])
+                            float(mutator_dicts[mutator.id][k][0])
                             * base_module_dict[k]["real_value"]
                         )
                         v2 = (
-                            float(mutator_dict[k][1])
+                            float(mutator_dicts[mutator.id][k][1])
                             * base_module_dict[k]["real_value"]
                         )
 
-                        min_mutated_value = min(v1, v2)
-                        max_mutated_value = max(v1, v2)
+                        mv1 = (
+                            min(
+                                float(mutator_dicts[x][k][0])
+                                for x in mutator_dicts.keys()
+                            )
+                            * base_module_dict[k]["real_value"]
+                        )
+                        mv2 = (
+                            max(
+                                float(mutator_dicts[x][k][1])
+                                for x in mutator_dicts.keys()
+                            )
+                            * base_module_dict[k]["real_value"]
+                        )
+
+                        if v["real_value"] >= 0:
+                            min_mutated_value = v1
+                            max_mutated_value = v2
+                            min_bound_mutated_value = mv1
+                            max_bound_mutated_value = mv2
+                        else:
+                            min_mutated_value = v2
+                            max_mutated_value = v1
+                            min_bound_mutated_value = mv2
+                            max_bound_mutated_value = mv1
+
+                        draw.push()
+                        draw.fill_color = Color("#bf3438")
+                        draw.pop()
 
                         if correct_high_is_good(v["high_is_good"], k):
+                            max_left_delta = (
+                                min_bound_mutated_value
+                                - base_module_dict[k]["real_value"]
+                            )
+                            max_right_delta = (
+                                max_bound_mutated_value
+                                - base_module_dict[k]["real_value"]
+                            )
+
                             if delta < 0:
-                                max_delta = (
-                                    min_mutated_value
-                                    - base_module_dict[k]["real_value"]
-                                )
+                                max_delta = max_left_delta
+                            else:
+                                max_delta = max_right_delta
+
+                            left_bound_delta = (
+                                min_mutated_value - base_module_dict[k]["real_value"]
+                            )
+                            right_bound_delta = (
+                                max_mutated_value - base_module_dict[k]["real_value"]
+                            )
+                            left_bound = (1 - (left_bound_delta / max_left_delta)) * (
+                                INNER_WIDTH // 2
+                            )
+                            right_bound = (INNER_WIDTH // 2) + (
+                                right_bound_delta / max_right_delta
+                            ) * (INNER_WIDTH // 2)
+
+                            if delta < 0:
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
                             else:
-                                max_delta = (
-                                    max_mutated_value
-                                    - base_module_dict[k]["real_value"]
-                                )
                                 draw.fill_color = Color("#69904f")
                                 left = INNER_WIDTH // 2
                                 right = (INNER_WIDTH // 2) + (delta / max_delta) * (
                                     INNER_WIDTH // 2
                                 )
                         else:
+                            max_right_delta = (
+                                min_bound_mutated_value
+                                - base_module_dict[k]["real_value"]
+                            )
+                            max_left_delta = (
+                                max_bound_mutated_value
+                                - base_module_dict[k]["real_value"]
+                            )
+
                             if delta < 0:
-                                max_delta = (
-                                    min_mutated_value
-                                    - base_module_dict[k]["real_value"]
-                                )
+                                max_delta = max_right_delta
+                            else:
+                                max_delta = max_left_delta
+
+                            left_bound_delta = (
+                                max_mutated_value - base_module_dict[k]["real_value"]
+                            )
+                            right_bound_delta = (
+                                min_mutated_value - base_module_dict[k]["real_value"]
+                            )
+                            left_bound = (1 - (left_bound_delta / max_left_delta)) * (
+                                INNER_WIDTH // 2
+                            )
+                            right_bound = (INNER_WIDTH // 2) + (
+                                right_bound_delta / max_right_delta
+                            ) * (INNER_WIDTH // 2)
+
+                            if delta < 0:
                                 draw.fill_color = Color("#69904f")
                                 left = INNER_WIDTH // 2
                                 right = (INNER_WIDTH // 2) + (delta / max_delta) * (
                                     INNER_WIDTH // 2
                                 )
                             else:
-                                max_delta = (
-                                    max_mutated_value
-                                    - base_module_dict[k]["real_value"]
-                                )
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
@@ -358,6 +428,15 @@ class ModuleImageView(DetailView):
                                 "Had to manually correct right-most edge of bar for attribute %d",
                                 k,
                             )
+                        draw.push()
+                        draw.fill_color = Color("#445c66")
+                        draw.rectangle(
+                            left=IMG_MARGINS + left_bound,
+                            right=IMG_MARGINS + right_bound - 1,
+                            top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT,
+                            height=STAT_BAR_HEIGHT - 1,
+                        )
+                        draw.pop()
                         draw.rectangle(
                             left=IMG_MARGINS + left,
                             right=right + IMG_MARGINS - 1,
