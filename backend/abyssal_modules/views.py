@@ -368,29 +368,35 @@ class ModuleImageView(DetailView):
                         draw.push()
                         draw.fill_color = Color("#ffffff")
                         draw.text(IMG_MARGINS + 32 + 2, y + 13, v["name"])
+
+                        value_str = "{val} {unit}".format(
+                            val=format_attribute_basic(
+                                render_attribute_value(v["real_value"], k), k
+                            ),
+                            unit=v["unit"],
+                        )
+
+                        metrics = draw.get_font_metrics(img, value_str)
+
                         draw.text(
                             IMG_MARGINS + 32 + 2,
                             y + 27,
-                            "{val} {unit}".format(
-                                val=format_attribute_basic(
-                                    render_attribute_value(v["real_value"], k), k
-                                ),
-                                unit=v["unit"],
-                            ),
+                            value_str,
                         )
                         draw.pop()
 
                         draw.push()
+                        draw.font_weight = 700
                         if correct_high_is_good(v["high_is_good"], k):
                             if delta < 0:
-                                draw.fill_color = Color("#bf3438")
+                                draw.fill_color = Color("#e63e43")
                             else:
-                                draw.fill_color = Color("#69904f")
+                                draw.fill_color = Color("#72b348")
                         else:
                             if delta < 0:
-                                draw.fill_color = Color("#69904f")
+                                draw.fill_color = Color("#72b348")
                             else:
-                                draw.fill_color = Color("#bf3438")
+                                draw.fill_color = Color("#e63e43")
                         rendered_delta = render_attribute_value(
                             v["real_value"], k
                         ) - render_attribute_value(base_module_dict[k]["real_value"], k)
@@ -401,9 +407,9 @@ class ModuleImageView(DetailView):
                             prefix = ""
 
                         draw.text(
-                            IMG_MARGINS + 32 + 2 + 96,
+                            IMG_MARGINS + 32 + 2 + int(metrics.text_width) + 8,
                             y + 27,
-                            "{prefix}{val} {unit}".format(
+                            "({prefix}{val} {unit})".format(
                                 prefix=prefix,
                                 val=format_attribute_basic(rendered_delta, k),
                                 unit=v["unit"],
