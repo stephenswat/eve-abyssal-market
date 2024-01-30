@@ -428,7 +428,7 @@ class ModuleImageView(DetailView):
                                 draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
-                        if right <= left:
+                        if (right - 1) <= left:
                             right = left + 1
                             logger.error(
                                 "Had to manually correct right-most edge of bar for attribute %d",
