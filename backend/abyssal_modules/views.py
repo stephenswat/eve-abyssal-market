@@ -13,7 +13,6 @@ from wand.color import Color
 from wand.image import Image
 from wand.drawing import Drawing
 from wand.compat import nested
-from wand.api import library
 
 from abyssal_modules.models.modules import Module, ModuleType, StaticModule
 from abyssal_modules.models.attributes import TypeAttribute
@@ -209,11 +208,9 @@ class ModuleImageView(DetailView):
                 height=2 * IMG_MARGINS
                 + len(mutator_dicts[mutator.id]) * (BLOCK_HEIGHT + BLOCK_DISTANCE)
                 + HEADER_HEIGHT,
-                format="webp",
+                format="png",
                 background=Color("#000000"),
             ) as img:
-                library.MagickSetOption(img.wand, "webp:lossless", "true")
-
                 img.alpha_channel = True
                 img.transparent_color(Color("#000000"), alpha=0.0)
                 draw.font_family = "DejaVu Sans"
@@ -509,7 +506,7 @@ class ModuleImageView(DetailView):
                 draw(img)
 
                 return HttpResponse(
-                    img.make_blob(format="webp"), content_type="image/webp"
+                    img.make_blob(format="png"), content_type="image/png"
                 )
 
 
