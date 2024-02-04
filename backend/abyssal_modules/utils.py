@@ -5,6 +5,24 @@ def format_attribute_basic(val, attr):
         return "%.0f" % val
     elif attr == 204:
         return "%.2f" % val
+    elif attr == 1255:
+        return "%.2f" % val
+    elif attr == 10204:
+        return "%.2f" % val
+    elif attr == 213:
+        return "%.2f" % val
+    elif attr == 10213:
+        return "%.2f" % val
+    elif attr == 100004:
+        return "%.2f" % val
+    elif attr == 100005:
+        return "%.2f" % val
+    elif attr == 50:
+        return "%.2f" % val
+    elif attr == 20:
+        return "%.2f" % val
+    elif attr == 6:
+        return "%.2f" % val
     else:
         return "%.1f" % val
 

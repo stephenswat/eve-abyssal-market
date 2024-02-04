@@ -1,5 +1,7 @@
 from django import template
 
+from abyssal_modules.utils import format_attribute_basic as fb
+
 
 register = template.Library()
 
@@ -8,22 +10,12 @@ register = template.Library()
 def format_attribute(mod, attr):
     val = mod.get_value(attr)
 
-    if attr == 64:
-        return "%.3f" % val
-    elif attr == 105:
-        return "%.0f" % val
-    else:
-        return "%.1f" % val
+    return fb(val, attr)
 
 
 @register.filter
 def format_attribute_basic(val, attr):
-    if attr == 64:
-        return "%.3f" % val
-    elif attr == 105:
-        return "%.0f" % val
-    else:
-        return "%.1f" % val
+    return fb(val, attr)
 
 
 @register.filter()

@@ -179,10 +179,10 @@ class ModuleImageView(DetailView):
 
     def render_to_response(self, context, **kwargs):
         BLOCK_DISTANCE = 4
-        HEADER_HEIGHT = 96
+        HEADER_HEIGHT = 64
         BLOCK_HEIGHT = 36
         STAT_BAR_HEIGHT = 4
-        IMG_MARGINS = 4
+        IMG_MARGINS = 0
         INNER_WIDTH = 352
 
         attr_dict = self.object.as_dict()
@@ -209,12 +209,14 @@ class ModuleImageView(DetailView):
                 + len(mutator_dicts[mutator.id]) * (BLOCK_HEIGHT + BLOCK_DISTANCE)
                 + HEADER_HEIGHT,
                 format="png",
-                background=Color("#020202"),
+                background=Color("#000000"),
             ) as img:
+                img.alpha_channel = True
+                img.transparent_color(Color("#000000"), alpha=0.0)
                 draw.font_family = "DejaVu Sans"
                 draw.fill_color = Color("#ffffff")
                 draw.text(10, 20, "Abyssal Ballistic Control System")
-                draw.fill_color = Color("#28353b")
+                draw.fill_color = Color("#232f36")
                 draw.rectangle(
                     left=IMG_MARGINS,
                     top=IMG_MARGINS,
@@ -224,24 +226,9 @@ class ModuleImageView(DetailView):
                 draw.font_size = 12
                 draw.push()
                 draw.fill_color = Color("#ffffff")
-                draw.text(IMG_MARGINS + 32 + 2, 24, self.object.type.name)
-                draw.text(IMG_MARGINS + 32 + 2, 24 + 32, self.object.source.name)
-                draw.text(IMG_MARGINS + 32 + 2, 24 + 32 + 32, self.object.mutator.name)
+                draw.text(IMG_MARGINS + 32 + 2, 21, self.object.source.name)
+                draw.text(IMG_MARGINS + 32 + 2, 21 + 32, self.object.mutator.name)
                 draw.pop()
-
-                type_img_path = finders.find(
-                    "img/types_32/%d.png" % self.object.type_id
-                )
-                if type_img_path is not None:
-                    with Image(filename=type_img_path) as embed_img:
-                        draw.composite(
-                            operator="atop",
-                            image=embed_img,
-                            left=IMG_MARGINS,
-                            top=IMG_MARGINS,
-                            width=embed_img.width,
-                            height=embed_img.height,
-                        )
 
                 source_img_path = finders.find(
                     "img/types_32/%d.png" % self.object.source_id
@@ -252,7 +239,7 @@ class ModuleImageView(DetailView):
                             operator="atop",
                             image=embed_img,
                             left=IMG_MARGINS,
-                            top=IMG_MARGINS + 32,
+                            top=IMG_MARGINS,
                             width=embed_img.width,
                             height=embed_img.height,
                         )
@@ -266,7 +253,7 @@ class ModuleImageView(DetailView):
                             operator="atop",
                             image=embed_img,
                             left=IMG_MARGINS,
-                            top=IMG_MARGINS + 64,
+                            top=IMG_MARGINS + 32,
                             width=embed_img.width,
                             height=embed_img.height,
                         )
@@ -436,9 +423,11 @@ class ModuleImageView(DetailView):
                             )
                         draw.push()
                         draw.fill_color = Color("#445c66")
+                        l = int(IMG_MARGINS + left_bound)
+                        r = max(l + 1, int(IMG_MARGINS + right_bound - 1))
                         draw.rectangle(
-                            left=IMG_MARGINS + left_bound,
-                            right=IMG_MARGINS + right_bound - 1,
+                            left=l,
+                            right=r,
                             top=y + BLOCK_HEIGHT - STAT_BAR_HEIGHT,
                             height=STAT_BAR_HEIGHT - 1,
                         )
