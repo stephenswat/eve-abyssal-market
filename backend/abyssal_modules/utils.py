@@ -23,6 +23,14 @@ def format_attribute_basic(val, attr):
         return "%.2f" % val
     elif attr == 6:
         return "%.2f" % val
+    elif attr == 2335:
+        return "%.3f" % val
+    elif attr == 2336:
+        return "%.3f" % val
+    elif attr == 2337:
+        return "%.3f" % val
+    elif attr == 2338:
+        return "%.3f" % val
     else:
         return "%.1f" % val
 
@@ -46,6 +54,14 @@ def render_attribute_value(val, attr):
         return 100 * (1 - val)
     elif attr == 977:
         return 100 * (1 - val)
+    elif attr == 2335:
+        return 100 * (val - 1)
+    elif attr == 2336:
+        return 100 * (val - 1)
+    elif attr == 2337:
+        return -100 * (val - 1)
+    elif attr == 2338:
+        return -100 * (val - 1)
     else:
         return val
 
@@ -60,6 +76,10 @@ def correct_high_is_good(val, attr):
     elif attr == 976:
         return not val
     elif attr == 977:
+        return not val
+    elif attr == 2337:
+        return not val
+    elif attr == 2338:
         return not val
     else:
         return val

@@ -1,6 +1,9 @@
 from django import template
 
-from abyssal_modules.utils import format_attribute_basic as fb
+from abyssal_modules.utils import (
+    format_attribute_basic as fb,
+    render_attribute_value as rv,
+)
 
 
 register = template.Library()
@@ -10,7 +13,7 @@ register = template.Library()
 def format_attribute(mod, attr):
     val = mod.get_value(attr)
 
-    return fb(val, attr)
+    return fb(rv(val, attr), attr)
 
 
 @register.filter
