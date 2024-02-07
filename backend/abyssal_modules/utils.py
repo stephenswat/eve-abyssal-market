@@ -69,5 +69,9 @@ def render_attribute_value(val, attr):
 def correct_high_is_good(val, attr):
     if attr == 204:
         return not val
+    elif attr == 2337:
+        return not val
+    elif attr == 2338:
+        return not val
     else:
         return val

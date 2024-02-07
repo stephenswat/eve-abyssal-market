@@ -106,8 +106,8 @@ RELEVANT_ATTRIBUTES = {
     ],
     "abyssal_fighter_support_unit": [
         (2336, True),
-        (2337, False),
-        (2338, False),
+        (2337, True),
+        (2338, True),
         (50, False),
         (30, False),
         (2335, True),

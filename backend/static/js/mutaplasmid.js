@@ -188,8 +188,16 @@ function render_attr(attr_id, val) {
     return val;
 }
 
+function rendered_high_is_good(attr_id, val) {
+    if (attr_id == 2335 || attr_id == 2336 || attr_id == 2337 || attr_id == 2338) {
+        return true;
+    } else {
+        return val;
+    }
+}
+
 function attr_format(attr, data) {
-    base = `<span class='attr-${attr} attr-cell'>${data.real_value.toFixed(get_precision(attr))}</span>`;
+    base = `<span class='attr-${attr} attr-cell'>${render_attr(attr, data.real_value).toFixed(get_precision(attr))}</span>`;
 
     if (data.rating != null && display_rating(attr)) {
         if (data.rating > 0) {
