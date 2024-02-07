@@ -117,6 +117,12 @@ class ModuleAttribute(models.Model):
             models.Index(fields=["module", "attribute", "value"]),
             models.Index(fields=["value"]),
             models.Index(fields=["-value"]),
+            models.Index(
+                F("attribute"), F("value").asc(), name="attribute_value_asc_idx"
+            ),
+            models.Index(
+                F("attribute"), F("value").desc(), name="attribute_value_desc_idx"
+            ),
         ]
 
 
