@@ -177,6 +177,17 @@ function generate_similar_button(mod, ids, names) {
     return output;
 }
 
+function render_attr(attr_id, val) {
+    if (attr_id == 2335 || attr_id == 2336) {
+        return 100 * (val - 1);
+    } else if (attr_id == 2337 || attr_id == 2338) {
+        return -100 * (val - 1);
+    } else {
+        return val;
+    }
+    return val;
+}
+
 function attr_format(attr, data) {
     base = `<span class='attr-${attr} attr-cell'>${data.real_value.toFixed(get_precision(attr))}</span>`;
 
@@ -212,6 +223,8 @@ function get_precision(attr_id) {
         return 0;
     } else if (attr_id == 204) {
         return 4;
+    } else if (attr_id == 2335 || attr_id == 2336 || attr_id == 2337 || attr_id == 2338) {
+        return 3;
     } else {
         return 1;
     }
@@ -239,7 +252,7 @@ function attribute_format(attrs) {
 
         list += `<div class="col-12 col-md-4">
                     <img src="/static/img/attributes/${a}.png">
-                    ${attrs[a].real_value.toFixed(get_precision(a))} ${attrs[a].unit} ${rating}
+                    ${render_attr(a, attrs[a].real_value).toFixed(get_precision(a))} ${attrs[a].unit} ${rating}
                  </div>`;
     }
 

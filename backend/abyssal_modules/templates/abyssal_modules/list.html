@@ -196,7 +196,9 @@
                         'display': function (data, type, row, meta) {
                             return attr_format({{ at.id }}, data);
                         },
-                        '_': 'real_value'
+                        '_': function (data, type, row, meta) {
+                            return render_attr({{ at.id }}, data.real_value);
+                        }
                     }
                 },
                 {% endfor %}
@@ -230,7 +232,7 @@
                     data = table
                         .column(`attr-${at}:name`)
                         .data()
-                        .map(function (n) { return n.real_value; })
+                        .map(function (n) { return render_attr(at, n.real_value); })
                         .sort(function (a, b) { return a - b; });
 
                     attr_val[at] = [data[0], data.reverse()[0]];
