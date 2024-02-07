@@ -111,7 +111,11 @@ class ModuleAttribute(models.Model):
     value = models.FloatField(db_index=True)
 
     class Meta:
-        indexes = [models.Index(fields=["module", "attribute"])]
+        indexes = [
+            models.Index(fields=["module", "attribute"]),
+            models.Index(fields=["module", "attribute", "-value"]),
+            models.Index(fields=["module", "attribute", "value"]),
+        ]
 
 
 class TypeAttribute(models.Model):
