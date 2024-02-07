@@ -46,7 +46,7 @@
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png" class="module-icon"><a href="{% url 'abyssal_modules:module_view' pk=c.module_id %}">Module {{ c.module_id }}</a></td>
-                        <td>{{ c.value|format_attribute_simple:k }} {{ v.0.unit_str }}</td>
+                        <td>{{ c.value|format_attribute_simple:v.0.id }} {{ v.0.unit_str }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -68,7 +68,7 @@
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png" class="module-icon"><a href="{% url 'abyssal_modules:module_view' pk=c.module_id %}">Module {{ c.module_id }}</a></td>
-                        <td>{{ c.value|format_attribute_simple:k }} {{ v.0.unit_str }}</td>
+                        <td>{{ c.value|format_attribute_simple:v.0.id }} {{ v.0.unit_str }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

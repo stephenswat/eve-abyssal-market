@@ -75,3 +75,16 @@ def correct_high_is_good(val, attr):
         return not val
     else:
         return val
+
+
+def base_high_is_good(val, attr):
+    if attr == 204:
+        return False
+    elif attr == 2337:
+        return False
+    elif attr == 2338:
+        return False
+    elif attr in [974, 975, 976, 977]:
+        return False
+    else:
+        return val

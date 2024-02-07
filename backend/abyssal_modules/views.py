@@ -28,6 +28,7 @@ from abyssal_modules.utils import (
     format_attribute_basic,
     render_attribute_value,
     correct_high_is_good,
+    base_high_is_good,
 )
 
 import logging
@@ -165,7 +166,7 @@ class HallOfFameView(View):
                 d1 = qs.order_by("value")[:10]
                 d2 = qs.order_by("-value")[:10]
 
-                hig = correct_high_is_good(k.high_is_good, k.id)
+                hig = base_high_is_good(k.high_is_good, k.attribute.id)
 
                 res[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
 
