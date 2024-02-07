@@ -146,10 +146,6 @@ class HallOfFameView(View):
         except ModuleType.DoesNotExist:
             raise Http404("Module type does not exist.")
 
-        mutators = Mutator.objects.filter(result=module_type).order_by(
-            "item_type__name"
-        )
-        modules = StaticModule.objects.filter(type=module_type)
         attributes = TypeAttribute.objects.filter(
             mutatorattribute__mutator__result=module_type
         ).distinct("attribute")
