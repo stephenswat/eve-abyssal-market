@@ -23,7 +23,7 @@ def format_attribute_basic(val, attr):
 
 @register.filter
 def rendered_high_is_good(at):
-    return hg(at.id, at.high_is_good)
+    return hg(at.high_is_good, at.id)
 
 @register.filter()
 def delta(d, attr):
