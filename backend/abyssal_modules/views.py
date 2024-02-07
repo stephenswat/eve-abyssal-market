@@ -398,7 +398,10 @@ class ModuleImageView(DetailView):
                             ) * (INNER_WIDTH // 2)
 
                             if delta < 0:
-                                draw.fill_color = Color("#bf3438")
+                                if (delta / max_delta) >= 0.999:
+                                    draw.fill_color = Color("#482413")
+                                else:
+                                    draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
                             else:
@@ -448,7 +451,10 @@ class ModuleImageView(DetailView):
                                     INNER_WIDTH // 2
                                 )
                             else:
-                                draw.fill_color = Color("#bf3438")
+                                if (delta / max_delta) >= 0.999:
+                                    draw.fill_color = Color("#482413")
+                                else:
+                                    draw.fill_color = Color("#bf3438")
                                 left = (1 - (delta / max_delta)) * (INNER_WIDTH // 2)
                                 right = INNER_WIDTH // 2
                         if (right - 1) <= left:
