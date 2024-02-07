@@ -158,17 +158,16 @@ class HallOfFameView(View):
             res = {}
 
             for k in attributes:
-                if k.display:
-                    qs = ModuleAttribute.objects.filter(
-                        module__type=module_type, attribute=k.attribute
-                    )
+                qs = ModuleAttribute.objects.filter(
+                    module__type=module_type, attribute=k.attribute
+                )
 
-                    d1 = qs.order_by("value")[:10]
-                    d2 = qs.order_by("-value")[:10]
+                d1 = qs.order_by("value")[:10]
+                d2 = qs.order_by("-value")[:10]
 
-                    hig = correct_high_is_good(k.high_is_good, k.id)
+                hig = correct_high_is_good(k.high_is_good, k.id)
 
-                    res[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
+                res[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
 
             cache.set(key, res, 60 * 120)
 

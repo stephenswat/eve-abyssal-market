@@ -110,6 +110,9 @@ class ModuleAttribute(models.Model):
 
     value = models.FloatField(db_index=True)
 
+    class Meta:
+        indexes = [models.Index(fields=["module", "attribute"])]
+
 
 class TypeAttribute(models.Model):
     type = models.ForeignKey("ModuleType", models.CASCADE)
