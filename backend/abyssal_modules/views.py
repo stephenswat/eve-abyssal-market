@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.cache import cache
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.edit import FormView
@@ -15,7 +16,7 @@ from wand.drawing import Drawing
 from wand.compat import nested
 
 from abyssal_modules.models.modules import Module, ModuleType, StaticModule
-from abyssal_modules.models.attributes import TypeAttribute, ModuleAttributeView
+from abyssal_modules.models.attributes import TypeAttribute, ModuleAttribute
 from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.models.mutators import Mutator, MutatorAttribute
 from eve_esi import ESI
@@ -153,24 +154,31 @@ class HallOfFameView(View):
             mutatorattribute__mutator__result=module_type
         ).distinct("attribute")
 
-        hof_dict = {}
+        key = "HallOfFame_%d" % type_id
 
-        for k in attributes:
-            qs = ModuleAttributeView.objects.filter(
-                module__type=module_type, attribute=k.attribute
-            )
+        res = cache.get(key)
 
-            d1 = qs.order_by("value")[:10]
-            d2 = qs.order_by("-value")[:10]
+        if res is None:
+            res = {}
 
-            hig = correct_high_is_good(k.high_is_good, k.id)
+            for k in attributes:
+                qs = ModuleAttribute.objects.filter(
+                    module__type=module_type, attribute=k.attribute
+                )
 
-            hof_dict[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
+                d1 = qs.order_by("value")[:10]
+                d2 = qs.order_by("-value")[:10]
+
+                hig = correct_high_is_good(k.high_is_good, k.id)
+
+                res[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
+
+                cache.set(key, res, 60 * 120)
 
         return render(
             request,
             "abyssal_modules/hall_of_fame.html",
-            {"module_type": module_type, "hof": hof_dict},
+            {"module_type": module_type, "hof": res},
         )
 
 
