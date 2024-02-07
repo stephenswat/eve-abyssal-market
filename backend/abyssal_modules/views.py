@@ -158,7 +158,7 @@ class HallOfFameView(View):
             res = {}
 
             for k in attributes:
-                if k.attribute.display:
+                if k.display:
                     qs = ModuleAttribute.objects.filter(
                         module__type=module_type, attribute=k.attribute
                     )
