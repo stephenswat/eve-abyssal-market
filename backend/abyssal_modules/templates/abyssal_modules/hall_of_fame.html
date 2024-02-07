@@ -1,0 +1,80 @@
+{% extends 'content_page.html' %}
+{% load humanize %}
+{% load cache %}
+{% load static %}
+{% load module_stats %}
+
+{% block title %}{{ module_type.name }}{% endblock %}
+
+{% block header %}
+<div class="container-fluid d-flex flex-column ng-scope">
+    <div class="row align-items-center bg-primary check-contrast py-5">
+        <div class="col-xl-9 container-alt text-light toggles-ignore mx-auto">
+            <h1 class="display-3 mb-0">
+                <span data-ng-bind="selected.palette.name" class="ng-binding">{{ module_type.name }}</span>
+            </h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content_tabs %}
+<div class="container">
+{% include "abyssal_modules/module_tabs.html" with active_page="hall_of_fame" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    {% for k, v in hof.items %}
+    <h2>{{ v.0.name }}</h2>
+
+    <div class="row">
+        <div class="col-6">
+            <h4>Best Modules</h4>
+
+            <table class="table stats-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Module</th>
+                        <th scope="col"><img src="{% static v.0.icon_path %}" title="{{ v.0.name }}"> {{ v.0.name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in v.1 %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png" class="module-icon"><a href="{% url 'abyssal_modules:module_view' pk=c.module_id %}">Module {{ c.module_id }}</a></td>
+                        <td>{{ c.value|format_attribute_simple:k }} {{ v.0.unit_str }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Worst Modules</h4>
+
+            <table class="table stats-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Module</th>
+                        <th scope="col"><img src="{% static v.0.icon_path %}" title="{{ v.0.name }}"> {{ v.0.name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in v.2 %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><img src="https://image.eveonline.com/Type/{{ module_type.id }}_32.png" class="module-icon"><a href="{% url 'abyssal_modules:module_view' pk=c.module_id %}">Module {{ c.module_id }}</a></td>
+                        <td>{{ c.value|format_attribute_simple:k }} {{ v.0.unit_str }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

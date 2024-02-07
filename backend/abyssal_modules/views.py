@@ -15,7 +15,7 @@ from wand.drawing import Drawing
 from wand.compat import nested
 
 from abyssal_modules.models.modules import Module, ModuleType, StaticModule
-from abyssal_modules.models.attributes import TypeAttribute
+from abyssal_modules.models.attributes import TypeAttribute, ModuleAttributeView
 from abyssal_modules.models.characters import EveCharacter
 from abyssal_modules.models.mutators import Mutator, MutatorAttribute
 from eve_esi import ESI
@@ -135,6 +135,42 @@ class RollCalculatorView(View):
                 },
                 "attributes": attributes,
             },
+        )
+
+
+class HallOfFameView(View):
+    def get(self, request, type_id):
+        try:
+            module_type = ModuleType.objects.get(id=type_id)
+        except ModuleType.DoesNotExist:
+            raise Http404("Module type does not exist.")
+
+        mutators = Mutator.objects.filter(result=module_type).order_by(
+            "item_type__name"
+        )
+        modules = StaticModule.objects.filter(type=module_type)
+        attributes = TypeAttribute.objects.filter(
+            mutatorattribute__mutator__result=module_type
+        ).distinct("attribute")
+
+        hof_dict = {}
+
+        for k in attributes:
+            qs = ModuleAttributeView.objects.filter(
+                module__type=module_type, attribute=k.attribute
+            )
+
+            d1 = qs.order_by("value")[:10]
+            d2 = qs.order_by("-value")[:10]
+
+            hig = correct_high_is_good(k.high_is_good, k.id)
+
+            hof_dict[k.id] = (k.attribute, d2 if hig else d1, d1 if hig else d2)
+
+        return render(
+            request,
+            "abyssal_modules/hall_of_fame.html",
+            {"module_type": module_type, "hof": hof_dict},
         )
 
 

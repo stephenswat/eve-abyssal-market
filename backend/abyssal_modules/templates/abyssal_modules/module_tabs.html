@@ -11,4 +11,7 @@
     <li class="nav-item">
         <a class="nav-tab nav-link {% if active_page == 'roll_calculator' %}active{% endif %}" href="{% url 'abyssal_modules:roll_calculator' type_id=module_type.id %}">Roll Calculator</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-tab nav-link {% if active_page == 'hall_of_fame' %}active{% endif %}" href="{% url 'abyssal_modules:type_hall_of_fame' type_id=module_type.id %}">Hall of Fame</a>
+    </li>
 </ul>

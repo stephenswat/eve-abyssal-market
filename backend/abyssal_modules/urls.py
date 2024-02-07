@@ -29,6 +29,11 @@ urlpatterns = [
         name="type_module_list",
     ),
     path(
+        "type/<int:type_id>/hof/",
+        abyssal_modules.views.HallOfFameView.as_view(),
+        name="type_hall_of_fame",
+    ),
+    path(
         "type/<int:type_id>/assets/",
         abyssal_modules.views.TypeAssetModuleList.as_view(),
         name="type_asset_module_list",
