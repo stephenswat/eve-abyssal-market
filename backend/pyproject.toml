@@ -25,7 +25,7 @@ djangorestframework = "^3.11.0"
 drf-yasg = "^1.21.4"
 whitenoise = "^6.3.0"
 django-bootstrap5 = "^22.2"
-pillow = "^10.2.0"
+pillow = "^10.3.0"
 wand = "^0.6.13"
 
 [tool.poetry.group.dev.dependencies]
