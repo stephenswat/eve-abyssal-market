@@ -27,10 +27,12 @@ def create_model_for_type(t):
         contract_single=F("contracts__single_item"),
         contract_auction=F("contracts__auction"),
         contract_available=F("contracts__available"),
+        contract_issued_at=F("contracts__issued_at"),
     ).filter(
         contract_single=True,
         contract_auction=False,
         contract_available=False,
+        contract_contract_issued_at__gt=timezone.now() - datetime.timedelta(days=180),
     )
 
     logger.info(f"Creating price models for type {t.name}")
@@ -44,7 +46,7 @@ def create_model_for_type(t):
     samples, features = [], []
 
     for x in mods:
-        samples.append((x.contract_price + x.contract_plex * 3300000) / 1000000)
+        samples.append((x.contract_price + x.contract_plex * 5200000) / 1000000)
         features.append(x.attribute_vector())
 
     scaler = StandardScaler()
