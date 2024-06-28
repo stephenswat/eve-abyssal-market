@@ -32,7 +32,7 @@ def create_model_for_type(t):
         contract_single=True,
         contract_auction=False,
         contract_available=False,
-        contract_contract_issued_at__gt=timezone.now() - datetime.timedelta(days=180),
+        contract_issued_at__gt=timezone.now() - datetime.timedelta(days=180),
     )
 
     logger.info(f"Creating price models for type {t.name}")
