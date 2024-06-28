@@ -314,8 +314,6 @@ class ModuleImageView(DetailView):
                             + (BLOCK_HEIGHT + BLOCK_DISTANCE) * i
                         )
 
-                        logger.info(k)
-
                         draw.rectangle(
                             left=IMG_MARGINS,
                             top=y,
@@ -333,7 +331,6 @@ class ModuleImageView(DetailView):
                         draw.pop()
                         draw.push()
                         delta = v["real_value"] - base_module_dict[k]["real_value"]
-                        logger.info(delta)
 
                         v1 = (
                             float(mutator_dicts[mutator.id][k][0])

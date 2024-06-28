@@ -23,9 +23,13 @@ class EsiManager:
 
         if self._ESI_APP is None:
             logger.debug("Application still uninitialized. Initializing...")
-            self._ESI_APP = esipy.EsiApp(
-                datasource=getattr(settings, "ESI_DATASOURCE", "tranquility")
-            ).get_latest_swagger
+            try:
+                self._ESI_APP = esipy.EsiApp(
+                    datasource=getattr(settings, "ESI_DATASOURCE", "tranquility")
+                ).get_latest_swagger
+            except:
+                logger.error("Initializing the ESI app failed!")
+                pass
             logger.debug("Application initialized!")
         else:
             logger.debug("Another thread got here before us, nothing to be done!")

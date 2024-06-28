@@ -11,5 +11,10 @@ logger = logging.getLogger(__name__)
 @on_startup()
 def initialize_esi():
     logger.info("Initializing ESI application to start Huey consumer")
-    ESI._initialize_app()
+    while True:
+        try:
+            ESI._initialize_app()
+            break
+        except:
+            logger.error("Initializing ESI failed. Trying again...")
     logger.info("ESI application initialized for consumer!")
